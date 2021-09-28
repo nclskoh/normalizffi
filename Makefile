@@ -4,7 +4,7 @@ all: ./Normaliz-build/lib/libnormaliz.so
 	dune install -p normalizffi --create-install-files normalizffi; echo "final ls"; ls
 
 ./Normaliz-build/lib/libnormaliz.so:
-	cd ./Normaliz-off; \
+	cd ./Normaliz-offline; \
 	echo "installing normaliz"; \
 	./install_normaliz_with_eantic.sh; \
 	cp -r local ../Normaliz-build; \
