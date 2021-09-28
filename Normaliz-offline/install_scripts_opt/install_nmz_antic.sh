@@ -18,10 +18,10 @@ ANTIC_VERSION=0.2.4
 ANTIC_URL="https://github.com/wbhart/antic/archive/v${ANTIC_VERSION}.tar.gz"
 ANTIC_SHA256=517d53633ff9c6348549dc6968567051b2161098d2bc395cb40ecc41e24312c6
 
-mkdir -p ${NMZ_OPT_DIR}/ANTIC_source/
+#mkdir -p ${NMZ_OPT_DIR}/ANTIC_source/
 cd ${NMZ_OPT_DIR}/ANTIC_source
 
-../../download.sh ${ANTIC_URL} ${ANTIC_SHA256}
+#../../download.sh ${ANTIC_URL} ${ANTIC_SHA256}
 if [ ! -d antic-${ANTIC_VERSION} ]; then
     tar -xvf v${ANTIC_VERSION}.tar.gz
 fi

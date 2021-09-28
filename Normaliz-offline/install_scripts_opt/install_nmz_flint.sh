@@ -19,9 +19,9 @@ FLINT_SHA256=584235cdc39d779d9920eaef16fe084f3c26ffeeea003a3fff64a20a0f33449e
 
 echo "Installing FLINT..."
 
-mkdir -p ${NMZ_OPT_DIR}/Flint_source/
+#mkdir -p ${NMZ_OPT_DIR}/Flint_source/
 cd ${NMZ_OPT_DIR}/Flint_source
-../../download.sh ${FLINT_URL} ${FLINT_SHA256}
+#../../download.sh ${FLINT_URL} ${FLINT_SHA256}
 if [ ! -d flint-${FLINT_VERSION} ]; then
     tar -xvf flint-${FLINT_VERSION}.tar.gz
 fi
@@ -34,4 +34,4 @@ if [[ $OSTYPE == "linux-gnu" ]]; then
     sed -i s/"-Wl,"// Makefile.subdirs
 fi
 # make -j4 # verbose
-make install -j4
+make install -j2
