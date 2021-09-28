@@ -1,4 +1,5 @@
-(data_only_dirs Normaliz Normaliz-offline Normaliz-build)
+(data_only_dirs Normaliz Normaliz-off Normaliz-build)
+(include_subdirs unqualified)
 
 (library
   (name	normalizffi)
@@ -8,7 +9,7 @@
   ; (link_flags (-cclib "-L./Normaliz-build/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint"))
   (foreign_stubs (language cxx)
   		 (names normaliz_stub flint_stub)
-   		 (include_dirs ./Normaliz-offline/include)
+   		 (include_dirs ./Normaliz-off/include)
  		 (flags :standard -Wno-deprecated-declarations --verbose -L./Normaliz-build/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint))
   (foreign_archives normaliz flint))
 
@@ -29,7 +30,7 @@
 ;   (archive_name normaliz)
 ;   (language cxx)
 ;   (names normaliz_stub flint_stub)
-;   (include_dirs ./Normaliz-offline/include)
+;   (include_dirs ./Normaliz-off/include)
 ;   (flags :standard -Wno-deprecated-declarations --verbose -L./Normaliz-build/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint))
 
 ; (c_library_flags (-lnormaliz -lgmp -lgmpxx -L/home/diagram/src/research/computer-algebra/normaliz/normalizffi/Normaliz-build/lib)))
