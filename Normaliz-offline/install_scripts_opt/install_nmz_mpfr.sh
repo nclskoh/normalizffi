@@ -27,6 +27,11 @@ echo "Installing MPFR..."
 # download & extract
 mkdir -p ${NMZ_OPT_DIR}/MPFR_source/
 cd ${NMZ_OPT_DIR}/MPFR_source
+
+# NK:
+echo "MPRF: Current directory is... "
+echo ${PWD}
+
 #../../download.sh ${MPFR_URL} ${MPFR_SHA256}
 if [ ! -d mpfr-${MPFR_VERSION} ]; then
     tar -xvf mpfr-${MPFR_VERSION}.tar.gz
