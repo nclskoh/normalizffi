@@ -25,7 +25,7 @@ MPFR_SHA256=3127fe813218f3a1f0adf4e8899de23df33b4cf4b4b3831a5314f78e65ffa2d6
 echo "Installing MPFR..."
 
 # download & extract
-mkdir -p ${NMZ_OPT_DIR}/MPFR_source/
+#mkdir -p ${NMZ_OPT_DIR}/MPFR_source/
 cd ${NMZ_OPT_DIR}/MPFR_source
 #../../download.sh ${MPFR_URL} ${MPFR_SHA256}
 if [ ! -d mpfr-${MPFR_VERSION} ]; then

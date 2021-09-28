@@ -24,9 +24,9 @@ NAUTY_SHA256=fc434729c833d9bb7053c8def10e72eaede03487d1afa50568ce2972b0337741
 echo "Installing nauty..."
 
 # download & extract
-mkdir -p ${NMZ_OPT_DIR}/Nauty_source/
+#mkdir -p ${NMZ_OPT_DIR}/Nauty_source/
 cd ${NMZ_OPT_DIR}/Nauty_source/
-../../download.sh ${NAUTY_URL} ${NAUTY_SHA256}
+#../../download.sh ${NAUTY_URL} ${NAUTY_SHA256}
 if [ ! -d nauty${NAUTY_VERSION} ]; then
     tar xvf nauty${NAUTY_VERSION}.tar.gz
 fi

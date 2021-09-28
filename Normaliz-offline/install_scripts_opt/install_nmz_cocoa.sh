@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+1#!/usr/bin/env bash
 
 set -e
 
@@ -25,7 +25,7 @@ COCOA_SHA256=80d472fd74c7972f8f2a239679e7ad8ae8a43676e3c259c2218ae2480a6267a8
 echo "Installing CoCoA..."
 
 # download & extract
-mkdir -p ${NMZ_OPT_DIR}/CoCoA_source/
+#mkdir -p ${NMZ_OPT_DIR}/CoCoA_source/
 cd ${NMZ_OPT_DIR}/CoCoA_source/
 #../../download.sh ${COCOA_URL} ${COCOA_SHA256}
 if [ ! -d CoCoALib-${COCOA_VERSION} ]; then

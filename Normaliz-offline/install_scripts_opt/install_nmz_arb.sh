@@ -19,7 +19,7 @@ ARB_SHA256=d2f186b10590c622c11d1ca190c01c3da08bac9bc04e84cb591534b917faffe7
 
 echo "Installing ARB..."
 
-mkdir -p ${NMZ_OPT_DIR}/ARB_source/
+#mkdir -p ${NMZ_OPT_DIR}/ARB_source/
 cd ${NMZ_OPT_DIR}/ARB_source
 # ../../download.sh ${ARB_URL} ${ARB_SHA256} arb-${ARB_VERSION}.tar.gz
 #../../download.sh ${ARB_URL} ${ARB_SHA256} arb-${ARB_VERSION}.tar.gz
