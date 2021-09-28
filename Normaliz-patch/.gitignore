@@ -47,7 +47,9 @@ test/*/*.out_1
 *.toc
 *.log
 *.backup
-*.gz
+
+# NK: *.gz
+
 *.blg
 *.bbl
 
@@ -69,13 +71,7 @@ source/gperftools/*
 homepage/*-Dateien/*
 
 # NK:
-# nmz_opt_lib/*
-nmz_opt_lib/*/*/build
-nmz_opt_lib/*/*/lib
-nmz_opt_lib/**/.libs
-nmz_opt_lib/**/*.o
-nmz_opt_lib/**/*.a
-nmz_opt_lib/**/*.so
+# Original: nmz_opt_lib/*
 
 # NK:
 nmz_opt_lib/ANTIC_SOURCE/antic-0.2.4
