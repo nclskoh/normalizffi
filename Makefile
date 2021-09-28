@@ -1,5 +1,5 @@
 all: ./Normaliz-build/lib/libnormaliz.so
-	echo "running dune..."; dune build --verbose
+	echo "running dune..."; ls; dune build --verbose
 
 ./Normaliz-build/lib/libnormaliz.so:
 	cd ./Normaliz-off; \
