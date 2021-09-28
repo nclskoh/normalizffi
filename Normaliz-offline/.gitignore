@@ -88,7 +88,7 @@ local/*
 .dirstamp
 *.la
 *.lo
-CoCoA
+# CoCoA
 /example/Makefile
 /example/Makefile.in
 /m4/libtool.m4
