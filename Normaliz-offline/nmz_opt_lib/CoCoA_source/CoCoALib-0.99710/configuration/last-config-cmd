@@ -1,0 +1,1 @@
+./configure  "--threadsafe-hack" "--no-boost"
