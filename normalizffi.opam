@@ -12,7 +12,8 @@ depends: [
   "ocaml" {>= "4.09"}
   "dune" {>= "2.9" & >= "2.9.1"}
   "odoc" {with-doc}
-# "ctypes.foreign" (TODO)
+  # "ctypes.foreign" (TODO)
+  # autoconf-archive
 ]
 build: [
   ["make"]
