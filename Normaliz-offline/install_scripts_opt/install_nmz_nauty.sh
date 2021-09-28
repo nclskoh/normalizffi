@@ -34,7 +34,7 @@ cd nauty${NAUTY_VERSION}
 
 # configure & compile
 ./configure --enable-tls
-make all -j4 CFLAGS="-fPIC -O3"
+make all -j2 CFLAGS="-fPIC -O3"
 mkdir -p ${PREFIX}/include/nauty
 cp nauty.h ${PREFIX}/include/nauty
 # mkdir -p ${PREFIX}/lib ## in common.sh

@@ -35,5 +35,5 @@ cd arb-${ARB_VERSION}
 if [ ! -f Makefile ]; then
     ./configure ${CONFIGURE_FLAGS}
 fi
-make -j4 # verbose
+make -j2 # verbose
 make install

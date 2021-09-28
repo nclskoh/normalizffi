@@ -37,7 +37,7 @@ cd CoCoALib-${COCOA_VERSION}
 if [ ! -f configuration/autoconf.mk ]; then
     ./configure --threadsafe-hack --no-boost ${COCOA_CONFIGURE_FLAGS}
 fi
-make library -j4
+make library -j2
 mkdir -p ${PREFIX}/include/CoCoA
 cp include/CoCoA/*.H ${PREFIX}/include/CoCoA
 # mkdir -p ${PREFIX}/lib ## in common.sh

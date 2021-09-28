@@ -38,5 +38,5 @@ sed -i -e s/fmpq_poly_add_fmpq/fmpq_poly_add_fmpq_eantic/g upstream/patched/nf_e
 if [ ! -f config.status ]; then
     ./configure ${CONFIGURE_FLAGS} --without-byexample --without-doc --without-benchmark --without-pyeantic
 fi
-make -j4
+make -j2
 make install

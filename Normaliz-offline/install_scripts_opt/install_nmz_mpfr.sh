@@ -40,7 +40,7 @@ if [ ! -f config.status ]; then
     ./configure ${CONFIGURE_FLAGS}
 fi
 
-make -j4
+make -j2
 make install
 
 echo "MPFR installed"
