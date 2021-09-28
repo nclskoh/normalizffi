@@ -68,6 +68,12 @@ source/gperftools/*
 # build files etc.
 homepage/*-Dateien/*
 # nmz_opt_lib/*
+nmz_opt_lib/*/*/build
+nmz_opt_lib/*/*/lib
+nmz_opt_lib/**/.libs
+nmz_opt_lib/**/*.o
+nmz_opt_lib/**/*.a
+nmz_opt_lib/**/*.so
 local/*
 /Makefile
 /Makefile.in
