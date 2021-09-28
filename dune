@@ -9,7 +9,7 @@
   ; (link_flags (-cclib "-L./Normaliz-build/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint"))
   (foreign_stubs (language cxx)
   		 (names normaliz_stub flint_stub)
-   		 (include_dirs ./Normaliz-offline/include)
+   		 (include_dirs ./Normaliz-build/include)
  		 (flags :standard -Wno-deprecated-declarations --verbose -L./Normaliz-build/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint))
   (foreign_archives normaliz flint))
 
