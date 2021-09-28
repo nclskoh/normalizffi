@@ -1,0 +1,30 @@
+2 extreme rays
+2 support hyperplanes
+
+embedding dimension = 3
+rank = 2
+external index = 1
+
+grading:
+-1 -2 0 
+
+degrees of extreme rays:
+4:2  
+
+***********************************************************************
+
+2 extreme rays:
+ -2 -1 0
+  2 -3 0
+
+2 support hyperplanes:
+ -3 -2 0
+  1 -2 0
+
+1 equations:
+ 0 0 1
+
+2 basis elements of generated  lattice:
+ 1 0 0
+ 0 1 0
+

@@ -1,0 +1,64 @@
+3 Hilbert basis elements
+0 lattice points in polytope (Hilbert basis elements of degree 1)
+2 extreme rays
+2 support hyperplanes
+
+embedding dimension = 2
+rank = 2 (maximal)
+external index = 1
+internal index = 1
+original monoid is integrally closed in chosen lattice
+
+size of triangulation   = 2
+resulting sum of |det|s = 2
+
+grading:
+1 1 
+
+degrees of extreme rays:
+3:2  
+
+multiplicity = 1/3
+multiplicity (float) = 0.333333333333
+
+Hilbert series:
+1 -1 1 
+denominator with 2 factors:
+1:1  3:1  
+
+degree of Hilbert Series as rational function = -2
+
+The numerator of the Hilbert series is symmetric.
+
+Hilbert series with cyclotomic denominator:
+1 -1 1 
+cyclotomic denominator:
+1:2  3:1  
+
+Hilbert quasi-polynomial of period 3:
+ 0:   3 1
+ 1:  -1 1
+ 2:   1 1
+with common denominator = 3
+
+rank of class group = 0
+finite cyclic summands:
+3:1  
+
+***********************************************************************
+
+0 lattice points in polytope (Hilbert basis elements of degree 1):
+
+3 further Hilbert basis elements of higher degree:
+ 1 1
+ 1 2
+ 2 1
+
+2 extreme rays:
+ 1 2
+ 2 1
+
+2 support hyperplanes:
+ -1  2
+  2 -1
+
