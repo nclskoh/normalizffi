@@ -17,18 +17,18 @@ depends: [
 build: [
   ["make"]
   ["dune" "subst"] {dev}
-  [
-    "dune"
-    "build"
-    "-p"
-    name
-    "-j"
-    jobs
-    "--promote-install-files=false"
-    "@install"
-    "@runtest" {with-test}
-    "@doc" {with-doc}
-  ]
+  # [
+  #   "dune"
+  #   "build"
+  #   "-p"
+  #   name
+  #   "-j"
+  #   jobs
+  #   "--promote-install-files=false"
+  #   "@install"
+  #   "@runtest" {with-test}
+  #   "@doc" {with-doc}
+  # ]
   ["dune" "install" "-p" name "--create-install-files" name]
 ]
 dev-repo: "git+https://github.com/nclskoh/normalizffi.git"
