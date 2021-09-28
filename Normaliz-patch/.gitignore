@@ -67,6 +67,8 @@ source/gperftools/*
 
 # build files etc.
 homepage/*-Dateien/*
+
+# NK:
 # nmz_opt_lib/*
 nmz_opt_lib/*/*/build
 nmz_opt_lib/*/*/lib
@@ -74,6 +76,16 @@ nmz_opt_lib/**/.libs
 nmz_opt_lib/**/*.o
 nmz_opt_lib/**/*.a
 nmz_opt_lib/**/*.so
+
+# NK:
+nmz_opt_lib/ANTIC_SOURCE/antic-0.2.4
+nmz_opt_lib/ARB_source/arb-2.20.0
+nmz_opt_lib/CoCoA_source/CoCoALib-0.99710
+nmz_opt_lib/E-ANTIC_source/e-antic-1.0.3
+nmz_opt_lib/Flint_source/flint-2.8.0
+nmz_opt_lib/MPFR_source/mpfr-4.1.0
+nmz_opt_lib/Nauty_source/nauty27r2
+
 local/*
 /Makefile
 /Makefile.in
@@ -88,7 +100,10 @@ local/*
 .dirstamp
 *.la
 *.lo
-CoCoA
+
+# NK:
+# CoCoA
+
 /example/Makefile
 /example/Makefile.in
 /m4/libtool.m4
