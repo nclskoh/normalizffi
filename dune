@@ -1,0 +1,41 @@
+(data_only_dirs Normaliz Normaliz-offline Normaliz-build)
+
+(library
+  (name	normalizffi)
+  (public_name normalizffi)
+  (libraries ctypes.foreign gmp ounit2)
+  ; link flags are only at link-time
+  ; (link_flags (-cclib "-L./Normaliz-build/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint"))
+  (foreign_stubs (language cxx)
+  		 (names normaliz_stub flint_stub)
+   		 (include_dirs ./Normaliz-offline/include)
+ 		 (flags :standard -Wno-deprecated-declarations --verbose -L./Normaliz-build/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint))
+  (foreign_archives normaliz flint))
+
+(rule
+  (deps (source_tree Normaliz-build))
+  (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a)
+  (action
+    (no-infer
+      (progn
+        (copy Normaliz-build/lib/libnormaliz.so dllnormaliz.so)
+	(copy Normaliz-build/lib/libnormaliz.a libnormaliz.a)
+        (copy Normaliz-build/lib/libflint.so dllflint.so)
+	(copy Normaliz-build/lib/libflint.a libflint.a)))))
+
+; (install_c_headers normaliz_stub flint_stub stub_common); this copies the C headers to the installation directory
+
+; (foreign_library
+;   (archive_name normaliz)
+;   (language cxx)
+;   (names normaliz_stub flint_stub)
+;   (include_dirs ./Normaliz-offline/include)
+;   (flags :standard -Wno-deprecated-declarations --verbose -L./Normaliz-build/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint))
+
+; (c_library_flags (-lnormaliz -lgmp -lgmpxx -L/home/diagram/src/research/computer-algebra/normaliz/normalizffi/Normaliz-build/lib)))
+
+;
+;(executables
+;  (names normaliz_stub.o flint.o)
+;  (modes (native object)))
+;
