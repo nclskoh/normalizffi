@@ -25,7 +25,7 @@ echo "Installing E-ANTIC..."
 mkdir -p ${NMZ_OPT_DIR}/E-ANTIC_source/
 cd ${NMZ_OPT_DIR}/E-ANTIC_source
 
-../../download.sh ${E_ANTIC_URL} ${E_ANTIC_SHA256}
+#../../download.sh ${E_ANTIC_URL} ${E_ANTIC_SHA256}
 if [ ! -d e-antic-${E_ANTIC_VERSION} ]; then
     tar -xvf e-antic-${E_ANTIC_VERSION}.tar.gz
 fi

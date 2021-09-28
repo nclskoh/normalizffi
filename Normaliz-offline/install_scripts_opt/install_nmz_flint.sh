@@ -21,7 +21,7 @@ echo "Installing FLINT..."
 
 mkdir -p ${NMZ_OPT_DIR}/Flint_source/
 cd ${NMZ_OPT_DIR}/Flint_source
-../../download.sh ${FLINT_URL} ${FLINT_SHA256}
+#../../download.sh ${FLINT_URL} ${FLINT_SHA256}
 if [ ! -d flint-${FLINT_VERSION} ]; then
     tar -xvf flint-${FLINT_VERSION}.tar.gz
 fi
