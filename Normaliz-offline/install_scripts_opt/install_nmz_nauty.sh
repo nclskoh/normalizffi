@@ -26,7 +26,7 @@ echo "Installing nauty..."
 # download & extract
 mkdir -p ${NMZ_OPT_DIR}/Nauty_source/
 cd ${NMZ_OPT_DIR}/Nauty_source/
-../../download.sh ${NAUTY_URL} ${NAUTY_SHA256}
+#../../download.sh ${NAUTY_URL} ${NAUTY_SHA256}
 if [ ! -d nauty${NAUTY_VERSION} ]; then
     tar xvf nauty${NAUTY_VERSION}.tar.gz
 fi
@@ -34,7 +34,7 @@ cd nauty${NAUTY_VERSION}
 
 # configure & compile
 ./configure --enable-tls
-make all -j4 CFLAGS="-fPIC -O3"
+make all -j2 CFLAGS="-fPIC -O3"
 mkdir -p ${PREFIX}/include/nauty
 cp nauty.h ${PREFIX}/include/nauty
 # mkdir -p ${PREFIX}/lib ## in common.sh
