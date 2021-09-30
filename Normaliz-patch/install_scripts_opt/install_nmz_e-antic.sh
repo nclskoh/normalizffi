@@ -26,8 +26,10 @@ mkdir -p ${NMZ_OPT_DIR}/E-ANTIC_source/
 cd ${NMZ_OPT_DIR}/E-ANTIC_source
 
 #../../download.sh ${E_ANTIC_URL} ${E_ANTIC_SHA256}
+cp ${DOWNLOAD_DIR}/${E_ANTIC_PACKAGE} ./
+
 if [ ! -d e-antic-${E_ANTIC_VERSION} ]; then
-    tar -xvf e-antic-${E_ANTIC_VERSION}.tar.gz
+    tar -xvf ${E_ANTIC_PACKAGE}
 fi
 
 cd e-antic-${E_ANTIC_VERSION}/libeantic

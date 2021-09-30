@@ -26,9 +26,12 @@ echo "Installing nauty..."
 # download & extract
 mkdir -p ${NMZ_OPT_DIR}/Nauty_source/
 cd ${NMZ_OPT_DIR}/Nauty_source/
+
 #../../download.sh ${NAUTY_URL} ${NAUTY_SHA256}
+cp ${DOWNLOAD_DIR}/${NAUTY_PACKAGE} ./
+
 if [ ! -d nauty${NAUTY_VERSION} ]; then
-    tar xvf nauty${NAUTY_VERSION}.tar.gz
+    tar xvf ${NAUTY_PACKAGE}
 fi
 cd nauty${NAUTY_VERSION}
 

@@ -27,9 +27,12 @@ echo "Installing CoCoA..."
 # download & extract
 mkdir -p ${NMZ_OPT_DIR}/CoCoA_source/
 cd ${NMZ_OPT_DIR}/CoCoA_source/
+
 #../../download.sh ${COCOA_URL} ${COCOA_SHA256}
+cp ${DOWNLOAD_DIR}/${COCOA_PACKAGE} ./
+
 if [ ! -d CoCoALib-${COCOA_VERSION} ]; then
-    tar xvf CoCoALib-${COCOA_VERSION}.tgz
+    tar xvf ${COCOA_PACKAGE}
 fi
 
 # configure & compile
