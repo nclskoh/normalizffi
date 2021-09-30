@@ -21,10 +21,12 @@ echo "Installing ARB..."
 
 mkdir -p ${NMZ_OPT_DIR}/ARB_source/
 cd ${NMZ_OPT_DIR}/ARB_source
+
 # ../../download.sh ${ARB_URL} ${ARB_SHA256} arb-${ARB_VERSION}.tar.gz
-../../download.sh ${ARB_URL} ${ARB_SHA256} arb-${ARB_VERSION}.tar.gz
+cp ${DOWNLOAD_DIR}/${ARB_PACKAGE} ./
+
 if [ ! -d arb-${ARB_VERSION} ]; then
-    tar -xvf arb-${ARB_VERSION}.tar.gz
+    tar -xvf ${ARB_PACKAGE}
 fi
 cd arb-${ARB_VERSION}
 # (In particular on Mac OS X, make sure that our version of MPFR comes
@@ -35,5 +37,5 @@ cd arb-${ARB_VERSION}
 if [ ! -f Makefile ]; then
     ./configure ${CONFIGURE_FLAGS}
 fi
-make -j4 # verbose
+make -j2 # verbose
 make install

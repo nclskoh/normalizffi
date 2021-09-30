@@ -27,9 +27,12 @@ echo "Installing MPFR..."
 # download & extract
 mkdir -p ${NMZ_OPT_DIR}/MPFR_source/
 cd ${NMZ_OPT_DIR}/MPFR_source
-../../download.sh ${MPFR_URL} ${MPFR_SHA256}
+
+#../../download.sh ${MPFR_URL} ${MPFR_SHA256}
+cp ${DOWNLOAD_DIR}/${MPFR_PACKAGE} ./
+
 if [ ! -d mpfr-${MPFR_VERSION} ]; then
-    tar -xvf mpfr-${MPFR_VERSION}.tar.gz
+    tar -xvf ${MPFR_PACKAGE}
 fi
 
 # configure & compile
@@ -40,7 +43,7 @@ if [ ! -f config.status ]; then
     ./configure ${CONFIGURE_FLAGS}
 fi
 
-make -j4
+make -j2
 make install
 
 echo "MPFR installed"

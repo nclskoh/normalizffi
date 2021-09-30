@@ -21,9 +21,12 @@ ANTIC_SHA256=517d53633ff9c6348549dc6968567051b2161098d2bc395cb40ecc41e24312c6
 mkdir -p ${NMZ_OPT_DIR}/ANTIC_source/
 cd ${NMZ_OPT_DIR}/ANTIC_source
 
-../../download.sh ${ANTIC_URL} ${ANTIC_SHA256}
+#../../download.sh ${ANTIC_URL} ${ANTIC_SHA256}
+cp ${DOWNLOAD_DIR}/${ANTIC_PACKAGE} ./
+
+cp ${DOWNLOAD_DIR}/
 if [ ! -d antic-${ANTIC_VERSION} ]; then
-    tar -xvf v${ANTIC_VERSION}.tar.gz
+    tar -xvf ${ANTIC_PACKAGE}
 fi
 
 cd antic-${ANTIC_VERSION}/

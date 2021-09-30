@@ -21,9 +21,12 @@ echo "Installing FLINT..."
 
 mkdir -p ${NMZ_OPT_DIR}/Flint_source/
 cd ${NMZ_OPT_DIR}/Flint_source
-../../download.sh ${FLINT_URL} ${FLINT_SHA256}
+
+#../../download.sh ${FLINT_URL} ${FLINT_SHA256}
+cp ${DOWNLOAD_DIR}/${FLINT_PACKAGE} ./
+
 if [ ! -d flint-${FLINT_VERSION} ]; then
-    tar -xvf flint-${FLINT_VERSION}.tar.gz
+    tar -xvf ${FLINT_PACKAGE}
 fi
 cd flint-${FLINT_VERSION}
 if [ ! -f Makefile ]; then
@@ -34,4 +37,4 @@ if [[ $OSTYPE == "linux-gnu" ]]; then
     sed -i s/"-Wl,"// Makefile.subdirs
 fi
 # make -j4 # verbose
-make install -j4
+make install -j2

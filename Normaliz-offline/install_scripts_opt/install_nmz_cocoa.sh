@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+1#!/usr/bin/env bash
 
 set -e
 
@@ -27,9 +27,12 @@ echo "Installing CoCoA..."
 # download & extract
 mkdir -p ${NMZ_OPT_DIR}/CoCoA_source/
 cd ${NMZ_OPT_DIR}/CoCoA_source/
-../../download.sh ${COCOA_URL} ${COCOA_SHA256}
+
+#../../download.sh ${COCOA_URL} ${COCOA_SHA256}
+cp ${DOWNLOAD_DIR}/${COCOA_PACKAGE} ./
+
 if [ ! -d CoCoALib-${COCOA_VERSION} ]; then
-    tar xvf CoCoALib-${COCOA_VERSION}.tgz
+    tar xvf ${COCOA_PACKAGE}
 fi
 
 # configure & compile
@@ -37,7 +40,7 @@ cd CoCoALib-${COCOA_VERSION}
 if [ ! -f configuration/autoconf.mk ]; then
     ./configure --threadsafe-hack --no-boost ${COCOA_CONFIGURE_FLAGS}
 fi
-make library -j4
+make library -j2
 mkdir -p ${PREFIX}/include/CoCoA
 cp include/CoCoA/*.H ${PREFIX}/include/CoCoA
 # mkdir -p ${PREFIX}/lib ## in common.sh

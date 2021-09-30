@@ -25,9 +25,11 @@ echo "Installing E-ANTIC..."
 mkdir -p ${NMZ_OPT_DIR}/E-ANTIC_source/
 cd ${NMZ_OPT_DIR}/E-ANTIC_source
 
-../../download.sh ${E_ANTIC_URL} ${E_ANTIC_SHA256}
+#../../download.sh ${E_ANTIC_URL} ${E_ANTIC_SHA256}
+cp ${DOWNLOAD_DIR}/${E_ANTIC_PACKAGE} ./
+
 if [ ! -d e-antic-${E_ANTIC_VERSION} ]; then
-    tar -xvf e-antic-${E_ANTIC_VERSION}.tar.gz
+    tar -xvf ${E_ANTIC_PACKAGE}
 fi
 
 cd e-antic-${E_ANTIC_VERSION}/libeantic
@@ -38,5 +40,5 @@ sed -i -e s/fmpq_poly_add_fmpq/fmpq_poly_add_fmpq_eantic/g upstream/patched/nf_e
 if [ ! -f config.status ]; then
     ./configure ${CONFIGURE_FLAGS} --without-byexample --without-doc --without-benchmark --without-pyeantic
 fi
-make -j4
+make -j2
 make install
