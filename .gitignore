@@ -2,5 +2,4 @@
 _build/*
 _destdir/*
 Normaliz-offline/local
-Normaliz-offline/test
 Normaliz/local
