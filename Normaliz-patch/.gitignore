@@ -125,11 +125,13 @@ local/*
 /source/Makefile.in
 /source/maxsimplex/maxsimplex
 /source/outerpar/outerpar
+
 /test/Makefile
 /test/Makefile.in
 /test/run_tests
 /test/unittests
 /test/*.trs
+
 /source/lib_test/*
 /source/Gorenstein/*
 /source/Makefile.Winfried
