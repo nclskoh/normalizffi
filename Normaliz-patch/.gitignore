@@ -126,8 +126,8 @@ local/*
 /source/maxsimplex/maxsimplex
 /source/outerpar/outerpar
 
-/test/Makefile
-/test/Makefile.in
+# /test/Makefile
+# /test/Makefile.in
 /test/run_tests
 /test/unittests
 /test/*.trs
