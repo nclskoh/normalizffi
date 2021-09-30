@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Download all packages periodically.
-# ./downloadall.sh
+./downloadall.sh
 
 cp ./.gitignore ../Normaliz-offline/
 
