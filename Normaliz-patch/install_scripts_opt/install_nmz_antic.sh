@@ -24,7 +24,6 @@ cd ${NMZ_OPT_DIR}/ANTIC_source
 #../../download.sh ${ANTIC_URL} ${ANTIC_SHA256}
 cp ${DOWNLOAD_DIR}/${ANTIC_PACKAGE} ./
 
-cp ${DOWNLOAD_DIR}/
 if [ ! -d antic-${ANTIC_VERSION} ]; then
     tar -xvf ${ANTIC_PACKAGE}
 fi
