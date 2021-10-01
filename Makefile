@@ -4,7 +4,7 @@ all: ./Normaliz-build/lib/libnormaliz.so
 ./Normaliz-build/lib/libnormaliz.so:
 	cd ./Normaliz-offline; \
 	echo "installing normaliz"; \
-	./install_normaliz.sh; \
+	./install_normaliz_with_eantic.sh; \
 	echo "installed normaliz"
 
 .PHONY: clean
