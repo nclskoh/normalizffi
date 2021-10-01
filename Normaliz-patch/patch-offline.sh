@@ -3,7 +3,7 @@
 # Download all packages periodically.
 ./downloadall.sh
 
-cp ./.gitignore ../Normaliz-offline/
+cp ./normaliz.gitignore ../Normaliz-offline/.gitignore
 
 # common.sh is patched to point to pre-downloaded packages;
 # filenames of downloaded packages have to be updated!
