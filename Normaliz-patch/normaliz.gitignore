@@ -3,7 +3,9 @@
 
 # ignore normaliz executables
 normaliz
-normaliz_*
+
+# NK:
+# normaliz_*
 
 # ignore executable tools
 collectcols
