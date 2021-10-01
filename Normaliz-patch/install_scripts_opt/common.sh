@@ -97,9 +97,9 @@ export MPFR_PACKAGE=mpfr-${MPFR_VERSION}.tar.gz
 export NAUTY_PACKAGE=nauty${NAUTY_VERSION}.tar.gz
 
 echo "**************"
-echo $NMZ_OPT_DIR
-echo $PREFIX
-echo $CPPFLAGS
-echo $LDFLAGS
-echo $DOWNLOAD_DIR
+echo "common.sh: NMZ_OPT_DIR is: ${NMZ_OPT_DIR}"
+echo "common.sh: Installation prefix is: ${PREFIX}"
+echo "common.sh: CPPFlags is: ${CPPFLAGS}"
+echo "common.sh: LDFLAGS is: ${LDFLAGS}"
+echo "common.sh: DOWNLOAD_DIR is: ${DOWNLOAD_DIR}"
 echo "-----------"
