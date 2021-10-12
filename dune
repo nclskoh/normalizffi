@@ -20,7 +20,8 @@
 
   ; For Flint, relocation fails because of TLS storage (I think), and the solution is to explicitly link against .so instead of .a.
   ; For Normaliz, we have to compile with -fPIC.
-  (c_library_flags (-lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -leanticxx -lsha256 -lnauty -lcocoa)))
+  ; (c_library_flags (-lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -leanticxx -lsha256 -lnauty -lcocoa)))
+  (c_library_flags (-lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint)))
 
   ; (flags (-verbose))
   ; (flags (-verbose) (-ccopt -L../../Normaliz-offline/local/lib))
