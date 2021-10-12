@@ -13,6 +13,9 @@ type rational_matrix_ptr
 (** Create a matrix in Flint *)
 val new_matrix : zz list list -> rational_matrix_ptr
 
+(** Dummy value to import symbol when linking; do not use. *)
+val dummy : unit -> unit
+
 (** Get the contents of a matrix *)
 val zz_matrix_of_matrix : rational_matrix_ptr -> zz list list
 

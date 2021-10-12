@@ -8,6 +8,8 @@ let slong_of_int x = Signed.Long.of_int64 (Int64.of_int x)
 type rational_matrix_ptr = unit ptr
 let rational_matrix_ptr = ptr void
 
+external dummy : unit -> unit = "matrix_from_string_array"
+
 let matrix_from_array =
   foreign "matrix_from_string_array" (ptr integer @-> slong @-> slong
                                       @-> integer
