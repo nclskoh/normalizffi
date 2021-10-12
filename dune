@@ -45,7 +45,7 @@
   (deps (source_tree Normaliz-offline))
   ; (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dlleanticxx.so libeanticxx.a dllsha256.so libsha256.a dllnauty.so libnauty.a dllcocoa.so libcocoa.a)
   ; (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dlleanticxx.so libeanticxx.a dllsha256.so libsha256.a libnauty.a dllcocoa.so libcocoa.a)
-  (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a)
+  (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dllsha256.so libsha256.a)
   ; (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dlleanticxx.so libeanticxx.a libsha256.a libnauty.a libcocoa.a)
   (action
     (no-infer
@@ -53,9 +53,9 @@
         ; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -Wl,--whole-archive -o dllsha256.so -L. -lsha256 -Wl,-no-whole-archive))
         ; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -Wl,--whole-archive -o dllnauty.so -L. -lnauty -Wl,-no-whole-archive))
         ; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -Wl,--whole-archive -o dllcocoa.so -L. -lcocoa -Wl,-no-whole-archive))
-	(chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -o dllsha256.so -L. -lsha256))
+	; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -o dllsha256.so -L. -lsha256))
 	; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -o dllnauty.so -L. -lnauty))
-	(chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -o dllcocoa.so -L. -lcocoa))
+	; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -o dllcocoa.so -L. -lcocoa))
 	; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -o dllsha256.so -L. -lsha256))
 	; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -o dllnauty.so -L. -lnauty))
 	; (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -o dllcocoa.so -L. -lcocoa))
