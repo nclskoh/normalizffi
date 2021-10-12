@@ -97,6 +97,8 @@ type cone_ptr = HomPtr of homogeneous_cone_ptr | InhomPtr of inhomogeneous_cone_
 let cone_ptr_of_hom ptr = HomPtr ptr
 let cone_ptr_of_inhom ptr = InhomPtr ptr
 
+external dummy_new_cone: unit -> unit = "new_cone"
+
 let alloc_cone = foreign "new_cone"
     (ptr integer @-> size_t (* cone generators *)
      @-> ptr integer @-> size_t (* subspace generators *)

@@ -74,6 +74,9 @@ val add_excluded_face_inequalities : 'a cone -> 'a list list -> ('a cone, string
     is sometimes problematic when the dehomogenizing component is negative. *)
 val new_cone : ?one_geq_zero:bool -> zz cone -> homogeneous_cone_ptr
 
+(** For ctypes to link properly. *)
+val dummy_new_cone : unit -> unit
+
 (** Intersect two cones *)
 val intersect_cone : homogeneous_cone_ptr -> homogeneous_cone_ptr -> (homogeneous_cone_ptr, string) result
 
