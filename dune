@@ -45,7 +45,7 @@
   (deps (source_tree Normaliz-offline))
   ; (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dlleanticxx.so libeanticxx.a dllsha256.so libsha256.a dllnauty.so libnauty.a dllcocoa.so libcocoa.a)
   ; (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dlleanticxx.so libeanticxx.a dllsha256.so libsha256.a libnauty.a dllcocoa.so libcocoa.a)
-  (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dllsha256.so libsha256.a)
+  (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a)
   ; (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dlleanticxx.so libeanticxx.a libsha256.a libnauty.a libcocoa.a)
   (action
     (no-infer
