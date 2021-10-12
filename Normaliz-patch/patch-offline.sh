@@ -21,4 +21,6 @@ cp install_scripts_opt/install_nmz_e-antic.sh ../Normaliz-offline/install_script
 
 cp install_scripts_opt/install_nmz_nauty.sh ../Normaliz-offline/install_scripts_opt/install_nmz_nauty.sh
 
+cp ./install_normaliz.sh ../Normaliz-offline/install_normaliz.sh
+
 cp -r download ../Normaliz-offline/download
