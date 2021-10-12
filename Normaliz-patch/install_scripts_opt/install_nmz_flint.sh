@@ -6,7 +6,14 @@ echo "::group::flint"
 
 source $(dirname "$0")/common.sh
 
+# NK:
+CXXFLAGS="-fPIC"
+CFLAGS="-fPIC"
+
 CONFIGURE_FLAGS="--prefix=${PREFIX} --with-mpfr=${PREFIX} ${EXTRA_FLINT_FLAGS}"
+
+CONFIGURE_FLAGS="${CONFIGURE_FLAGS} CXXFLAGS=${CXXFLAGS} CFLAGS=${CFLAGS}"
+
 if [ "$GMP_INSTALLDIR" != "" ]; then
     CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=${GMP_INSTALLDIR}"
 fi
