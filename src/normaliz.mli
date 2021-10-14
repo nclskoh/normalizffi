@@ -7,11 +7,12 @@ type 'a cone
 
 (** Pointer to a Normaliz cone in C++ *)
 
-(** A pointer to a (homogeneous) cone *)
-type homogeneous_cone_ptr
+(** A pointer to a cone.
 
-(** A pointer to a (homogeneous) cone intersected with the constraint x0 = 1.
-    Hence, an inhomogeneous cone corresponds to a polyhedron.
+    A homogeneous cone is just a cone; it is {x: Ax >= 0} for some A.
+
+    An inhomogeneous cone is a homogeneous cone intersected with the constraint
+    x0 = 1, so an inhomogeneous cone defines a polyhedron.
     Constraints of the inhomogeneous cone such as inequalities and equalities
     are the constraints of this polyhedron, by reading the x0 component as 1.
     Generators of the inhomogeneous cone such as extreme rays, lineality space
@@ -19,17 +20,16 @@ type homogeneous_cone_ptr
     normalizing each vector to get 1 in the x0 component (possibly getting
     fractional entries as a result), and secondly, by dropping the x0 component.
 
-    Note that the constraint x0 = 1 cannot be explicitly expressed because the
-    homogeneous setting only allows linear forms and not affine forms,
+    Note that the constraint x0 = 1 cannot be explicitly expressed because a
+    homogeneous cone only allows linear forms and not affine forms,
     and hence does not show up among the equations of an inhomogeneous cone.
     (This is also why we cannot define a polyhedron ourselves by just adding
-    this constraint to a cone.) Sometimes, this shows up as the constraint
-    x0 >= 0, which corresponds to 1 >= 0.
-*)
-type inhomogeneous_cone_ptr
+    this constraint to a cone.)
 
-(** A pointer to either a homogeneous cone or an inhomogeneous cone
-    (a polyhedron). *)
+    A cone_ptr points to either a homogeneous cone or an inhomogeneous one.
+ *)
+type homogeneous_cone_ptr
+type inhomogeneous_cone_ptr
 type cone_ptr
 
 val cone_ptr_of_hom : homogeneous_cone_ptr -> cone_ptr
