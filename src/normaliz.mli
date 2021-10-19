@@ -51,7 +51,7 @@ val add_subspace_generators : 'a cone -> 'a list list -> ('a cone, string) resul
     a1 x1 + ... + an xn >= 0, to the cone, provided that dimensions match. *)
 val add_inequalities : 'a cone -> 'a list list -> ('a cone, string) result
 
-(** Add inequalities each of the form [a1; a2; ...; an] representing
+(** Add equalities each of the form [a1; a2; ...; an] representing
     a1 x1 + ... + an xn = 0, to the cone, provided that dimensions match. *)
 val add_equalities : Mpzf.t cone -> Mpzf.t list list -> (Mpzf.t cone, string) result
 
