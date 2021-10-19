@@ -1,7 +1,7 @@
 # Normalizffi
 
 This package provides Ocaml bindings to
-[Normaliz](https://www.normaliz.uni-osnabrueck.de/) and 
+[Normaliz](https://www.normaliz.uni-osnabrueck.de/) and
 [Flint](https://flintlib.org/).
 
 ## Installation
@@ -21,6 +21,6 @@ opam pin .
 
 ## Usage
 
-The library is available as `normalizffi`.
+The library is available as `normalizffi`, and exports the modules `Normaliz`
+and `Flint`.
 
-	
