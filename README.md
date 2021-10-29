@@ -13,6 +13,12 @@ This package provides Ocaml bindings to
 cd Normaliz-patch; ./patch-offline.sh
 ```
 
+2. Install dependencies.
+
+```
+opam install ctypes-foreign gmp
+```
+
 2. Pin the package and install. In `normalizffi`:
 
 ```

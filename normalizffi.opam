@@ -11,9 +11,8 @@ depends: [
   "ocaml" {>= "4.09"}
   "dune" {>= "2.9" & >= "2.9.1"}
   "odoc" {with-doc}
-  "ctypes" {>= "0.19.1"}
+  "ctypes.foreign" {>= "0.18.0"}
   "gmp" {>= "1.2.13"}
-  "ounit2" {>= "2.2.4"}
 ]
 build: [
   [make]

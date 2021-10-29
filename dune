@@ -4,7 +4,7 @@
 (library
   (name	normalizffi)
   (public_name normalizffi)
-  (libraries ctypes.foreign gmp ounit2)
+  (libraries ctypes.foreign gmp)
   ; (foreign_archives normaliz_stubs flint normaliz eanticxx sha256 cocoa)
   (foreign_archives normaliz_stubs flint normaliz nauty)
   ; (link_flags (-cclib "-L./Normaliz-offline/local/lib -lstdc++ -lgmpxx -lgmp -leanticxx -lnormaliz -lflint"))
