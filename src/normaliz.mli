@@ -2,7 +2,9 @@
 
 open FfiLib
 
-(** Ocaml representation of a cone *)
+(** Ocaml representation of a cone;
+    'a is the type of the entries of generators and constraints of the cone.
+ *)
 type 'a cone
 
 (** Pointer to a Normaliz cone in C++ *)
@@ -28,13 +30,17 @@ type 'a cone
 
     A cone_ptr points to either a homogeneous cone or an inhomogeneous one.
  *)
-type homogeneous_cone_ptr
-type inhomogeneous_cone_ptr
-type cone_ptr
+type homogeneous
+type inhomogeneous
 
-val cone_ptr_of_hom : homogeneous_cone_ptr -> cone_ptr
+(** Phantom type with 'a being homogeneous or inhomogeneous *)
+type 'a cone_ptr
 
-val cone_ptr_of_inhom: inhomogeneous_cone_ptr -> cone_ptr
+(*
+val cone_ptr_of_hom : homogeneous cone_ptr -> hom_or_inhom cone_ptr
+
+val cone_ptr_of_inhom: inhomogeneous cone_ptr -> hom_or_inhom cone_ptr
+ *)
 
 (** Create an empty cone *)
 val empty_cone : 'a cone
@@ -72,58 +78,58 @@ val add_excluded_face_inequalities : 'a cone -> 'a list list -> ('a cone, string
 (** Construct a cone in Normaliz.
     By default, we add the constraint x0 >= 0 to the cone, because dehomogenizing
     is sometimes problematic when the dehomogenizing component is negative. *)
-val new_cone : ?one_geq_zero:bool -> zz cone -> homogeneous_cone_ptr
+val new_cone : ?one_geq_zero:bool -> zz cone -> homogeneous cone_ptr
 
 (** For ctypes to link properly. *)
 val dummy_new_cone : unit -> unit
 
 (** Intersect two cones *)
-val intersect_cone : homogeneous_cone_ptr -> homogeneous_cone_ptr -> (homogeneous_cone_ptr, string) result
+val intersect_cone : homogeneous cone_ptr -> homogeneous cone_ptr -> (homogeneous cone_ptr, string) result
 
 (** Construct a new cone whose constraints (inequalities and equalities)
     are the generators of the input cone. *)
-val generators_to_constraints : homogeneous_cone_ptr -> homogeneous_cone_ptr
+val generators_to_constraints : homogeneous cone_ptr -> homogeneous cone_ptr
 
 (** Dehomogenize the cone by adding an implicit constraint x0 = 1, where x0
     is the first coordinate. The result points to a polyhedron that is
     obtained by intersecting the homogeneous cone with x0 = 1.
 *)
-val dehomogenize : homogeneous_cone_ptr -> inhomogeneous_cone_ptr
+val dehomogenize : homogeneous cone_ptr -> inhomogeneous cone_ptr
 
 (** Given an inhomogeneous cone obtained through [dehomogenize],
     hence representing a polyhedron, compute the integer hull of the polyhedron.
 *)
-val hull : inhomogeneous_cone_ptr -> unit
+val hull : inhomogeneous cone_ptr -> unit
 
 (** Get the conic generators of a homogeneous cone or a polyhedron
     (inhomogeneous cone). Note that these extreme rays do not
     include generators of the lineality space, which have to be obtained
     separately via [get_lineality_space].
 *)
-val get_extreme_rays : cone_ptr -> zz list list
+val get_extreme_rays : 'a cone_ptr -> zz list list
 
 (** Get the lineality generators of a homogeneous cone or a polyhedron
     (inhomogeneous cone). The linear combination of these generators is a
     (maximal) subspace within the object. Note that purely conic generators are
     not among these; they have to be separately obtained via [get_extreme_rays].
 *)
-val get_lineality_space : cone_ptr -> zz list list
+val get_lineality_space : 'a cone_ptr -> zz list list
 
 (** Get the inequalities that define the homogeneous cone or polyhedron.
     Note that these do not include equations, i.e., two-sided inequalities,
     which have to be obtained separately using [get_equations]. *)
-val get_inequalities : cone_ptr -> zz list list
+val get_inequalities : 'a cone_ptr -> zz list list
 
 (** Get the equations (two-sided inequalities) defining the cone. These do
     not include one-sided inequalities, which have to be obtained separately
     using [get_inequalities]. *)
-val get_equations : cone_ptr -> zz list list
+val get_equations : 'a cone_ptr -> zz list list
 
 (** Get the vertices of the polyhedron defined by the homogeneous cone
     intersected with the dehomogenizing constraint x0 = 1. *)
-val get_vertices : inhomogeneous_cone_ptr -> zz list list
+val get_vertices : inhomogeneous cone_ptr -> zz list list
 
-val get_dehomogenization : inhomogeneous_cone_ptr -> zz list list
+val get_dehomogenization : inhomogeneous cone_ptr -> zz list list
 
 (** The integer hull MUST first be computed using [hull].
     Get the inequalities defining the integer hull of the polyhedron defined
@@ -131,7 +137,7 @@ val get_dehomogenization : inhomogeneous_cone_ptr -> zz list list
     x0 = 1.  Note that these do not include equations, i.e., two-sided
     inequalities, that define the hull. They have to be obtained via
     [get_int_hull_equations] separately. *)
-val get_int_hull_inequalities : inhomogeneous_cone_ptr -> zz list list
+val get_int_hull_inequalities : inhomogeneous cone_ptr -> zz list list
 
 (** The integer hull MUST first be computed using [hull].
     Get the equations (two-sided inequalities) defining the integer hull of the
@@ -139,24 +145,24 @@ val get_int_hull_inequalities : inhomogeneous_cone_ptr -> zz list list
     constraint x0 = 1. Note that these do not include one-sided inequalities,
     which have to be obtained separately via [get_int_hull_inequalities].
   *)
-val get_int_hull_equations : inhomogeneous_cone_ptr -> zz list list
+val get_int_hull_equations : inhomogeneous cone_ptr -> zz list list
 
-val get_embedding_dimension : cone_ptr -> int
+val get_embedding_dimension : 'a cone_ptr -> int
 
-val is_empty : inhomogeneous_cone_ptr -> bool
+val is_empty : inhomogeneous cone_ptr -> bool
 
 (** This is exported for testing purposes only. *)
-val is_empty_semiopen : homogeneous_cone_ptr -> bool
+val is_empty_semiopen : homogeneous cone_ptr -> bool
 
 (* val is_semiopen: homogeneous_cone_ptr -> bool *)
 
 (** Determine if a vector is contained in a cone or not.
     Fails if the dimension of the vector doesn't match the dimension of the
     cone. *)
-val contains : homogeneous_cone_ptr -> zz list -> (bool, string) result
+val contains : homogeneous cone_ptr -> zz list -> (bool, string) result
 
-val pp_hom : Format.formatter -> homogeneous_cone_ptr -> unit
-val pp_inhom : Format.formatter -> inhomogeneous_cone_ptr -> unit
+val pp_hom : Format.formatter -> homogeneous cone_ptr -> unit
+val pp_inhom : Format.formatter -> inhomogeneous cone_ptr -> unit
 
 val pp_cone : Format.formatter -> zz cone -> unit
 

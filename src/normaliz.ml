@@ -90,12 +90,10 @@ let add_excluded_face_inequalities cone vecs = add_vectors_to_cone add_excluded_
 type cptr = unit ptr (* Ocaml type for cone pointers *)
 let cptr = ptr void (* typ for cone pointers *)
 
-type homogeneous_cone_ptr = Hom of cptr
-type inhomogeneous_cone_ptr = Inhom of cptr
-type cone_ptr = HomPtr of homogeneous_cone_ptr | InhomPtr of inhomogeneous_cone_ptr
+type homogeneous = unit
+type inhomogeneous = unit
 
-let cone_ptr_of_hom ptr = HomPtr ptr
-let cone_ptr_of_inhom ptr = InhomPtr ptr
+type 'a cone_ptr = Ptr of cptr
 
 external dummy_new_cone: unit -> unit = "new_cone"
 
@@ -143,7 +141,7 @@ let negate_vectors ll =
 let add_equalities cone vecs =
   add_inequalities cone (List.concat [vecs; negate_vectors vecs])
 
-let new_cone ?one_geq_zero:(one_geq_zero=true) cone : homogeneous_cone_ptr =
+let new_cone ?one_geq_zero:(one_geq_zero=true) cone : homogeneous cone_ptr =
   let dim = cone.ambient_dim in
   let num_rays = List.length cone.rays in
   let num_subspace_gens = List.length cone.subspace in
@@ -163,7 +161,7 @@ let new_cone ?one_geq_zero:(one_geq_zero=true) cone : homogeneous_cone_ptr =
       let matrix = carray_of_zz_matrix l in
       CArray.start matrix
   in
-  Hom (
+  Ptr (
     alloc_cone
       (alloc_matrix cone.rays (num_rays, dim))
       (size_t_of_int num_rays)
@@ -184,24 +182,23 @@ let get_embedding_dimension cone =
     let f = foreign "get_embedding_dimension" (cptr @-> returning size_t) in
     int_of_size_t (f cone_ptr) in
   match cone with
-  | HomPtr (Hom ptr) -> get_dim ptr
-  | InhomPtr (Inhom ptr) -> get_dim ptr
+  | Ptr ptr -> get_dim ptr
 
-let intersect_cone (Hom c1) (Hom c2) =
-  if get_embedding_dimension (HomPtr (Hom c1)) != get_embedding_dimension (HomPtr (Hom c2)) then
+let intersect_cone (Ptr c1) (Ptr c2) =
+  if get_embedding_dimension (Ptr c1) != get_embedding_dimension (Ptr c2) then
     Result.error "intersect_cone: Dimensions of the two cones do not match"
   else
     Result.ok
-      (Hom (
+      (Ptr (
           foreign "intersect_cone"
             (cptr @-> cptr @-> returning cptr)
             c1 c2
         ))
 
-let dehomogenize (Hom c) =
-  Inhom (foreign "dehomogenize" (cptr @-> returning cptr) c)
+let dehomogenize (Ptr c) =
+  Ptr (foreign "dehomogenize" (cptr @-> returning cptr) c)
 
-let hull (Inhom c) =
+let hull (Ptr c) =
   foreign "hull" (cptr @-> returning void) c
 
 let get_matrix (cone : cptr) (name: string) =
@@ -213,38 +210,28 @@ let get_matrix (cone : cptr) (name: string) =
   let arr = !@ ptr in
   zz_matrix_of_two_dim_array arr
 
-let get_extreme_rays =
-  function
-  | HomPtr (Hom cone) -> get_matrix cone "get_extreme_rays"
-  | InhomPtr (Inhom cone) -> get_matrix cone "get_extreme_rays"
+let get_extreme_rays = function
+  | Ptr cone -> get_matrix cone "get_extreme_rays"
 
-let get_lineality_space =
-  function
-  | HomPtr (Hom cone) -> get_matrix cone "get_lineality_space"
-  | InhomPtr (Inhom cone) -> get_matrix cone "get_lineality_space"
+let get_lineality_space = function
+  | Ptr cone -> get_matrix cone "get_lineality_space"
 
-let get_inequalities =
-  function
-  | HomPtr (Hom cone) -> get_matrix cone "get_inequalities"
-  | InhomPtr (Inhom cone) -> get_matrix cone "get_inequalities"
+let get_inequalities = function
+  | Ptr cone -> get_matrix cone "get_inequalities"
 
-let get_equations =
-  function
-  | HomPtr (Hom cone) -> get_matrix cone "get_equations"
-  | InhomPtr (Inhom cone) -> get_matrix cone "get_equations"
+let get_equations = function
+  | Ptr cone -> get_matrix cone "get_equations"
 
-let get_congruences =
-  function
-  | HomPtr (Hom cone) -> get_matrix cone "get_congruences"
-  | InhomPtr (Inhom cone) -> get_matrix cone "get_congruences"
+let get_congruences = function
+  | Ptr cone -> get_matrix cone "get_congruences"
 
-let get_vertices (Inhom cone) = get_matrix cone "get_vertices"
+let get_vertices (Ptr cone) = get_matrix cone "get_vertices"
 (* let get_original_monoid_generators (Inhom cone) =
    get_matrix cone "get_original_monoid_generators"
 *)
-let get_int_hull_inequalities (Inhom cone) = get_matrix cone "get_integer_hull_inequalities"
-let get_int_hull_equations (Inhom cone) = get_matrix cone "get_integer_hull_equations"
-let get_dehomogenization (Inhom cone) = get_matrix cone "get_dehomogenization"
+let get_int_hull_inequalities (Ptr cone) = get_matrix cone "get_integer_hull_inequalities"
+let get_int_hull_equations (Ptr cone) = get_matrix cone "get_integer_hull_equations"
+let get_dehomogenization (Ptr cone) = get_matrix cone "get_dehomogenization"
 
 (* TODO: This really doesn't work well:
 
@@ -255,13 +242,13 @@ let is_semiopen (Hom ptr) =
   foreign "is_semiopen" (cptr @-> returning bool) ptr
 *)
 
-let is_empty_semiopen (Hom ptr) =
+let is_empty_semiopen (Ptr ptr) =
   foreign "is_empty_semiopen" (cptr @-> returning bool) ptr
 
-let extract_generators_as_constraints (cone : homogeneous_cone_ptr) =
-  let rays = get_extreme_rays (HomPtr cone) in
-  let lineality = get_lineality_space (HomPtr cone) in
-  let dim = get_embedding_dimension (HomPtr cone) in
+let extract_generators_as_constraints (cone : homogeneous cone_ptr) =
+  let rays = get_extreme_rays cone in
+  let lineality = get_lineality_space cone in
+  let dim = get_embedding_dimension cone in
   let equalities = List.concat [lineality ; negate_vectors lineality] in
   let cone' =
     if (rays = []) && (lineality = []) then
@@ -284,7 +271,7 @@ let extract_generators_as_constraints (cone : homogeneous_cone_ptr) =
       }
   in cone'
 
-let generators_to_constraints (cone : homogeneous_cone_ptr) =
+let generators_to_constraints (cone : homogeneous cone_ptr) =
   new_cone (extract_generators_as_constraints cone)
 
 let is_empty cone = (get_vertices cone = [])
@@ -297,7 +284,7 @@ let contains cone vector =
      So we turn generators into constraints defining a semi-open polyhedron,
      and check if it is empty.
   *)
-  if get_embedding_dimension (HomPtr cone) != List.length vector then
+  if get_embedding_dimension cone != List.length vector then
     Result.error "contains: dimension doesn't match"
   else
     let cone' = extract_generators_as_constraints cone in
@@ -308,13 +295,13 @@ let contains cone vector =
 (* let foreign_print_cone = foreign "print_cone" (cptr @-> returning void) *)
 
 let pp fmt c =
-  let rays = get_extreme_rays (HomPtr c) in
-  let lineality_generators = get_lineality_space (HomPtr c) in
-  let inequalities = get_inequalities (HomPtr c) in
-  let equations = get_equations (HomPtr c) in
-  let congruences = get_congruences (HomPtr c) in
+  let rays = get_extreme_rays c in
+  let lineality_generators = get_lineality_space c in
+  let inequalities = get_inequalities c in
+  let equations = get_equations c in
+  let congruences = get_congruences c in
   Format.fprintf fmt "Printing cone:\n";
-  Format.fprintf fmt "Embedding dimension: %d\n" (get_embedding_dimension (HomPtr c));
+  Format.fprintf fmt "Embedding dimension: %d\n" (get_embedding_dimension c);
   Format.fprintf fmt "Rays:\n%a" pp_list_list rays;
   Format.fprintf fmt "Lineality space generators:\n%a"
     pp_list_list lineality_generators;
@@ -328,10 +315,10 @@ let pp_hom fmt c =
      Format.fprintf fmt "Semiopen?: %b\n" semiopen; *)
   Format.fprintf fmt "Dehomogenization: none\n"
 
-let pp_inhom fmt (Inhom c) =
-  pp fmt (Hom c);
-  let vertices = get_vertices (Inhom c) in
-  let dehom = get_dehomogenization (Inhom c) in
+let pp_inhom fmt c =
+  pp fmt c;
+  let vertices = get_vertices c in
+  let dehom = get_dehomogenization c in
   Format.fprintf fmt "Vertices:\n%a" pp_list_list vertices;
   Format.fprintf fmt "Dehomogenization:\n%a" pp_list_list dehom
 
