@@ -2,7 +2,7 @@
 (name normalizffi)
 (version 0.1)
 
-(generate_opam_files true)
+(generate_opam_files false)
 
 (source (github nclskoh/normalizffi))
 (license MIT)
