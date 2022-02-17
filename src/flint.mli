@@ -16,11 +16,19 @@ val new_matrix : zz list list -> rational_matrix_ptr
 (** Dummy value to import symbol when linking; do not use. *)
 val dummy : unit -> unit
 
-(** Get the contents of a matrix *)
-val zz_matrix_of_matrix : rational_matrix_ptr -> zz list list
-
 (** Compute the row Hermite normal form of the input matrix, done in-place.
-    The input matrix can have arbitrary rank.
+    The denominator of the rational matrix is ignored and left unchanged.
+
+    A matrix is in row-Hermite normal form if
+    (1) its all-zero rows are at the bottom of the matrix,
+    (2) for each non-zero row, the leading non-zero entry is positive,
+        all entries below it in the column are 0,
+        and all entries above it in the column are non-negative and
+        strictly smaller.
+    (3) for any leading non-zero entry, the leading non-zero entries in rows
+        above it must occur strictly to its left, so it is upper-triangular-like.
+    Note that columns with no leading non-zero entries or all zeroes are 
+    possible, which can happen if the input matrix is not of full column rank.
 *)
 val hermitize : rational_matrix_ptr -> unit
 
@@ -52,3 +60,6 @@ val matrix_ptr_of_rational_matrix :
 
 (** Get the contents of a rational matrix *)
 val zz_denom_matrix_of_rational_matrix : rational_matrix_ptr -> zz * zz list list
+
+(** Get rank of the matrix *)
+val rank : rational_matrix_ptr -> int

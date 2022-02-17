@@ -57,3 +57,7 @@ let denom_of_matrix (mat_ptr : rational_matrix_ptr): zz =
 let zz_denom_matrix_of_rational_matrix (rm_ptr : rational_matrix_ptr)
   : zz * zz list list =
   (denom_of_matrix rm_ptr, zz_matrix_of_matrix rm_ptr)
+
+let rank (mat_ptr : rational_matrix_ptr) =
+  foreign "rank" (rational_matrix_ptr @-> returning slong) mat_ptr
+  |> Signed.Long.to_int64 |> Int64.to_int

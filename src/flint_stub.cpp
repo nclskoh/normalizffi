@@ -277,3 +277,8 @@ rational_matrix* matrix_multiply(rational_matrix* mat1, rational_matrix* mat2) {
   result->denominator = str;
   return result;
 }
+
+extern "C"
+slong rank(rational_matrix* mat) {
+  return fmpz_mat_rank(mat->matrix);
+}
