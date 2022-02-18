@@ -52,6 +52,14 @@ extern "C" {
 
   slong rank(rational_matrix* matrix);
 
+  rational_matrix* transpose(rational_matrix* mat);
+
+  /**
+     Solve the matrix equation AX = B.
+     A MUST be invertible, otherwise NULL is returned.
+   */
+  rational_matrix* solve(rational_matrix* mat_A, rational_matrix* mat_B);
+
 }
 
 #endif

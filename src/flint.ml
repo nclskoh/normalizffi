@@ -55,9 +55,24 @@ let denom_of_matrix (mat_ptr : rational_matrix_ptr): zz =
   zz_of_integer denom
 
 let zz_denom_matrix_of_rational_matrix (rm_ptr : rational_matrix_ptr)
-  : zz * zz list list =
-  (denom_of_matrix rm_ptr, zz_matrix_of_matrix rm_ptr)
+    : zz * zz list list =
+  if is_null rm_ptr then
+    invalid_arg "Flint: rational matrix pointer is null"
+  else
+    (denom_of_matrix rm_ptr, zz_matrix_of_matrix rm_ptr)
 
 let rank (mat_ptr : rational_matrix_ptr) =
   foreign "rank" (rational_matrix_ptr @-> returning slong) mat_ptr
   |> Signed.Long.to_int64 |> Int64.to_int
+
+let transpose (mat_ptr : rational_matrix_ptr) =
+  foreign "transpose" (rational_matrix_ptr @-> returning rational_matrix_ptr) mat_ptr
+
+let solve matA matB =
+  let solved = foreign "solve" (rational_matrix_ptr
+                                @-> rational_matrix_ptr
+                                @-> returning rational_matrix_ptr) matA matB in
+  if is_null solved then
+    invalid_arg "Flint: Failed to solve matrix equation. Check if the matrix is non-singular."
+  else
+    solved

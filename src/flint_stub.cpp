@@ -282,3 +282,53 @@ extern "C"
 slong rank(rational_matrix* mat) {
   return fmpz_mat_rank(mat->matrix);
 }
+
+extern "C"
+rational_matrix* transpose(rational_matrix* mat) {
+  auto transposed = new fmpz_mat_struct;
+  auto nrows = fmpz_mat_nrows(mat->matrix);
+  auto ncols = fmpz_mat_ncols(mat->matrix);
+
+  fmpz_mat_init(transposed, ncols, nrows);
+  fmpz_mat_transpose(transposed, mat->matrix);
+  auto result = new rational_matrix;
+  result->matrix = transposed;
+
+  auto denom = new std::string(mat->denominator);
+  result->denominator = &(*denom)[0];
+  return result;
+}
+
+extern "C"
+rational_matrix* solve(rational_matrix* mat_A, rational_matrix* mat_B) {
+
+  auto x = new fmpz_mat_struct;
+  auto nrows_A = fmpz_mat_nrows(mat_A->matrix);
+  auto ncols_A = fmpz_mat_ncols(mat_A->matrix);
+  auto nrows_B = fmpz_mat_nrows(mat_B->matrix);
+  auto ncols_B = fmpz_mat_ncols(mat_B->matrix);
+
+  fmpz_mat_init(x, ncols_A, ncols_B);
+  fmpz denom, denom_A, denom_B;
+  fmpz_init(&denom);
+  fmpz_set_str(&denom_A, mat_A->denominator, 10);
+  fmpz_set_str(&denom_B, mat_B->denominator, 10);
+
+  int ok = fmpz_mat_solve(x, &denom, mat_A->matrix, mat_B->matrix);
+
+  if(!ok) {
+    return NULL;
+  }
+
+  // WARNING: Need to test if in-place is safe.
+  fmpz_mat_scalar_mul_fmpz(x, x, &denom_A);
+  fmpz_mul(&denom, &denom, &denom_B);
+
+  auto str = fmpz_get_str(nullptr, 10, &denom);
+
+  auto result = new rational_matrix;
+  result->matrix = x;
+  result->denominator = str;
+
+  return result;
+}

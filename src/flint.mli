@@ -63,3 +63,8 @@ val zz_denom_matrix_of_rational_matrix : rational_matrix_ptr -> zz * zz list lis
 
 (** Get rank of the matrix *)
 val rank : rational_matrix_ptr -> int
+
+(** Transpose a matrix *)
+val transpose : rational_matrix_ptr -> rational_matrix_ptr
+
+val solve : rational_matrix_ptr -> rational_matrix_ptr -> rational_matrix_ptr
