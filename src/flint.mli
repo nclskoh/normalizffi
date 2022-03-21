@@ -10,6 +10,8 @@ open FfiLib
  *)
 type rational_matrix_ptr
 
+val set_debug : bool -> unit
+
 (** Create a matrix in Flint *)
 val new_matrix : zz list list -> rational_matrix_ptr
 

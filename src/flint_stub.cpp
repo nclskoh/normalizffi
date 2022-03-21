@@ -6,7 +6,7 @@
 
 #include "flint_stub.h"
 
-const int debug = 0;
+int debug = 0;
 
 // An fmpz is an slong that can encode a pointer to an MPZ.
 
@@ -16,6 +16,10 @@ typedef struct rational_matrix {
   fmpz_mat_struct* matrix;
   Integer denominator;
 } rational_matrix;
+
+void set_debug(int flag) {
+  debug = flag;
+}
 
 extern "C"
 rational_matrix* matrix_from_string_array(Integer* matrix, slong nrows, slong ncols,
@@ -216,8 +220,20 @@ rational_matrix* extend_hnf_to_basis(rational_matrix* rmatrix) {
 extern "C"
 void make_hnf(rational_matrix* rmatrix) {
   auto matrix = rmatrix->matrix;
+
+  if(debug) {
+    std::cout << "make_hnf: input: " << std::endl;
+    fmpz_mat_print(matrix);
+    std::cout << std::endl;
+  }
+
   fmpz_mat_hnf(matrix, matrix);
-  // fmpz_mat_print(matrix);
+
+  if(debug) {
+    std::cout << "make_hnf: output" << std::endl;
+    fmpz_mat_print(matrix);
+    std::cout << std::endl;
+  }
 }
 
 extern "C"

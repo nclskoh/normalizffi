@@ -11,6 +11,8 @@ extern "C" {
 
   typedef struct rational_matrix rational_matrix;
 
+  void set_debug(int flag);
+
   rational_matrix* matrix_from_string_array(Integer* matrix, slong nrows, slong ncols,
 					    Integer denom);
 

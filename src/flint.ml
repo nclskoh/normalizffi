@@ -10,6 +10,10 @@ let rational_matrix_ptr = ptr void
 
 external dummy : unit -> unit = "matrix_from_string_array"
 
+let set_debug flag =
+  let f = foreign "set_debug" (int @-> returning void) in
+  if flag then f 1 else f 0
+
 let matrix_from_array =
   foreign "matrix_from_string_array" (ptr integer @-> slong @-> slong
                                       @-> integer
