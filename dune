@@ -4,6 +4,7 @@
 (library
   (name	normalizffi)
   (public_name normalizffi)
+  (modules (:standard \ test))
   (libraries ctypes.foreign gmp)
   (foreign_archives normaliz_stubs flint normaliz nauty)
   (c_library_flags (-lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)))
@@ -13,6 +14,11 @@
   (language cxx)
   (names normaliz_stub flint_stub)
   (include_dirs ./Normaliz-offline/local/include))
+
+(executable
+  (name test)
+  (modules test)
+  (libraries normalizffi))
 
 (rule
   (deps (source_tree Normaliz-offline))
