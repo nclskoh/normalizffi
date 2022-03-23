@@ -24,9 +24,7 @@ void set_debug(int flag) {
 extern "C"
 rational_matrix* matrix_from_string_array(Integer* matrix, slong nrows, slong ncols,
 					  Integer denom) {
-  if(debug) {
-    assert(matrix != nullptr && nrows * ncols > 0);
-  }
+  assert(matrix != nullptr && nrows * ncols > 0);
 
   fmpz_mat_struct* new_matrix = new fmpz_mat_struct;
 
@@ -38,13 +36,23 @@ rational_matrix* matrix_from_string_array(Integer* matrix, slong nrows, slong nc
       auto str = matrix[i * ncols + j];
       fmpz n;
 
-      if(debug) {
-	assert(str != nullptr);
-      }
+      assert(str != nullptr);
 
       fmpz_set_str(&n, str, 10);
       *entry = n;
     }
+  }
+
+  if(debug) {
+    std::cout << "matrix_from_string_array: input:" << std::endl;
+    for(int i = 0; i < nrows * ncols; i++) {
+      auto str = matrix[i];
+      std::cout << str << ", ";
+    }
+    std::cout << std::endl;
+    std::cout << "matrix_from_string_array:" << std::endl;
+    fmpz_mat_print(new_matrix);
+    std::cout << std::endl;
   }
 
   auto result = new rational_matrix;
@@ -59,9 +67,7 @@ rational_matrix* matrix_from_string_array(Integer* matrix, slong nrows, slong nc
 extern "C"
 rational_matrix* matrix_from_array(fmpz* matrix, slong nrows, slong ncols,
 				   Integer denom) {
-  if(debug) {
-    assert(matrix != nullptr && nrows * ncols > 0);
-  }
+  assert(matrix != nullptr && nrows * ncols > 0);
 
   fmpz_mat_struct* new_matrix = new fmpz_mat_struct;
 
@@ -86,9 +92,7 @@ rational_matrix* matrix_from_array(fmpz* matrix, slong nrows, slong ncols,
 extern "C"
 two_dim_array* matrix_contents(rational_matrix* rmatrix) {
 
-  if(debug) {
-    assert(rmatrix != nullptr && rmatrix->matrix != nullptr);
-  }
+  assert(rmatrix != nullptr && rmatrix->matrix != nullptr);
 
   auto matrix = rmatrix->matrix;
 
@@ -106,6 +110,18 @@ two_dim_array* matrix_contents(rational_matrix* rmatrix) {
       auto str = fmpz_get_str(nullptr, 10, entry);
       result->data[i * result->num_cols + j] = str;
     }
+  }
+
+  if(debug) {
+    std::cout << "matrix_contents: original:" << std::endl;
+    fmpz_mat_print(matrix);
+    std::cout << std::endl;
+
+    std::cout << "matrix_contents: transferred:" << std::endl;
+    for(int i = 0; i < size; i++) {
+      std::cout << result->data[i] << ", ";
+    }
+    std::cout << std::endl;
   }
 
   return result;
@@ -160,9 +176,7 @@ void copy_row(fmpz_mat_struct* matrix,
 extern "C"
 rational_matrix* extend_hnf_to_basis(rational_matrix* rmatrix) {
 
-  if(debug) {
-    assert(rmatrix != nullptr && rmatrix->matrix != nullptr);
-  }
+  assert(rmatrix != nullptr && rmatrix->matrix != nullptr);
 
   auto matrix = rmatrix->matrix;
 
@@ -200,6 +214,7 @@ rational_matrix* extend_hnf_to_basis(rational_matrix* rmatrix) {
   }
 
   if(debug) {
+    std::cout << "extend_hnf_to_basis: " << std::endl;
     for(int i = 0; i < v.size(); i++) {
       std::cout << v[i];
     }
@@ -238,9 +253,7 @@ void make_hnf(rational_matrix* rmatrix) {
 
 extern "C"
 rational_matrix* matrix_inverse(rational_matrix* rmatrix) {
-  if(debug) {
-    assert(rmatrix != nullptr && rmatrix->matrix != nullptr);
-  }
+  assert(rmatrix != nullptr && rmatrix->matrix != nullptr);
 
   auto matrix = rmatrix->matrix;
   auto nrows = fmpz_mat_nrows(matrix);
@@ -269,10 +282,8 @@ rational_matrix* matrix_inverse(rational_matrix* rmatrix) {
 
 extern "C"
 rational_matrix* matrix_multiply(rational_matrix* mat1, rational_matrix* mat2) {
-  if(debug) {
-    assert(mat1 != nullptr && mat2 != nullptr
-	   && mat1->matrix != nullptr && mat2->matrix != nullptr);
-  }
+  assert(mat1 != nullptr && mat2 != nullptr
+	 && mat1->matrix != nullptr && mat2->matrix != nullptr);
 
   auto product = new fmpz_mat_struct;
   auto nrows = fmpz_mat_nrows(mat1->matrix);

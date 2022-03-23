@@ -158,7 +158,7 @@ let new_cone ?one_geq_zero:(one_geq_zero=true) cone : homogeneous cone_ptr =
   let alloc_matrix l (m, n) =
     if m * n = 0 then from_voidp integer null
     else
-      let matrix = carray_of_zz_matrix l in
+      let matrix = carray_of_zz_list (List.concat l) in
       CArray.start matrix
   in
   Ptr (

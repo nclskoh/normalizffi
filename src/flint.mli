@@ -7,6 +7,7 @@ open FfiLib
 
 (** Pointer to a rational matrix consisting of an integer denominator
     and an integer-valued matrix.
+    This is the Ocaml view of [rational_matrix*] in C.
  *)
 type rational_matrix_ptr
 

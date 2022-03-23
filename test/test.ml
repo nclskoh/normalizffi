@@ -7,8 +7,11 @@ let ( let* ) o f =
   | Ok x -> f x
   | Error e -> Error e
 
+let pp_list_list fmt l =
+  let p = List.iter (fun x -> Format.fprintf fmt "%s, " (Mpzf.to_string x)) in
+  List.iter (fun x -> p  x; Format.fprintf fmt "\n") l
+
 let test_normaliz () =
-  let () = Flint.set_debug true in
   let rational_triangle_gens =
     (* 2D triangle with points (0, 0), (0, 3/2), (3/2, 0) in the x-y plane *)
     (* Homogenize in the first coordinate, lineality in the last coordinate *)
@@ -21,20 +24,36 @@ let test_normaliz () =
   Result.ok c1_ptr
 
 let test_flint () =
+  let () = Flint.set_debug true in
   let zzify = List.map Mpzf.of_int in
-  let mat = Flint.new_matrix (List.map zzify [ [ 1 ; 2 ] ; [ 2 ; 1 ] ]) in
-  Flint.hermitize mat;
-  let rank = Flint.rank mat in
-  let rec take n l =
-    if n = 0 then [] else
-      match l with
-      | [] -> []
-      | (x :: l) -> x :: take (n-1) l in
-  Flint.zz_denom_matrix_of_rational_matrix mat
-  |> snd
-  |> take rank (* The rows after rank should be all zeros *)
+  let rec e n i =
+    if n = 0 then [] else if i = 0 then (1 :: e (n-1) (i-1)) else (0 :: e (n-1) (i-1))
+  in
+  let rec diagonal m n i =
+    if m = 0 then [] else (e n i) :: diagonal (m-1) n (i + 1) in
+  let rec go n =
+    if n = 0 then ()
+    else
+      let mat = List.map zzify (diagonal n n 0) in
+      let () = Format.printf "matrix: @[<v 0>%a@]@;" pp_list_list mat in
+      let mat = Flint.new_matrix mat in
+      Flint.hermitize mat;
+      let rank = Flint.rank mat in
+      let rec take n l =
+        if n = 0 then [] else
+          match l with
+          | [] -> []
+          | (x :: l) -> x :: take (n-1) l in
+      let _result =
+        Flint.zz_denom_matrix_of_rational_matrix mat
+        |> snd
+        |> take rank (* The rows after rank should be all zeros *)
+      in
+      go (n-1)
+  in
+  go 15
 
 let () =
   Format.printf "Hello world\n";
-  ignore (test_normaliz ());
+  (* ignore (test_normaliz ()); *)
   ignore (test_flint ())
