@@ -368,7 +368,7 @@ Cone<Integer>* dehomogenize(Cone<Integer>* c) {
   // print_cone(c0);
 
   if(debug) {
-    assert(c0 == nullptr);
+    assert(c0 != nullptr);
   }
 
   return c0;
