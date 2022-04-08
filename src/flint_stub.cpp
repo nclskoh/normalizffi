@@ -6,7 +6,7 @@
 
 #include "flint_stub.h"
 
-int debug = 0;
+static int debug = 0;
 
 // An fmpz is an slong that can encode a pointer to an MPZ.
 
@@ -17,7 +17,7 @@ typedef struct rational_matrix {
   Integer denominator;
 } rational_matrix;
 
-void set_debug(int flag) {
+void debug_flint(int flag) {
   debug = flag;
 }
 

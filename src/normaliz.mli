@@ -36,11 +36,7 @@ type inhomogeneous
 (** Phantom type with 'a being homogeneous or inhomogeneous *)
 type 'a cone_ptr
 
-(*
-val cone_ptr_of_hom : homogeneous cone_ptr -> hom_or_inhom cone_ptr
-
-val cone_ptr_of_inhom: inhomogeneous cone_ptr -> hom_or_inhom cone_ptr
- *)
+val set_debug : bool -> unit
 
 (** Create an empty cone *)
 val empty_cone : 'a cone

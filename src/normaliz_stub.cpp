@@ -6,9 +6,13 @@
 
 #include "normaliz_stub.h"
 
-const int debug = 0;
+static int debug = 0;
 
 using namespace libnormaliz;
+
+void debug_normaliz(int flag) {
+  debug = flag;
+}
 
 typedef mpz_class Integer;
 // typedef long long Integer;
@@ -373,6 +377,8 @@ Cone<Integer>* dehomogenize(Cone<Integer>* c) {
 extern "C" void hull(Cone<Integer>* c) {
   if(debug) {
     assert(c != nullptr);
+    std::cout << "Computing integer hull of:" << std::endl;
+    print_cone(c);
   }
 
   c->compute(ConeProperty::IntegerHull, ConeProperty::LatticePoints);

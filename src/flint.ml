@@ -22,7 +22,7 @@ let log fmt_str = logf Format.std_formatter fmt_str
 
 let set_debug flag =
   debug := flag;
-  let f = foreign "set_debug" (int @-> returning void) in
+  let f = foreign "debug_flint" (int @-> returning void) in
   if flag then
     begin
       f 1;

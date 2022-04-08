@@ -2,6 +2,13 @@ open Foreign
 open Ctypes
 open FfiLib
 
+let debug = ref false
+
+let set_debug flag =
+  debug := flag;
+  let f = foreign "debug_normaliz" (int @-> returning void) in
+  if flag then f 1 else f 0
+
 type 'a cone = {
   rays: 'a list list;
   subspace: 'a list list;

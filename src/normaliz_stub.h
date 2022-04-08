@@ -8,6 +8,8 @@ using namespace libnormaliz;
 
 extern "C" {
 
+  void debug_normaliz(int flag);
+
   typedef mpz_class Integer;
 
   Cone<Integer>* new_cone(char** cone_generators,
