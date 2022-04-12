@@ -43,20 +43,24 @@ let pp_list_list fmt l =
 let zz_of_integer ptr =
   (* deserialize_int ptr |> Mpzf.of_string *)
   let s = deserialize_int ptr in
-  Format.printf "%s" s;
+  (* Format.printf "%s\n" s; *)
   Mpzf.of_string s
 
 let allocate_string s =
   log "normalizffi: ffiLib: allocate_string: serializing %s@;" s;
   let len = String.length s in
-  let _finalise = (fun (ptr : char ptr) ->
+  let finalise =
+    (* TODO: This finalise is somehow the reason for the string not being garbage-collected
+       prematurely; once taken away, [new_matrix] in Flint would give garbage if GC runs.
+     *)
+    (fun (ptr : char ptr) ->
       log "normalizffi: ffiLib: GC: freeing %s@;"
         (string_of integer ptr)
                    (* (string_of nativeint (raw_address_of_ptr (to_voidp ptr))) *)
     )
   in
   let ptr = allocate_n
-              (* ~finalise *)
+              ~finalise
               char
               ~count:(len + 1) in
   let rec copy i =
