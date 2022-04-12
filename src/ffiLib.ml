@@ -43,6 +43,7 @@ let pp_list_list fmt l =
 let zz_of_integer ptr =
   (* deserialize_int ptr |> Mpzf.of_string *)
   let s = deserialize_int ptr in
+  Format.printf "%s" s;
   Mpzf.of_string s
 
 let allocate_string s =
