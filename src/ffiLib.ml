@@ -53,9 +53,10 @@ let allocate_string s =
     (* TODO: This finalise is somehow the reason for the string not being garbage-collected
        prematurely; once taken away, [new_matrix] in Flint would give garbage if GC runs.
      *)
-    (fun (ptr : char ptr) ->
-      log "normalizffi: ffiLib: GC: freeing %s@;"
-        (string_of integer ptr)
+    (fun (_ptr : char ptr) ->
+      (* log "normalizffi: ffiLib: GC: freeing %s@;"
+        (string_of integer ptr) *)
+      ()
                    (* (string_of nativeint (raw_address_of_ptr (to_voidp ptr))) *)
     )
   in
