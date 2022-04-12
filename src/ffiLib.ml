@@ -23,7 +23,11 @@ let log fmt_str = logf Format.std_formatter fmt_str
 let deserialize_int (x : integer) : string =
   let rec go i s =
     let c = !@ (x +@ i) in
-    if Char.equal c (Char.chr 0) then s
+    if Char.equal c (Char.chr 0) then
+      if s = "" then
+        invalid_arg "normalizffi: ffiLib: deserialize_int: empty string!"
+      else
+        s
     else
       begin
         let s = String.concat "" [s ; String.make 1 c] in
@@ -60,8 +64,8 @@ let allocate_string s =
     else
       begin
         (ptr +@ i) <-@ (String.get s i);
-        log "allocate_string: serializing %c, getting %c back@;"
-          (String.get s i) (!@ (ptr +@ i));
+        (* log "allocate_string: serializing %c, getting %c back@;"
+          (String.get s i) (!@ (ptr +@ i)); *)
         copy (i + 1)
       end
   in
