@@ -41,7 +41,10 @@ let pp_list_list fmt l =
   List.iter (fun x -> p x; Format.fprintf fmt "@;") l
 
 let zz_of_integer ptr =
-  deserialize_int ptr |> Mpzf.of_string
+  (* deserialize_int ptr |> Mpzf.of_string *)
+  let s = deserialize_int ptr in
+  Format.printf "zz_of_integer: %s" s;
+  Mpzf.of_string s
 
 let allocate_string s =
   log "normalizffi: ffiLib: allocate_string: serializing %s@;" s;
