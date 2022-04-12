@@ -12,11 +12,11 @@ external dummy : unit -> unit = "matrix_from_string_array"
 
 let debug = ref false
 
-let devnull = Format.formatter_of_out_channel (open_out "/dev/null")
+(* let devnull = Format.formatter_of_out_channel (open_out "/dev/null") *)
 
 let logf fmt fmt_str =
   if !debug then Format.fprintf fmt fmt_str
-  else Format.fprintf devnull fmt_str
+  else Format.ifprintf fmt fmt_str
 
 let log fmt_str = logf Format.std_formatter fmt_str
 
