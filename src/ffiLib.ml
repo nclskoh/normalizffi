@@ -49,7 +49,7 @@ let zz_of_integer ptr =
 let allocate_string s =
   log "normalizffi: ffiLib: allocate_string: serializing %s@;" s;
   let len = String.length s in
-  let _finalise =
+  let finalise =
     (* TODO: This finalise is somehow the reason for the string not being garbage-collected
        prematurely; once taken away, [new_matrix] in Flint would give garbage if GC runs.
      *)
@@ -60,7 +60,7 @@ let allocate_string s =
     )
   in
   let ptr = allocate_n
-              (* ~finalise *)
+              ~finalise
               char
               ~count:(len + 1) in
   let rec copy i =
