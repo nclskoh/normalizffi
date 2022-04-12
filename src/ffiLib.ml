@@ -60,8 +60,8 @@ let allocate_string s =
     else
       begin
         (ptr +@ i) <-@ (String.get s i);
-        (* log "allocate_string: serializing %c, getting %c back@;"
-          (String.get s i) (!@ (ptr +@ i)); *)
+        log "allocate_string: serializing %c, getting %c back@;"
+          (String.get s i) (!@ (ptr +@ i));
         copy (i + 1)
       end
   in
