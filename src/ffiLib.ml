@@ -49,19 +49,18 @@ let zz_of_integer ptr =
 let allocate_string s =
   log "normalizffi: ffiLib: allocate_string: serializing %s@;" s;
   let len = String.length s in
-  let finalise =
+  let _finalise =
     (* TODO: This finalise is somehow the reason for the string not being garbage-collected
        prematurely; once taken away, [new_matrix] in Flint would give garbage if GC runs.
      *)
-    (fun (_ptr : char ptr) ->
-      (* log "normalizffi: ffiLib: GC: freeing %s@;"
-        (string_of integer ptr) *)
-      ()
+    (fun (ptr : char ptr) ->
+      log "normalizffi: ffiLib: GC: freeing %s@;"
+        (string_of integer ptr)
                    (* (string_of nativeint (raw_address_of_ptr (to_voidp ptr))) *)
     )
   in
   let ptr = allocate_n
-              ~finalise
+              (* ~finalise *)
               char
               ~count:(len + 1) in
   let rec copy i =
