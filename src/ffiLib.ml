@@ -24,7 +24,7 @@ let deserialize_int (x : integer) : string =
   let rec go i s =
     let c = !@ (x +@ i) in
     if Char.equal c (Char.chr 0) then
-      if s = "" then
+      if String.equal s "" then
         invalid_arg "normalizffi: ffiLib: deserialize_int: empty string!"
       else
         s
