@@ -53,7 +53,61 @@ let test_flint () =
   in
   go 15
 
+let test_qfnia_calypto_000797 () =
+  (*
+    0 0 0 0 0 1
+    0 0 0 0 1 0
+    0 0 0 1 0 0
+    0 0 1 0 0 0
+    0 1 0 0 0 0
+    127 0 0 -1 0 0
+    127 0 0 0 -1 0
+    255 0 -1 0 0 0
+    255 0 0 0 0 -1
+    134217728 -1 0 0 0 0
+   *)
+  Normaliz.set_debug true;
+  let matrix = [ [0; 0; 0; 0; 0; 1]
+               ; [0; 0; 0; 0; 1; 0]
+               ; [0; 0; 0; 1; 0; 0]
+               ; [0; 0; 1; 0; 0; 0]
+               ; [0; 1; 0; 0; 0; 0]
+               ; [127; 0; 0; -1; 0; 0]
+               ; [127; 0; 0; 0; -1; 0]
+               ; [255; 0; -1; 0; 0; 0]
+               ; [255; 0; 0; 0; 0; -1]
+               ; [134217728; -1; 0; 0; 0; 0]
+               ] |> List.map (List.map Mpzf.of_int)
+  in
+  let cone = Result.get_ok (Normaliz.add_inequalities Normaliz.empty_cone matrix)
+             |> Normaliz.new_cone
+             |> Normaliz.dehomogenize in
+  Normaliz.hull cone;
+  let inequalities = Normaliz.get_int_hull_inequalities cone in
+  let equations = Normaliz.get_int_hull_equations cone in
+  Format.printf "Calypto hull: @[<v 0>inequalities: @[%a@]@; equalities: @[%a@]@]@;"
+    pp_list_list inequalities
+    pp_list_list equations
+
+let test_gc () =
+  Flint.set_debug true;
+  let matrix = [ [0; 0; 0; 0; 0; 1]
+               ; [0; 0; 0; 0; 1; 0]
+               ; [0; 0; 0; 1; 0; 0]
+               ; [0; 0; 1; 0; 0; 0]
+               ; [0; 1; 0; 0; 0; 0]
+               ; [127; 0; 0; -1; 0; 0]
+               ; [127; 0; 0; 0; -1; 0]
+               ; [255; 0; -1; 0; 0; 0]
+               ; [255; 0; 0; 0; 0; -1]
+               ; [134217728; -1; 0; 0; 0; 0]
+               ] |> List.map (List.map Mpzf.of_int)
+  in
+  Flint.new_matrix matrix
+
 let () =
   Format.printf "Hello world\n";
   (* ignore (test_normaliz ()); *)
-  ignore (test_flint ())
+  (* ignore (test_flint ()) *)
+  (* ignore (test_qfnia_calypto_000797 ()) *)
+  ignore (test_gc ())
