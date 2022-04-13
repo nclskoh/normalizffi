@@ -13,6 +13,7 @@
  (archive_name normaliz_stubs)
  (language cxx)
  (names normaliz_stub flint_stub custom_memory)
+ (flags (:standard -std=c++14))
  (include_dirs ./Normaliz-offline/local/include))
 
 (library
@@ -38,7 +39,7 @@
   (generated_types Types_generated)
   (generated_entry_point C))
  (foreign_archives normaliz_stubs flint normaliz nauty)
- (c_library_flags (-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)))
+ (c_library_flags (-L. -lstdc++ -std=c++14 -lgmpxx -lgmp -lomp -lnormaliz -lflint -lnauty)))
 
 (executable
  (flags (:standard -w -32))
@@ -52,10 +53,10 @@
  (action
   (no-infer
    (progn
-    (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -o dllnauty.so -L. -lnauty))
+    (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -dynamiclib -shared -fPIC -std=c++14 -o dllnauty.so -L. -lnauty))
     (copy Normaliz-offline/local/lib/libnormaliz.so dllnormaliz.so)
     (copy Normaliz-offline/local/lib/libnormaliz.a libnormaliz.a)
-    (copy Normaliz-offline/local/lib/libflint.so dllflint.so)
+    (copy Normaliz-offline/local/lib/libflint.dylib dllflint.so)
     (copy Normaliz-offline/local/lib/libflint.a libflint.a)
     (copy Normaliz-offline/local/lib/dllnauty.so dllnauty.so)
     (copy Normaliz-offline/local/lib/libnauty.a libnauty.a)))))
