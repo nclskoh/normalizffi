@@ -162,27 +162,46 @@ let new_cone ?one_geq_zero:(one_geq_zero=true) cone : homogeneous cone_ptr =
       (one dim 0 :: cone.inequalities, List.length cone.inequalities + 1)
     else
       (cone.inequalities, List.length cone.inequalities) in
-  let alloc_matrix l (m, n) =
-    if m * n = 0 then from_voidp integer null
-    else
-      let matrix = integer_array_of_zz_list (List.concat l) in
-      CArray.start (carray_of_integer_array matrix)
-  in
-  Ptr (
-    alloc_cone
-      (alloc_matrix cone.rays (num_rays, dim))
-      (size_t_of_int num_rays)
-      (alloc_matrix cone.subspace (num_subspace_gens, dim))
-      (size_t_of_int num_subspace_gens)
-      (alloc_matrix inequalities (num_ineqs, dim))
-      (size_t_of_int num_ineqs)
-      (alloc_matrix cone.lattice_equations (num_eqns, dim))
-      (size_t_of_int num_eqns)
-      (alloc_matrix cone.excluded_face_inequalities (num_excluded_faces, dim))
-      (size_t_of_int num_excluded_faces)
-      (* (from_voidp integer null) *)
-      (size_t_of_int dim)
-  )
+  if dim = 0 then invalid_arg "normalizffi: normaliz: new_cone: ambient dimension is 0"
+  else
+    (* TODO: Make this better *)
+    let keep_ocaml_value_live _ = () in
+    let alloc_array l =
+      if l = [] then
+        (from_voidp integer null, None)
+      else
+        let arr = integer_array_of_zz_list (List.concat l) in
+        (CArray.start (carray_of_integer_array arr), Some arr)
+    in
+    let rays_ptr, rays_array = alloc_array cone.rays in
+    let subspace_gens_ptr, subspace_gens_array = alloc_array cone.subspace in
+    let inequalities_ptr, inequalities_array = alloc_array inequalities in
+    let lattice_equations_ptr, lattice_equations_array = alloc_array cone.lattice_equations in
+    let excluded_face_inequalities_ptr, excluded_face_inequalities_array =
+      alloc_array cone.excluded_face_inequalities
+    in
+    let ptr = Ptr (
+                  alloc_cone
+                    rays_ptr
+                    (size_t_of_int num_rays)
+                    subspace_gens_ptr
+                    (size_t_of_int num_subspace_gens)
+                    inequalities_ptr
+                    (size_t_of_int num_ineqs)
+                    lattice_equations_ptr
+                    (size_t_of_int num_eqns)
+                    excluded_face_inequalities_ptr
+                    (size_t_of_int num_excluded_faces)
+                    (* (from_voidp integer null) *)
+                    (size_t_of_int dim)
+                )
+    in
+    keep_ocaml_value_live rays_array;
+    keep_ocaml_value_live subspace_gens_array;
+    keep_ocaml_value_live inequalities_array;
+    keep_ocaml_value_live lattice_equations_array;
+    keep_ocaml_value_live excluded_face_inequalities_array;
+    ptr
 
 let get_embedding_dimension cone =
   let get_dim cone_ptr =
