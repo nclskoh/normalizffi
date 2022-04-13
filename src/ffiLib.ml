@@ -59,7 +59,6 @@ let allocate_string s =
                    (* (string_of nativeint (raw_address_of_ptr (to_voidp ptr))) *)
     )
   in
-  Gc.compact ();
   let ptr = allocate_n
               (* ~finalise *)
               char
