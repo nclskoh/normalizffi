@@ -49,7 +49,7 @@ let zz_of_integer ptr =
 let allocate_string s =
   log "normalizffi: ffiLib: allocate_string: serializing %s@;" s;
   let len = String.length s in
-  let finalise =
+  let _finalise =
     (* TODO: This finalise is somehow the reason for the string not being garbage-collected
        prematurely; once taken away, [new_matrix] in Flint would give garbage if GC runs.
      *)
@@ -60,7 +60,7 @@ let allocate_string s =
     )
   in
   let ptr = allocate_n
-              ~finalise
+              (* ~finalise *)
               char
               ~count:(len + 1) in
   let rec copy i =
@@ -86,45 +86,44 @@ type size_t = Unsigned.Size_t.t
 let size_t_of_int = Unsigned.Size_t.of_int
 let int_of_size_t x = Int64.to_int (Unsigned.Size_t.to_int64 x)
 
-(* A C array is a CArray.t in Ocaml *)
+(* Suppose we allocate a value in C memory via Ctypes' [allocate] or [allocate_n].
+   This returns an Ocaml value [v] representing the C pointer, and as long as
+   this Ocaml value is live, what it points to in C memory is live.
 
-(* Ocaml representation and typ constructors:
-  - Ocaml: [CArray.t] (wrapper for [Ctypes_static.carray])
-    - [ctypes.mli] holds module signature.
-    - [CArray.get], [CArray.set]
-    - [CArray.of_list], [CArray.to_list],
-    - [CArray.iter], [CArray.fold_left], [CArray.fold_right]
-    - [CArray.length]
-    - [CArray.from_ptr p n] casts pointer p to a pointer that points to an array
-    - [CArray.start] returns a pointer to the first element of the array
+   If we have something like a CArray, say [arr] and set say [arr[i]] to
+   [v]'s C pointer, if [v] goes out of scope, what [v] points to gets garbage-collected
+   and [arr[i]] points to garbage, even if [arr] itself is live in Ocaml.
+   Possible reason: The GC doesn't seem to follow pointers from Ocaml memory into C
+   memory.
 
-  - typ constructor: [array: int -> 'a typ -> 'a CArray.t typ]
- *)
+   An [('a ptr) ffiarray] remedies this by holding both views:
+   the CArray and the list of Ocaml ['a ptr]'s, so that the values in C memory
+   remain live.
 
-let carray_of_zz_list (l : zz list) : integer CArray.t =
-  (* inject into the Ocaml representation of an array of integers *)
-  (* CArray.of_list integer (List.map integer_of_zz l) *)
-  let integers = List.map integer_of_zz l in
-  let result = CArray.of_list (ptr char) integers in
-  log "carray_of_zz_list:";
-  CArray.iter (fun x -> log "%s, " (Ctypes.string_of integer x)) result;
-  log "@\n";
-  result
-
-(*
-let carray_of_zz_matrix (l : zz list list) : integer CArray.t * integer list =
-  let well_formed l =
-    if l = [] then invalid_arg "carray_of_zz_matrix: empty matrix"
-    else
-      let len = List.length (List.hd l) in
-      List.for_all (fun r -> List.length r = len) l
-  in
-  if well_formed l then
-    let mat = List.concat l in
-    carray_of_zz_list mat
-  else
-    invalid_arg "carray_of_zz_matrix: malformed matrix"
+   An [('a, 'b) dual_array] remedies this by holding both views:
+   an ['a CArray] pointing to a C array of values in C memory, and a ['b list] that
+   holds the Ocaml values necessary to keep these C values live.
+   In the simplest case, ['b] is just ['a] itself, where ['a] is say ['t ptr] for some ['t].
+   If the array is nested, ['b] can be a [dual_array] itself.
 *)
+type ('a, 'b) dual_array =
+  {
+    arr : 'a CArray.t
+  ; contents : 'b list (* Hold values in Ocaml to prevent garbage collection *)
+  }
+
+type integer_array = (integer, integer) dual_array
+
+let carray_of_integer_array arr = arr.arr
+
+let integer_array_of_zz_list (l : zz list) : integer_array =
+  let contents = List.map integer_of_zz l in
+  (* let arr = CArray.make integer (List.length l) in *)
+  let arr = CArray.of_list integer contents in
+  {
+    arr
+  ; contents
+  }
 
 let gather_as_matrix
       (num_rows : int) (num_cols : int) (ptr : 'a ptr) : 'a list list =
@@ -144,45 +143,11 @@ let gather_as_matrix
   in
   go_row 0 []
 
-let zz_list_of_carray (arr: integer CArray.t) : zz list =
-  (* List.map zz_of_integer (CArray.to_list arr) *)
-  let ptr = CArray.start arr in
-  let len = CArray.length arr in
+let zz_list_of_integer_array (arr : integer_array) =
+  let ptr = CArray.start arr.arr in
+  let len = CArray.length arr.arr in
   let l = List.hd (gather_as_matrix 1 len ptr) in
   List.map zz_of_integer l
-
-(*
-let zz_matrix_of_carray (arr: integer CArray.t) (num_cols : int) : zz list list =
-  let ctr = ref num_cols in
-  let adjoin x ll =
-    if !ctr = 0 then ((ctr := num_cols - 1); [zz_of_integer x] :: ll)
-    else
-      ((ctr := !ctr - 1);
-       if ll = [] then [[zz_of_integer x]]
-       else
-         (zz_of_integer x :: List.hd ll) :: (List.tl ll)) in
-  let l = CArray.fold_right adjoin arr [] in
-  (* Format.printf "num_cols: %d, ctr = %d\n" num_cols !ctr;
-     assert (!ctr = 0); true only if arr is non-empty *)
-  l
- *)
-
-type 't ffiarray =
-  {
-    arr : 't CArray.t
-  ; values : 't list (* Hold values to prevent garbage collection *)
-  }
-
-let ffiarray_of_zz_list l =
-  let values = List.map integer_of_zz l in
-  let arr = CArray.of_list integer values in
-  { arr ; values }
-
-let ffiarray_ptr ffiarr =
-  CArray.start ffiarr.arr
-
-let zz_list_of_integer_ffiarray ffiarr =
-  List.map zz_of_integer ffiarr.values
 
 type two_dim_array =
   { data : integer ptr; (* To cast to an array of integers *)
