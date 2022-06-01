@@ -162,13 +162,11 @@ let new_matrix (generators : zz list list): rational_matrix_ptr =
   else
     ();
 
-  Gc.compact ();
   let mat = matrix_from_array
               (CArray.start (carray_of_integer_array arr))
               (* (ffiarray_ptr arr) *)
               (slong_of_int num_rows) (slong_of_int num_cols)
               (integer_of_zz (Mpzf.of_int 1)) in
-  Gc.compact ();
 
   if !debug then
     let (denom, zzmat) = zz_denom_matrix_of_rational_matrix mat in
