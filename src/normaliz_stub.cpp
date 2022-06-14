@@ -38,28 +38,16 @@ vector<vector<Integer> >* vector_of(char** arr, size_t num_rows, size_t num_cols
     int j = 0;
     for(; j < num_cols; j++) {
       auto n_str = arr[i * num_cols + j];
-      Integer n(n_str, 10);
-      v.push_back(n);
+      try {
+	Integer n(n_str, 10);
+	v.push_back(n);
+      } catch (std::invalid_argument& e) {
+	std::cerr << "vector_of: Invalid argument: " << e.what() << ", input: " << n_str << std::endl;
+      }
     }
     result->push_back(v);
   }
 
-  return result;
-}
-
-static
-vector<vector<Integer> >* vector_of(char** arr, size_t num_cols) {
-  if(num_cols == 0) {
-    return nullptr;
-  }
-  auto result = new vector<vector<Integer> >;
-  vector<Integer> v;
-  for(int i; i < num_cols; i++) {
-    auto n_str = arr[i];
-    Integer n(n_str, 10);
-    v.push_back(n);
-  }
-  result->push_back(v);
   return result;
 }
 
@@ -529,6 +517,18 @@ two_dim_array* get_integer_hull_equations(Cone<Integer>* c) {
   // print_matrix(v);
 
   return get_equations(&c0_hull);
+}
+
+extern "C"
+two_dim_array* get_hilbert_basis(Cone<Integer>* c) {
+  auto basis = c->getHilbertBasis();
+  return two_dim_array_of(basis);
+}
+
+extern "C"
+two_dim_array* get_module_generators(Cone<Integer>* c) {
+  auto generators = c->getModuleGenerators();
+  return two_dim_array_of(generators);
 }
 
 extern "C"

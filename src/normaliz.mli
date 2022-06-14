@@ -72,9 +72,11 @@ val add_lattice_equations : 'a cone -> 'a list list -> ('a cone, string) result
 val add_excluded_face_inequalities : 'a cone -> 'a list list -> ('a cone, string) result
 
 (** Construct a cone in Normaliz.
-    By default, we add the constraint x0 >= 0 to the cone, because dehomogenizing
-    is sometimes problematic when the dehomogenizing component is negative. *)
-val new_cone : ?one_geq_zero:bool -> zz cone -> homogeneous cone_ptr
+    The first coordinate x0 is assumed to correspond to the constant dimension,
+    and the constraint x0 >= 0 is automatically added to make the cone pointed,
+    which is what Normaliz assumes.
+ *)
+val new_cone : zz cone -> homogeneous cone_ptr
 
 (** For ctypes to link properly. *)
 val dummy_new_cone : unit -> unit
@@ -96,6 +98,8 @@ val dehomogenize : homogeneous cone_ptr -> inhomogeneous cone_ptr
     hence representing a polyhedron, compute the integer hull of the polyhedron.
 *)
 val hull : inhomogeneous cone_ptr -> unit
+
+val hilbert_basis : homogeneous cone_ptr -> zz list list
 
 (** Get the conic generators of a homogeneous cone or a polyhedron
     (inhomogeneous cone). Note that these extreme rays do not

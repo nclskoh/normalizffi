@@ -148,7 +148,7 @@ let negate_vectors ll =
 let add_equalities cone vecs =
   add_inequalities cone (List.concat [vecs; negate_vectors vecs])
 
-let new_cone ?one_geq_zero:(one_geq_zero=true) cone : homogeneous cone_ptr =
+let new_cone cone : homogeneous cone_ptr =
   let dim = cone.ambient_dim in
   let num_rays = List.length cone.rays in
   let num_subspace_gens = List.length cone.subspace in
@@ -158,10 +158,7 @@ let new_cone ?one_geq_zero:(one_geq_zero=true) cone : homogeneous cone_ptr =
      dehomogenizing, which typically arises when the dehomogenizing component
      is possibly negative. *)
   let (inequalities, num_ineqs) =
-    if one_geq_zero then
-      (one dim 0 :: cone.inequalities, List.length cone.inequalities + 1)
-    else
-      (cone.inequalities, List.length cone.inequalities) in
+    (one dim 0 :: cone.inequalities, List.length cone.inequalities + 1) in
   if dim = 0 then invalid_arg "normalizffi: normaliz: new_cone: ambient dimension is 0"
   else
     (* TODO: Make this better *)
@@ -258,6 +255,8 @@ let get_vertices (Ptr cone) = get_matrix cone "get_vertices"
 let get_int_hull_inequalities (Ptr cone) = get_matrix cone "get_integer_hull_inequalities"
 let get_int_hull_equations (Ptr cone) = get_matrix cone "get_integer_hull_equations"
 let get_dehomogenization (Ptr cone) = get_matrix cone "get_dehomogenization"
+
+let hilbert_basis (Ptr cone) = get_matrix cone "get_hilbert_basis"
 
 (* TODO: This really doesn't work well:
 

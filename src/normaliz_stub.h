@@ -52,6 +52,10 @@ extern "C" {
 
   two_dim_array* get_integer_hull_equations(Cone<Integer>* c);
 
+  two_dim_array* get_hilbert_basis(Cone<Integer>* c);
+
+  two_dim_array* get_module_generators(Cone<Integer>* c);
+
   bool is_pointed(Cone<Integer>* c);
 
   bool is_inhomogeneous(Cone<Integer>* c);
