@@ -1,4 +1,4 @@
-(lang dune 2.9.1)
+(lang dune 2.9)
 (name normalizffi)
 (version 0.1)
 
