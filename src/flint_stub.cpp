@@ -3,8 +3,7 @@
 #include <assert.h>
 
 #include "flint/fmpz_mat.h"
-
-#include "flint_stub.h"
+#include "stub_common.h"
 
 static int debug = 0;
 
@@ -17,6 +16,7 @@ typedef struct rational_matrix {
   Integer denominator;
 } rational_matrix;
 
+extern "C"
 void debug_flint(int flag) {
   debug = flag;
 }

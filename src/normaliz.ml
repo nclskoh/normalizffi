@@ -1,8 +1,12 @@
 open Foreign
 open Ctypes
-open FfiLib
 
 let debug = ref false
+
+let ( let* ) o f =
+  match o with
+  | Ok x -> f x
+  | Error e -> Error e
 
 let set_debug flag =
   debug := flag;
@@ -104,7 +108,9 @@ type 'a cone_ptr = Ptr of cptr
 
 external dummy_new_cone: unit -> unit = "new_cone"
 
-let alloc_cone = foreign "new_cone"
+let alloc_cone =
+  let open FfiLib in
+  foreign "new_cone"
     (ptr integer @-> size_t (* cone generators *)
      @-> ptr integer @-> size_t (* subspace generators *)
      @-> ptr integer @-> size_t (* inequalities *)
@@ -120,7 +126,7 @@ let dimensions (l : 'a list list) : int * int =
   else (0, 0)
 *)
 
-let rec zeros n : zz list =
+let rec zeros n : FfiLib.zz list =
   assert (n >= 0);
   if n = 0 then []
   else Mpzf.of_int 0 :: zeros (n - 1)
@@ -131,11 +137,11 @@ let minus_one n : zz list =
   Mpzf.of_int (-1) :: zeros (n - 1)
 *)
 
-let one n pos : zz list =
+let one n pos : FfiLib.zz list =
   assert (n > 0);
   List.concat [zeros pos; [Mpzf.of_int 1]; zeros (n - pos - 1)]
 
-let identity_matrix n : zz list list =
+let identity_matrix n : FfiLib.zz list list =
   assert (n > 0);
   let rec dec n =
     if n = 0 then [0]
@@ -165,10 +171,10 @@ let new_cone cone : homogeneous cone_ptr =
     let keep_ocaml_value_live _ = () in
     let alloc_array l =
       if l = [] then
-        (from_voidp integer null, None)
+        (from_voidp FfiLib.integer null, None)
       else
-        let arr = integer_array_of_zz_list (List.concat l) in
-        (CArray.start (carray_of_integer_array arr), Some arr)
+        let arr = FfiLib.integer_array_of_zz_list (List.concat l) in
+        (CArray.start (FfiLib.carray_of_integer_array arr), Some arr)
     in
     let rays_ptr, rays_array = alloc_array cone.rays in
     let subspace_gens_ptr, subspace_gens_array = alloc_array cone.subspace in
@@ -177,6 +183,7 @@ let new_cone cone : homogeneous cone_ptr =
     let excluded_face_inequalities_ptr, excluded_face_inequalities_array =
       alloc_array cone.excluded_face_inequalities
     in
+    let open FfiLib in
     let ptr = Ptr (
                   alloc_cone
                     rays_ptr
@@ -203,7 +210,7 @@ let new_cone cone : homogeneous cone_ptr =
 let get_embedding_dimension cone =
   let get_dim cone_ptr =
     let f = foreign "get_embedding_dimension" (cptr @-> returning size_t) in
-    int_of_size_t (f cone_ptr) in
+    FfiLib.int_of_size_t (f cone_ptr) in
   match cone with
   | Ptr ptr -> get_dim ptr
 
@@ -225,13 +232,13 @@ let hull (Ptr c) =
   foreign "hull" (cptr @-> returning void) c
 
 let get_matrix (cone : cptr) (name: string) =
-  let f = foreign name (cptr @-> returning (ptr two_dim_array)) in
+  let f = foreign name (cptr @-> returning (ptr FfiLib.two_dim_array)) in
   let ptr = f cone in
   if is_null ptr then
     []
   else
   let arr = !@ ptr in
-  zz_matrix_of_two_dim_array arr
+  FfiLib.zz_matrix_of_two_dim_array arr
 
 let get_extreme_rays = function
   | Ptr cone -> get_matrix cone "get_extreme_rays"
@@ -320,6 +327,7 @@ let contains cone vector =
 (* let foreign_print_cone = foreign "print_cone" (cptr @-> returning void) *)
 
 let pp fmt c =
+  let open FfiLib in
   let rays = get_extreme_rays c in
   let lineality_generators = get_lineality_space c in
   let inequalities = get_inequalities c in
@@ -341,6 +349,7 @@ let pp_hom fmt c =
   Format.fprintf fmt "Dehomogenization: none\n"
 
 let pp_inhom fmt c =
+  let open FfiLib in
   pp fmt c;
   let vertices = get_vertices c in
   let dehom = get_dehomogenization c in
@@ -348,6 +357,7 @@ let pp_inhom fmt c =
   Format.fprintf fmt "Dehomogenization:\n%a" pp_list_list dehom
 
 let pp_cone fmt c =
+  let open FfiLib in
   Format.fprintf fmt "Printing cone:\n";
   Format.fprintf fmt "Rays:\n%a" pp_list_list c.rays;
   Format.fprintf fmt "Subspace:\n%a" pp_list_list c.subspace;
@@ -357,6 +367,7 @@ let pp_cone fmt c =
   Format.fprintf fmt "Ambient dimension:%d" c.ambient_dim
 
 let print_hull_constraints s ineqs_eqns =
+  let open FfiLib in
   Format.printf "Cutting plane in/for %s:\n" s;
   Format.printf "Hull inequalities: %a\n" pp_list_list (fst ineqs_eqns);
   Format.printf "Hull equations: %a\n" pp_list_list (snd ineqs_eqns)

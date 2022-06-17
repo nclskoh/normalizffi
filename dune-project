@@ -1,6 +1,7 @@
-(lang dune 2.9)
+(lang dune 3.2)
 (name normalizffi)
 (version 0.1)
+(using ctypes 0.1)
 
 (generate_opam_files false)
 
@@ -13,4 +14,4 @@
   (synopsis "Ocaml bindings for the C++ Normaliz library")
   (description "")
   (depends
-  (ocaml (>= 4.09)) (dune (>= 2.9.1))))
+  (ocaml (>= 4.09)) (dune (>= 3.2))))

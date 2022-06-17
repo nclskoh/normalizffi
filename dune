@@ -1,13 +1,13 @@
 (data_only_dirs Normaliz Normaliz-offline)
 (include_subdirs unqualified)
 
-(library
-  (name	normalizffi)
-  (public_name normalizffi)
-  (modules (:standard \ test))
-  (libraries ctypes.foreign gmp)
-  (foreign_archives normaliz_stubs flint normaliz nauty)
-  (c_library_flags (-lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)))
+; (library
+;   (name	normalizffi)
+;   (public_name normalizffi)
+;   (modules (:standard \ test))
+;   (libraries ctypes.foreign gmp)
+;   (foreign_archives normaliz_stubs flint normaliz nauty)
+;   (c_library_flags (-lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)))
 
 (foreign_library
   (archive_name normaliz_stubs)
@@ -15,7 +15,33 @@
   (names normaliz_stub flint_stub)
   (include_dirs ./Normaliz-offline/local/include))
 
+(library
+  (name normalizffi)
+  (public_name normalizffi)
+  (modules (:standard \ test))
+  (libraries ctypes.foreign gmp)
+  (flags (:standard -w -9-27))
+  (ctypes
+    (external_library_name stubs)
+    (type_description
+      (instance Types)
+      (functor Type_description))
+    (function_description
+      (instance Functions)
+      (functor Function_description)
+      (concurrency sequential))
+    (build_flags_resolver
+      (vendored (c_flags :standard -I%{project_root}/Normaliz-offline/local/include -Isrc)
+      		(c_library_flags (:standard -lnormaliz_stubs -lstdc++))))
+    (headers (preamble "#include \"normaliz_stub.h\"\n#include \"flint_stub.h\""))
+    ; (headers (include normaliz_stub.h flint_stub.h))
+    (generated_types Types_generated)
+    (generated_entry_point C))
+  (foreign_archives normaliz_stubs flint normaliz nauty)
+  (c_library_flags (-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)))
+
 (executable
+  (flags (:standard -w -32))
   (name test)
   (modules test)
   (libraries normalizffi))

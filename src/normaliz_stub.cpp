@@ -3,12 +3,17 @@
 #include <string>
 
 #include "libnormaliz/libnormaliz.h"
+using namespace libnormaliz;
 
-#include "normaliz_stub.h"
+#include "stub_common.h"
+
+typedef mpz_class Integer;
 
 static int debug = 0;
 
-using namespace libnormaliz;
+typedef struct NCone {
+  Cone<Integer>* v;
+} NCone;
 
 void debug_normaliz(int flag) {
   debug = flag;
@@ -174,12 +179,12 @@ void print_cone(Cone<Integer>* c0) {
 
 // See Sections 3.2 and 3.3 in Normaliz manual.
 extern "C"
-Cone<Integer>* new_cone(char** cone_generators, size_t num_cone_gens,
-			char** subspace_generators, size_t num_subspace_gens,
-			char** inequalities, size_t num_inequalities,
-			char** lattice_equations, size_t num_lattice_equations,
-			char** excluded_face_inequalities, size_t num_excluded_faces,
-			size_t dimension)
+NCone* new_cone(char** cone_generators, size_t num_cone_gens,
+		char** subspace_generators, size_t num_subspace_gens,
+		char** inequalities, size_t num_inequalities,
+		char** lattice_equations, size_t num_lattice_equations,
+		char** excluded_face_inequalities, size_t num_excluded_faces,
+		size_t dimension)
 {
   std::map<InputType, vector<vector< Integer>>> input;
 
@@ -245,11 +250,18 @@ Cone<Integer>* new_cone(char** cone_generators, size_t num_cone_gens,
     std::cout << "New cone created.\n" << std::endl;
   }
 
-  return c;
+  NCone* ncone = new NCone;
+  ncone->v = c;
+
+  return ncone;
 }
 
 extern "C"
-Cone<Integer>* intersect_cone(Cone<Integer> *c1, Cone<Integer> *c2) {
+NCone* intersect_cone(NCone *nc1, NCone *nc2) {
+
+  Cone<Integer>* c1 = nc1->v;
+  Cone<Integer>* c2 = nc2->v;
+
   if(debug) {
     std::cout << "intersecting..." << std::endl;
   }
@@ -322,12 +334,17 @@ Cone<Integer>* intersect_cone(Cone<Integer> *c1, Cone<Integer> *c2) {
     std::cout << "Generators of intersected cone: " << rays << std::endl;
   }
 
-  return c0;
+  NCone* result = new NCone;
+  result->v = c0;
+
+  return result;
 }
 
 // Return dehomogenized cone
 extern "C"
-Cone<Integer>* dehomogenize(Cone<Integer>* c) {
+NCone* dehomogenize(NCone* nc) {
+
+  Cone<Integer>* c = nc->v;
 
   // Dehomogenize to get polyhedron, and then compute the integral hull
 
@@ -359,10 +376,14 @@ Cone<Integer>* dehomogenize(Cone<Integer>* c) {
     assert(c0 != nullptr);
   }
 
-  return c0;
+  NCone* result = new NCone;
+  result->v = c0;
+  return result;
 }
 
-extern "C" void hull(Cone<Integer>* c) {
+extern "C" void hull(NCone* nc) {
+  Cone<Integer>* c = nc->v;
+
   if(debug) {
     assert(c != nullptr);
     std::cout << "Computing integer hull of:" << std::endl;
@@ -384,7 +405,9 @@ extern "C" void hull(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_extreme_rays(Cone<Integer>* c) {
+two_dim_array* get_extreme_rays(NCone* nc) {
+  Cone<Integer>* c = nc->v;
+
   if(debug) {
     assert(c != nullptr);
   }
@@ -399,7 +422,8 @@ two_dim_array* get_extreme_rays(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_vertices(Cone<Integer>* c) {
+two_dim_array* get_vertices(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -409,7 +433,8 @@ two_dim_array* get_vertices(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_lineality_space(Cone<Integer>* c) {
+two_dim_array* get_lineality_space(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -424,7 +449,8 @@ two_dim_array* get_lineality_space(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_original_monoid_generators(Cone<Integer>* c) {
+two_dim_array* get_original_monoid_generators(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -434,7 +460,8 @@ two_dim_array* get_original_monoid_generators(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_inequalities(Cone<Integer>* c) {
+two_dim_array* get_inequalities(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -444,7 +471,8 @@ two_dim_array* get_inequalities(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_equations(Cone<Integer>* c) {
+two_dim_array* get_equations(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -454,7 +482,8 @@ two_dim_array* get_equations(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_congruences(Cone<Integer>* c) {
+two_dim_array* get_congruences(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -464,7 +493,8 @@ two_dim_array* get_congruences(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_dehomogenization(Cone<Integer>* c) {
+two_dim_array* get_dehomogenization(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -475,7 +505,8 @@ two_dim_array* get_dehomogenization(Cone<Integer>* c) {
 }
 
 extern "C"
-size_t get_embedding_dimension(Cone<Integer>* c) {
+size_t get_embedding_dimension(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -484,7 +515,8 @@ size_t get_embedding_dimension(Cone<Integer>* c) {
 }
 
 extern "C"
-two_dim_array* get_integer_hull_inequalities(Cone<Integer>* c) {
+two_dim_array* get_integer_hull_inequalities(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -498,11 +530,15 @@ two_dim_array* get_integer_hull_inequalities(Cone<Integer>* c) {
   vector<vector<Integer> > v{{dehom}};
   // print_matrix(v);
 
-  return get_inequalities(&c0_hull);
+  NCone hull;
+  hull.v = &c0_hull;
+
+  return get_inequalities(&hull);
 }
 
 extern "C"
-two_dim_array* get_integer_hull_equations(Cone<Integer>* c) {
+two_dim_array* get_integer_hull_equations(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -516,23 +552,29 @@ two_dim_array* get_integer_hull_equations(Cone<Integer>* c) {
   vector<vector<Integer> > v{{dehom}};
   // print_matrix(v);
 
-  return get_equations(&c0_hull);
+  NCone hull;
+  hull.v = &c0_hull;
+
+  return get_equations(&hull);
 }
 
 extern "C"
-two_dim_array* get_hilbert_basis(Cone<Integer>* c) {
+two_dim_array* get_hilbert_basis(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   auto basis = c->getHilbertBasis();
   return two_dim_array_of(basis);
 }
 
 extern "C"
-two_dim_array* get_module_generators(Cone<Integer>* c) {
+two_dim_array* get_module_generators(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   auto generators = c->getModuleGenerators();
   return two_dim_array_of(generators);
 }
 
 extern "C"
-bool is_pointed(Cone<Integer>* c) {
+bool is_pointed(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -541,7 +583,8 @@ bool is_pointed(Cone<Integer>* c) {
 }
 
 extern "C"
-bool is_inhomogeneous(Cone<Integer>* c) {
+bool is_inhomogeneous(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -550,7 +593,8 @@ bool is_inhomogeneous(Cone<Integer>* c) {
 }
 
 extern "C"
-bool is_empty_semiopen(Cone<Integer>* c) {
+bool is_empty_semiopen(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   if(debug) {
     assert(c != nullptr);
   }
@@ -559,7 +603,8 @@ bool is_empty_semiopen(Cone<Integer>* c) {
 }
 
 extern "C"
-bool is_semiopen(Cone<Integer>* c) {
+bool is_semiopen(NCone* nc) {
+  Cone<Integer>* c = nc->v;
   auto num_excluded_faces = c->getNrExcludedFaces();
   return (num_excluded_faces > 0);
 }
