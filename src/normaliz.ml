@@ -98,15 +98,17 @@ let add_excluded_face_inequalities cone vecs = add_vectors_to_cone add_excluded_
 
 (* Treat cone as opaque *)
 
-type homogeneous = unit
-type inhomogeneous = unit
+type homogeneous = Homogeneous 
+type inhomogeneous = Inhomogeneous
+
+let () =
+  (* Phantom constructors for phantom types *)
+  ignore (Homogeneous); ignore (Inhomogeneous)
 
 type 'a cone_ptr = Ptr of C.Types.cptr
 
 (* To load Normaliz in *)
 external dummy_new_cone: unit -> unit = "new_cone"
-
-let alloc_cone = C.Functions.Normaliz.new_cone
 
 (*
 let dimensions (l : 'a list list) : int * int =
@@ -156,25 +158,26 @@ let new_cone cone : homogeneous cone_ptr =
     (one dim 0 :: cone.inequalities, List.length cone.inequalities + 1) in
   if dim = 0 then invalid_arg "normalizffi: normaliz: new_cone: ambient dimension is 0"
   else
-    (* TODO: Make this better *)
-    let keep_ocaml_value_live _ = () in
     let alloc_array l =
       if l = [] then
-        (from_voidp C.Types.integer null, None)
+        from_voidp C.Types.integer null
       else
-        let arr = FfiLib.integer_array_of_zz_list (List.concat l) in
-        (CArray.start (FfiLib.carray_of_integer_array arr), Some arr)
-    in
-    let rays_ptr, rays_array = alloc_array cone.rays in
-    let subspace_gens_ptr, subspace_gens_array = alloc_array cone.subspace in
-    let inequalities_ptr, inequalities_array = alloc_array inequalities in
-    let lattice_equations_ptr, lattice_equations_array = alloc_array cone.lattice_equations in
-    let excluded_face_inequalities_ptr, excluded_face_inequalities_array =
-      alloc_array cone.excluded_face_inequalities
+        let open FfiLib in
+        List.concat l
+        |> integer_array_of_zz_list
+        |> integer_array_start
+        |> from_voidp C.Types.integer
+    in    
+    let rays_ptr = alloc_array cone.rays in
+    let subspace_gens_ptr = alloc_array cone.subspace in
+    let inequalities_ptr = alloc_array inequalities in
+    let lattice_equations_ptr = alloc_array cone.lattice_equations in
+    let excluded_face_inequalities_ptr =
+      alloc_array cone.excluded_face_inequalities      
     in
     let open FfiLib in
     let ptr = Ptr (
-                  alloc_cone
+                  C.Functions.Normaliz.new_cone
                     rays_ptr
                     (size_t_of_int num_rays)
                     subspace_gens_ptr
@@ -188,13 +191,7 @@ let new_cone cone : homogeneous cone_ptr =
                     (* (from_voidp integer null) *)
                     (size_t_of_int dim)
                 )
-    in
-    keep_ocaml_value_live rays_array;
-    keep_ocaml_value_live subspace_gens_array;
-    keep_ocaml_value_live inequalities_array;
-    keep_ocaml_value_live lattice_equations_array;
-    keep_ocaml_value_live excluded_face_inequalities_array;
-    ptr
+    in ptr
 
 let get_embedding_dimension cone =
   let get_dim cone_ptr =

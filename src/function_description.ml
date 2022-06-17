@@ -11,7 +11,7 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
     let debug_flint = foreign "debug_flint" (int @-> returning void)
 
-    let matrix_from_array =
+    let matrix_from_string_array =
       foreign "matrix_from_string_array" (ptr void @-> slong @-> slong
                                           @-> ptr void
                                           @-> returning rational_matrix_ptr)

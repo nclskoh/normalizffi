@@ -18,7 +18,14 @@ module type SimpleWrappedPointer = sig
 
   val read : 'a t -> int -> 'a
 
-  val unwrap : 'a t -> unit ptr
+  val unwrap : 'a t -> unit Ctypes.ptr
+
+  (* TODO: We actually want [pointer] to [char t],
+     but how can we be sure that it points to anything valid?
+     [pointer] is just [int64].
+
+     val to_string_ptr : pointer t -> char t
+   *)
 
 end
 
@@ -74,6 +81,13 @@ module WrappedPointer_BigArray : SimpleWrappedPointer = struct
 
   let unwrap { pointer ; _ } = to_voidp pointer
 
+  (*
+  let to_string_ptr { pointer ; keepalive } =
+    { keepalive
+    ; pointer = from_voidp char (to_voidp pointer)
+    }
+  *)
+
 end
 
 module WrappedArray : sig
@@ -81,41 +95,67 @@ module WrappedArray : sig
 
   type pointer
 
-  val array_of_string : string -> char t
-  val array_of_array : 'a t list -> pointer t
-  val allocate : 'a t -> unit ptr
+  val build_string : string -> char t
+  val build_array : 'a t list -> pointer t
+
+  val write_ptr : pointer t -> int -> 'a t -> unit
+  val write : 'a t -> int -> 'a -> unit
+  val read : 'a t -> int -> 'a
+  val unwrap : 'a t -> unit Ctypes.ptr
 
 end = struct
 
   module WrappedPointer = WrappedPointer_BigArray
   type pointer = WrappedPointer.pointer
 
-  type !_ serializable =
-    | SerializeString : string -> char serializable
-    | SerializeList : 'a serializable list -> pointer serializable
+  type 'a t = 'a WrappedPointer.t
 
-  type 'a t = 'a serializable
+  let write_ptr = WrappedPointer.write_ptr
+  let write = WrappedPointer.write
+  let read = WrappedPointer.read
+  let unwrap = WrappedPointer.unwrap
 
-  let array_of_string s = SerializeString s
-  let array_of_array l = SerializeList l
-
-  let serialize_string s =
+  let build_string s =
     let ptr = WrappedPointer.allocate_chars (String.length s + 1) in
     String.iteri (fun i c -> WrappedPointer.write ptr i c) s;
     ptr
 
-  let rec serialize : 'a. 'a serializable -> 'a WrappedPointer.t =
-    fun (type a) (l : a serializable) : a WrappedPointer.t ->
-    (match l with
-     | SerializeList l ->
-        let children = List.map serialize l in
-        let parent = WrappedPointer.allocate_ptrs (List.length l) in
-        List.iteri
-          (fun i wrapped -> WrappedPointer.write_ptr parent i wrapped) children;
-        parent
-     | SerializeString s -> serialize_string s
-    )
+  let build_array l =
+    let parent = WrappedPointer.allocate_ptrs (List.length l) in
+    List.iteri
+      (fun i wrapped -> WrappedPointer.write_ptr parent i wrapped) l;
+    parent
 
-  let allocate t = WrappedPointer.unwrap (serialize t) |> Ctypes.to_voidp
+  module Serializable = struct
+    (** TODO: Ideally we should export [serialize]. *)
+    let serialize_string s =
+      (* This is just [build_string] above *)
+      let ptr = WrappedPointer.allocate_chars (String.length s + 1) in
+      String.iteri (fun i c -> WrappedPointer.write ptr i c) s;
+      ptr
+
+    type !_ serializable =
+      | SerializeString : string -> char serializable
+      | SerializeList : 'a serializable list -> pointer serializable
+
+    let rec serialize : 'a. 'a serializable -> 'a WrappedPointer.t =
+      fun (type a) (l : a serializable)
+          : a WrappedPointer.t ->
+      (match l with
+       | SerializeList l ->
+          let children = List.map serialize l in
+          let parent = WrappedPointer.allocate_ptrs (List.length l) in
+          List.iteri
+            (fun i wrapped -> WrappedPointer.write_ptr parent i wrapped) children;
+          parent
+       | SerializeString s -> serialize_string s
+      )
+  end
+
+  let _ =
+    let open Serializable in
+    serialize (SerializeList [SerializeString "gobble"])
+
+  (* let allocate t = WrappedPointer.unwrap (serialize t) |> Ctypes.to_voidp *)
 
 end

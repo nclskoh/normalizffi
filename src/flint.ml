@@ -36,7 +36,7 @@ let matrix_inverse = C.Functions.Flint.matrix_inverse
 
 let matrix_multiply = C.Functions.Flint.matrix_multiply
 
-let reshape num_cols l =
+let _reshape num_cols l =
   if num_cols <= 0 then
     invalid_arg "Flint: reshape: number of columns in a matrix must be positive"
   else
@@ -121,29 +121,12 @@ let new_matrix (generators : zz list list): rational_matrix_ptr =
 let new_matrix (generators : zz list list): C.Types.rational_matrix_ptr =
   log "normalizffi: Flint: new_matrix: serializing: @[%a@]@;" pp_list_list generators;
   let arr = integer_array_of_zz_list (List.concat generators) in
-  (* let arr = ffiarray_of_zz_list (List.concat generators) in *)
   let num_rows = List.length generators in
   let num_cols = if num_rows = 0 then 0 else List.length (List.hd generators) in
-
-  if !debug then
-    begin
-      log "normalizffi: Flint: new_matrix: calling GC@;";
-      Gc.compact ();
-      log "normalizffi: Flint: new_matrix: deserializing input to test...@;";
-      (* let inv_arr = zz_list_of_integer_ffiarray arr |> reshape num_cols in *)
-      let inv_arr = zz_list_of_integer_array arr |> reshape num_cols in
-      log "normalizffi: Flint: new_matrix: deserialized input: @[%a@]@;" pp_list_list inv_arr
-    end
-  else
-    ();
-
-  let cast p = Ctypes.to_voidp p in
-
-  let mat = C.Functions.Flint.matrix_from_array
-              (cast (CArray.start (carray_of_integer_array arr)))
-              (* (ffiarray_ptr arr) *)
+  let mat = C.Functions.Flint.matrix_from_string_array
+              (integer_array_start arr)
               (slong_of_int num_rows) (slong_of_int num_cols)
-              (integer_to_ptr (integer_of_zz (Mpzf.of_int 1))) in
+              (wrapped_integer_start (wrapped_integer_of_zz (Mpzf.of_int 1))) in
 
   if !debug then
     let (denom, zzmat) = denom_matrix_of_rational_matrix mat in

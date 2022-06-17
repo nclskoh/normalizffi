@@ -14,8 +14,8 @@ void debug_flint(int flag);
 rational_matrix* matrix_from_string_array(Integer* matrix, slong nrows, slong ncols,
 					  Integer denom);
 
-rational_matrix* matrix_from_array(fmpz* matrix, slong nrows, slong ncols,
-				   Integer denom);
+rational_matrix* matrix_from_fpmz_array(fmpz* matrix, slong nrows, slong ncols,
+					Integer denom);
 
 two_dim_array* matrix_contents(rational_matrix* matrix);
 

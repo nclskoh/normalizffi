@@ -65,8 +65,8 @@ rational_matrix* matrix_from_string_array(Integer* matrix, slong nrows, slong nc
 }
 
 extern "C"
-rational_matrix* matrix_from_array(fmpz* matrix, slong nrows, slong ncols,
-				   Integer denom) {
+rational_matrix* matrix_from_fmpz_array(fmpz* matrix, slong nrows, slong ncols,
+					Integer denom) {
   assert(matrix != nullptr && nrows * ncols > 0);
 
   fmpz_mat_struct* new_matrix = new fmpz_mat_struct;
