@@ -45,7 +45,7 @@ let test_flint () =
           | [] -> []
           | (x :: l) -> x :: take (n-1) l in
       let _result =
-        Flint.zz_denom_matrix_of_rational_matrix mat
+        Flint.denom_matrix_of_rational_matrix mat
         |> snd
         |> take rank (* The rows after rank should be all zeros *)
       in

@@ -2,19 +2,10 @@
 
 open FfiLib
 
-(* Pointer to a matrix in Flint *)
-(* type matrix_ptr *)
-
-(** Pointer to a rational matrix consisting of an integer denominator
-    and an integer-valued matrix.
-    This is the Ocaml view of [rational_matrix*] in C.
- *)
-type rational_matrix_ptr
-
 val set_debug : bool -> unit
 
 (** Create a matrix in Flint *)
-val new_matrix : zz list list -> rational_matrix_ptr
+val new_matrix : zz list list -> C.Types.rational_matrix_ptr
 
 (** Dummy value to import symbol when linking; do not use. *)
 val dummy : unit -> unit
@@ -33,21 +24,24 @@ val dummy : unit -> unit
     Note that columns with no leading non-zero entries or all zeroes are 
     possible, which can happen if the input matrix is not of full column rank.
 *)
-val hermitize : rational_matrix_ptr -> unit
+val hermitize : C.Types.rational_matrix_ptr -> unit
 
 (** Given an (m x n) matrix A in row Hermite normal form whose non-zero rows
     are the first k rows, return an (n x n) matrix whose first k rows are those
     of A, and the other (n - k) rows are standard basis vectors whose 1's are
     in columns that have no leading entries in A.
 *)
-val extend_hnf_to_basis : rational_matrix_ptr -> rational_matrix_ptr
+val extend_hnf_to_basis :
+  C.Types.rational_matrix_ptr -> C.Types.rational_matrix_ptr
 
 (** Given an invertible matrix, construct its inverse. *)
 val matrix_inverse :
-  rational_matrix_ptr -> rational_matrix_ptr
+  C.Types.rational_matrix_ptr -> C.Types.rational_matrix_ptr
 
 (** Create the product of two matrices *)
-val matrix_multiply : rational_matrix_ptr -> rational_matrix_ptr -> rational_matrix_ptr
+val matrix_multiply :
+  C.Types.rational_matrix_ptr -> C.Types.rational_matrix_ptr ->
+  C.Types.rational_matrix_ptr
 
 (* Get the pointer to the matrix part of a rational matrix.
 
@@ -62,12 +56,14 @@ val matrix_ptr_of_rational_matrix :
 *)
 
 (** Get the contents of a rational matrix *)
-val zz_denom_matrix_of_rational_matrix : rational_matrix_ptr -> zz * zz list list
+val denom_matrix_of_rational_matrix :
+  C.Types.rational_matrix_ptr -> zz * zz list list
 
 (** Get rank of the matrix *)
-val rank : rational_matrix_ptr -> int
+val rank : C.Types.rational_matrix_ptr -> int
 
 (** Transpose a matrix *)
-val transpose : rational_matrix_ptr -> rational_matrix_ptr
+val transpose : C.Types.rational_matrix_ptr -> C.Types.rational_matrix_ptr
 
-val solve : rational_matrix_ptr -> rational_matrix_ptr -> rational_matrix_ptr
+val solve : C.Types.rational_matrix_ptr -> C.Types.rational_matrix_ptr ->
+            C.Types.rational_matrix_ptr

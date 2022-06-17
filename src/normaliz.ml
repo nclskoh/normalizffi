@@ -1,4 +1,3 @@
-open Foreign
 open Ctypes
 
 let debug = ref false
@@ -10,7 +9,7 @@ let ( let* ) o f =
 
 let set_debug flag =
   debug := flag;
-  let f = foreign "debug_normaliz" (int @-> returning void) in
+  let f = C.Functions.Normaliz.debug_normaliz in
   if flag then f 1 else f 0
 
 type 'a cone = {
@@ -98,26 +97,16 @@ let add_lattice_equations cone vecs = add_vectors_to_cone add_lattice_equation c
 let add_excluded_face_inequalities cone vecs = add_vectors_to_cone add_excluded_face cone vecs
 
 (* Treat cone as opaque *)
-type cptr = unit ptr (* Ocaml type for cone pointers *)
-let cptr = ptr void (* typ for cone pointers *)
 
 type homogeneous = unit
 type inhomogeneous = unit
 
-type 'a cone_ptr = Ptr of cptr
+type 'a cone_ptr = Ptr of C.Types.cptr
 
+(* To load Normaliz in *)
 external dummy_new_cone: unit -> unit = "new_cone"
 
-let alloc_cone =
-  let open FfiLib in
-  foreign "new_cone"
-    (ptr integer @-> size_t (* cone generators *)
-     @-> ptr integer @-> size_t (* subspace generators *)
-     @-> ptr integer @-> size_t (* inequalities *)
-     @-> ptr integer @-> size_t (* lattice_equations *)
-     @-> ptr integer @-> size_t (* excluded faces *)
-     @-> size_t (* dimension *)
-     @-> returning cptr)
+let alloc_cone = C.Functions.Normaliz.new_cone
 
 (*
 let dimensions (l : 'a list list) : int * int =
@@ -171,7 +160,7 @@ let new_cone cone : homogeneous cone_ptr =
     let keep_ocaml_value_live _ = () in
     let alloc_array l =
       if l = [] then
-        (from_voidp FfiLib.integer null, None)
+        (from_voidp C.Types.integer null, None)
       else
         let arr = FfiLib.integer_array_of_zz_list (List.concat l) in
         (CArray.start (FfiLib.carray_of_integer_array arr), Some arr)
@@ -209,7 +198,7 @@ let new_cone cone : homogeneous cone_ptr =
 
 let get_embedding_dimension cone =
   let get_dim cone_ptr =
-    let f = foreign "get_embedding_dimension" (cptr @-> returning size_t) in
+    let f = C.Functions.Normaliz.get_embedding_dimension in
     FfiLib.int_of_size_t (f cone_ptr) in
   match cone with
   | Ptr ptr -> get_dim ptr
@@ -219,19 +208,14 @@ let intersect_cone (Ptr c1) (Ptr c2) =
     Result.error "intersect_cone: Dimensions of the two cones do not match"
   else
     Result.ok
-      (Ptr (
-          foreign "intersect_cone"
-            (cptr @-> cptr @-> returning cptr)
-            c1 c2
-        ))
+      (Ptr (C.Functions.Normaliz.intersect_cone c1 c2))
 
-let dehomogenize (Ptr c) =
-  Ptr (foreign "dehomogenize" (cptr @-> returning cptr) c)
+let dehomogenize (Ptr c) = Ptr (C.Functions.Normaliz.dehomogenize c)
 
-let hull (Ptr c) =
-  foreign "hull" (cptr @-> returning void) c
+let hull (Ptr c) = C.Functions.Normaliz.hull c
 
-let get_matrix (cone : cptr) (name: string) =
+(*
+let get_matrix (cone : C.Types.cptr) (name: string) =
   let f = foreign name (cptr @-> returning (ptr FfiLib.two_dim_array)) in
   let ptr = f cone in
   if is_null ptr then
@@ -239,31 +223,44 @@ let get_matrix (cone : cptr) (name: string) =
   else
   let arr = !@ ptr in
   FfiLib.zz_matrix_of_two_dim_array arr
+ *)
 
-let get_extreme_rays = function
-  | Ptr cone -> get_matrix cone "get_extreme_rays"
+let to_matrix ptr =
+  if is_null ptr then
+    []
+  else
+    let arr = !@ ptr in
+    FfiLib.zz_matrix_of_two_dim_array arr
 
-let get_lineality_space = function
-  | Ptr cone -> get_matrix cone "get_lineality_space"
+let get_extreme_rays (Ptr cone) =
+  C.Functions.Normaliz.get_extreme_rays cone |> to_matrix
 
-let get_inequalities = function
-  | Ptr cone -> get_matrix cone "get_inequalities"
+let get_lineality_space (Ptr cone) =
+  C.Functions.Normaliz.get_lineality_space cone |> to_matrix
 
-let get_equations = function
-  | Ptr cone -> get_matrix cone "get_equations"
+let get_inequalities (Ptr cone) =
+  C.Functions.Normaliz.get_inequalities cone |> to_matrix
 
-let get_congruences = function
-  | Ptr cone -> get_matrix cone "get_congruences"
+let get_equations (Ptr cone) =
+  C.Functions.Normaliz.get_equations cone |> to_matrix
 
-let get_vertices (Ptr cone) = get_matrix cone "get_vertices"
-(* let get_original_monoid_generators (Inhom cone) =
-   get_matrix cone "get_original_monoid_generators"
-*)
-let get_int_hull_inequalities (Ptr cone) = get_matrix cone "get_integer_hull_inequalities"
-let get_int_hull_equations (Ptr cone) = get_matrix cone "get_integer_hull_equations"
-let get_dehomogenization (Ptr cone) = get_matrix cone "get_dehomogenization"
+let get_congruences (Ptr cone) =
+  C.Functions.Normaliz.get_congruences cone |> to_matrix
 
-let hilbert_basis (Ptr cone) = get_matrix cone "get_hilbert_basis"
+let get_vertices (Ptr cone) =
+  C.Functions.Normaliz.get_vertices cone |> to_matrix
+
+let get_int_hull_inequalities (Ptr cone) =
+  C.Functions.Normaliz.get_integer_hull_inequalities cone |> to_matrix
+
+let get_int_hull_equations (Ptr cone) =
+  C.Functions.Normaliz.get_integer_hull_equations cone |> to_matrix
+
+let get_dehomogenization (Ptr cone) =
+  C.Functions.Normaliz.get_dehomogenization cone |> to_matrix
+
+let hilbert_basis (Ptr cone) =
+  C.Functions.Normaliz.get_hilbert_basis cone |> to_matrix
 
 (* TODO: This really doesn't work well:
 
@@ -274,8 +271,7 @@ let is_semiopen (Hom ptr) =
   foreign "is_semiopen" (cptr @-> returning bool) ptr
 *)
 
-let is_empty_semiopen (Ptr ptr) =
-  foreign "is_empty_semiopen" (cptr @-> returning bool) ptr
+let is_empty_semiopen (Ptr ptr) = C.Functions.Normaliz.is_empty_semiopen ptr
 
 let extract_generators_as_constraints (cone : homogeneous cone_ptr) =
   let rays = get_extreme_rays cone in

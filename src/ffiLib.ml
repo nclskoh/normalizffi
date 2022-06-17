@@ -1,13 +1,15 @@
 open Ctypes
 
+include C.Types
+
 let ( let* ) o f =
   match o with
   | Ok x -> f x
   | Error e -> Error e
 
 type zz = Mpzf.t
-type integer = char ptr
-let integer = ptr char (* string *)
+
+let integer_to_ptr p = to_voidp p
 
 let debug = ref false
 
@@ -82,7 +84,6 @@ let allocate_string s =
 let integer_of_zz x =
   Mpzf.to_string x |> allocate_string
 
-type size_t = Unsigned.Size_t.t
 let size_t_of_int = Unsigned.Size_t.of_int
 let int_of_size_t x = Int64.to_int (Unsigned.Size_t.to_int64 x)
 
@@ -149,22 +150,12 @@ let zz_list_of_integer_array (arr : integer_array) =
   let l = List.hd (gather_as_matrix 1 len ptr) in
   List.map zz_of_integer l
 
-type two_dim_array =
-  { data : integer ptr; (* To cast to an array of integers *)
-    num_rows : size_t ;
-    num_cols: size_t }
-
-let two_dim_array : two_dim_array structure typ = structure "two_dim_array"
-let two_dim_array_data = field two_dim_array "data" (ptr integer)
-let two_dim_array_nrows = field two_dim_array "num_rows" size_t
-let two_dim_array_ncols = field two_dim_array "num_cols" size_t
-let () = seal two_dim_array
-
 let zz_matrix_of_two_dim_array (arr : two_dim_array structure) : zz list list =
   let m = int_of_size_t (getf arr two_dim_array_nrows) in
   let n = int_of_size_t (getf arr two_dim_array_ncols) in
   let data = getf arr two_dim_array_data in
-  let mat = gather_as_matrix m n data in
+  let cast ptr = Ctypes.from_voidp integer data in
+  let mat = gather_as_matrix m n (cast data) in
   List.map (fun r -> List.map zz_of_integer r) mat
 
 let zz_matrix_of_int_matrix m : zz list list =

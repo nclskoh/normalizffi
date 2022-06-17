@@ -15,6 +15,7 @@ typedef struct NCone {
   Cone<Integer>* v;
 } NCone;
 
+extern "C"
 void debug_normaliz(int flag) {
   debug = flag;
 }
