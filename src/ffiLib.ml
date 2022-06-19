@@ -34,7 +34,9 @@ type integer_array =
 
 let wrapped_integer_start p = WrappedArray.unwrap p
 
-let wrapped_integer_of_zz x = Mpzf.to_string x |> WrappedArray.build_string
+let free_wrapped_integer p = WrappedArray.free p
+
+let wrapped_integer_of_zz x = Mpzf.to_string x |> WrappedArray.make_string
 
 let deserialize_int (x : char ptr) : string =
   let rec go i s =
@@ -63,13 +65,16 @@ let int_of_size_t x = Int64.to_int (Unsigned.Size_t.to_int64 x)
 
 let integer_array_of_zz_list (l : zz list) : integer_array =
   let wrapped_ptr =
-    WrappedArray.build_array
-      (List.map (fun x -> WrappedArray.build_string (Mpzf.to_string x)) l) in
+    WrappedArray.make_array
+      (List.map (fun x -> WrappedArray.make_string (Mpzf.to_string x)) l) in
   { wrapped_ptr ; arr_len = List.length l }
 
 let integer_array_start { wrapped_ptr ; _ } =
   WrappedArray.unwrap wrapped_ptr
-  
+
+let free_integer_array { wrapped_ptr ; _ } =
+  WrappedArray.free wrapped_ptr
+
 (*
 let gather_as_matrix
       (num_rows : int) (num_cols : int) (ptr : 'a WrappedArray.t) : 'a list list =

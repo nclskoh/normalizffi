@@ -7,6 +7,14 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
   open Types
 
+  module Memory = struct
+
+    let alloc = foreign "normalizffi_alloc" (int @-> int @-> returning (ptr void))
+
+    let free = foreign "normalizffi_free" (ptr void @-> returning void)
+
+  end
+
   module Flint = struct
 
     let debug_flint = foreign "debug_flint" (int @-> returning void)

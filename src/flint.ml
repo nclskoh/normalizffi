@@ -80,63 +80,19 @@ let denom_matrix_of_rational_matrix (rm_ptr : C.Types.rational_matrix_ptr)
     invalid_arg "Flint: rational matrix pointer is null"
   else
     (denom_of_matrix rm_ptr, zz_matrix_of_matrix rm_ptr)
-
-(*
-let new_matrix (generators : zz list list): rational_matrix_ptr =
-  log "normalizffi: Flint: new_matrix: serializing: @[%a@]@;" pp_list_list generators;
-  let arr = carray_of_zz_list (List.concat generators) in
-  (* let arr = ffiarray_of_zz_list (List.concat generators) in *)
-  let num_rows = List.length generators in
-  let num_cols = if num_rows = 0 then 0 else List.length (List.hd generators) in
-
-  if !debug then
-    begin
-      log "normalizffi: Flint: new_matrix: calling GC@;";
-      Gc.compact ();
-      log "normalizffi: Flint: new_matrix: deserializing input to test...@;";
-      (* let inv_arr = zz_list_of_integer_ffiarray arr |> reshape num_cols in *)
-      let inv_arr = zz_list_of_carray arr |> reshape num_cols in
-      log "normalizffi: Flint: new_matrix: deserialized input: @[%a@]@;" pp_list_list inv_arr
-    end
-  else
-    ();
-
-  let mat = matrix_from_array
-              (CArray.start arr)
-              (* (ffiarray_ptr arr) *)
-              (slong_of_int num_rows) (slong_of_int num_cols)
-              (integer_of_zz (Mpzf.of_int 1)) in
-
-  if !debug then
-    let (denom, zzmat) = zz_denom_matrix_of_rational_matrix mat in
-    log "normalizffi: Flint: new_matrix: checking allocated matrix: denom = %s@; matrix = @[%a@]"
-      (Mpzf.to_string denom)
-      pp_list_list zzmat
-  else
-    ();
-
-  mat
- *)
-
+  
 let new_matrix (generators : zz list list): C.Types.rational_matrix_ptr =
   log "normalizffi: Flint: new_matrix: serializing: @[%a@]@;" pp_list_list generators;
   let arr = integer_array_of_zz_list (List.concat generators) in
+  let denom = wrapped_integer_of_zz (Mpzf.of_int 1) in
   let num_rows = List.length generators in
   let num_cols = if num_rows = 0 then 0 else List.length (List.hd generators) in
   let mat = C.Functions.Flint.matrix_from_string_array
               (integer_array_start arr)
               (slong_of_int num_rows) (slong_of_int num_cols)
-              (wrapped_integer_start (wrapped_integer_of_zz (Mpzf.of_int 1))) in
-
-  if !debug then
-    let (denom, zzmat) = denom_matrix_of_rational_matrix mat in
-    log "normalizffi: Flint: new_matrix: checking allocated matrix: 
-         denom = %s@; matrix = @[%a@]"
-      (Mpzf.to_string denom)
-      pp_list_list zzmat
-  else
-    ();
-
+              (wrapped_integer_start denom) in
+  FfiLib.free_integer_array arr;
+  FfiLib.free_wrapped_integer denom;
   mat
 
 let rank (mat_ptr : C.Types.rational_matrix_ptr) =

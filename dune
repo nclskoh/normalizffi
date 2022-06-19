@@ -12,7 +12,7 @@
 (foreign_library
   (archive_name normaliz_stubs)
   (language cxx)
-  (names normaliz_stub flint_stub)
+  (names normaliz_stub flint_stub custom_memory)
   (include_dirs ./Normaliz-offline/local/include))
 
 (library
@@ -33,7 +33,7 @@
     (build_flags_resolver
       (vendored (c_flags :standard -I%{project_root}/Normaliz-offline/local/include -Isrc)
       		(c_library_flags (:standard -lnormaliz_stubs -lstdc++))))
-    (headers (preamble "#include \"normaliz_stub.h\"\n#include \"flint_stub.h\""))
+    (headers (preamble "#include \"normaliz_stub.h\"\n#include \"flint_stub.h\"\n#include \"custom_memory.h\""))
     ; (headers (include normaliz_stub.h flint_stub.h))
     (generated_types Types_generated)
     (generated_entry_point C))
@@ -44,7 +44,7 @@
   (flags (:standard -w -32))
   (name test)
   (modules test)
-  (libraries normalizffi))
+  (libraries normalizffi ounit2))
 
 (rule
   (deps (source_tree Normaliz-offline))

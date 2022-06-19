@@ -1,6 +1,5 @@
 open Normalizffi
-(* open FfiLib *)
-(* open Normaliz *)
+(* open OUnit *)
 
 let ( let* ) o f =
   match o with
@@ -103,9 +102,16 @@ let test_gc () =
                ; [134217728; -1; 0; 0; 0; 0]
                ] |> List.map (List.map Mpzf.of_int)
   in
-  Flint.new_matrix matrix
+  ignore (Flint.new_matrix matrix);
+  Gc.compact ();
+  ignore (Flint.new_matrix matrix);
+  Gc.compact ();
+  ignore (Flint.new_matrix matrix);
+  Gc.compact ()
 
 let () =
+  (* Gc.set {(Gc.get ()) with Gc.verbose = 0x4FF}; *)
+  Gc.set {(Gc.get ()) with Gc.verbose = 0x01};
   Format.printf "Hello world\n";
   (* ignore (test_normaliz ()); *)
   (* ignore (test_flint ()) *)

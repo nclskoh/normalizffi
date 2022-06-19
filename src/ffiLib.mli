@@ -18,12 +18,16 @@ type zz = Mpzf.t
     and is one that is returned from C.
     In other words: use [wrapped_integer] when sending pointers to C,
     use [C.Types.integer] when receiving pointers from C.
+
+    Wrapped values have to be manually freed when no longer needed.
  *)
 type wrapped_integer
 
 val wrapped_integer_of_zz : zz -> wrapped_integer
 
 val wrapped_integer_start : wrapped_integer -> unit Ctypes.ptr
+
+val free_wrapped_integer : wrapped_integer -> unit
 
 val zz_of_integer : C.Types.integer -> zz
 
@@ -42,6 +46,8 @@ val zz_list_of_integer_array : integer_array -> zz list
  *)
 
 val integer_array_start: integer_array -> unit Ctypes.ptr
+
+val free_integer_array : integer_array -> unit
 
 val zz_matrix_of_two_dim_array :
   C.Types.two_dim_array Ctypes.structure -> zz list list

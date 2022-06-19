@@ -160,20 +160,20 @@ let new_cone cone : homogeneous cone_ptr =
   else
     let alloc_array l =
       if l = [] then
-        from_voidp C.Types.integer null
+        (from_voidp C.Types.integer null, None)
       else
         let open FfiLib in
-        List.concat l
-        |> integer_array_of_zz_list
-        |> integer_array_start
-        |> from_voidp C.Types.integer
+        let arr = integer_array_of_zz_list (List.concat l)
+        in ( integer_array_start arr |> from_voidp C.Types.integer
+           , Some arr)
     in    
-    let rays_ptr = alloc_array cone.rays in
-    let subspace_gens_ptr = alloc_array cone.subspace in
-    let inequalities_ptr = alloc_array inequalities in
-    let lattice_equations_ptr = alloc_array cone.lattice_equations in
-    let excluded_face_inequalities_ptr =
-      alloc_array cone.excluded_face_inequalities      
+    let (rays_ptr, rays) = alloc_array cone.rays in
+    let (subspace_gens_ptr, subspace_gens) = alloc_array cone.subspace in
+    let (inequalities_ptr, inequalities) = alloc_array inequalities in
+    let (lattice_equations_ptr, lattice_equations) =
+      alloc_array cone.lattice_equations in
+    let (excluded_face_inequalities_ptr, excluded_face_inequalities) =
+      alloc_array cone.excluded_face_inequalities
     in
     let open FfiLib in
     let ptr = Ptr (
@@ -191,7 +191,15 @@ let new_cone cone : homogeneous cone_ptr =
                     (* (from_voidp integer null) *)
                     (size_t_of_int dim)
                 )
-    in ptr
+    in
+    let free arr = match arr with
+      | None -> ()
+      | Some arr -> FfiLib.free_integer_array arr
+    in
+    List.iter free
+      [ rays ; subspace_gens ; inequalities ;
+        lattice_equations ; excluded_face_inequalities ];
+    ptr
 
 let get_embedding_dimension cone =
   let get_dim cone_ptr =
