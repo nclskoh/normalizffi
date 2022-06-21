@@ -137,9 +137,10 @@ module WrappedPointer_BigArray_Roots : SimpleWrappedPointer = struct
       let open Bigarray in
       let arr = Array1.create kind c_layout n in
       let root = Ctypes.Root.create arr in
-      let addr = Ctypes.raw_address_of_ptr root in
-      (* Gc.finalise (fun a -> Format.printf "GC: Finalizing %x\n"
-         (Nativeint.to_int addr)) root; *)
+      (*
+         let addr = Ctypes.raw_address_of_ptr root in
+         Gc.finalise (fun a -> Format.printf "GC: Finalizing %x\n"
+           (Nativeint.to_int addr)) root; *)
       let obj_repr = Obj.repr arr in
       let dummy_tag = Obj.repr "Hello" in
       global_root := dummy_tag :: obj_repr :: !global_root;
