@@ -103,6 +103,12 @@ val dehomogenize : homogeneous cone_ptr -> inhomogeneous cone_ptr
 *)
 val hull : inhomogeneous cone_ptr -> unit
 
+
+(** Get the unique Hilbert Basis of the salient cone obtained by quotienting
+    out the lineality space (but still residing in the same ambient space).
+    The Hilbert basis for the cone is this result together with the lineality
+    space generators obtained through [get_lineality_space].
+*)
 val hilbert_basis : homogeneous cone_ptr -> zz list list
 
 (** Get the conic generators of a homogeneous cone or a polyhedron
