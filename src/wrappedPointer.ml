@@ -112,7 +112,7 @@ module WrappedPointer_BigArray_Keepalive : SimpleWrappedPointer = struct
     | ArrayPtr (KeepArrayPtr { root ; _ }) -> Bigarray.Array1.get root index
     | _ -> failwith "WrappedPointer: Shouldn't happen"
 
-  (** [free] is just an illusion to force the client to hold onto the Ocaml 
+  (** [free] is just an illusion to force the client to hold onto the Ocaml
       value. *)
   let free t = ()
 
@@ -123,7 +123,7 @@ module WrappedPointer_BigArray_Roots : SimpleWrappedPointer = struct
   type pointer = nativeint
 
   exception Empty_array
-  exception Pointer_already_freed               
+  exception Pointer_already_freed
 
   type 'a t =
     { pointer : 'a ptr
@@ -152,8 +152,8 @@ module WrappedPointer_BigArray_Roots : SimpleWrappedPointer = struct
       Obj.custom_tag Obj.int_tag Obj.out_of_heap_tag;
        *)
 
-      Format.printf "registered root with address %x, (object, dummy) representation = (%d, %d)\n"
-        (Nativeint.to_int addr) (Obj.tag obj_repr) (Obj.tag dummy_tag);
+      (*Format.printf "registered root with address %x, (object, dummy) representation = (%d, %d)\n"
+        (Nativeint.to_int addr) (Obj.tag obj_repr) (Obj.tag dummy_tag); *)
       { roots = [root]
       ; pointer = Ctypes.bigarray_start Ctypes.array1 arr
       }
@@ -208,7 +208,7 @@ end
 
 module WrappedArrayFromPointer (Wp : SimpleWrappedPointer) : WrappedArray =
   struct
-    
+
     type pointer = Wp.pointer
     exception Empty_array = Wp.Empty_array
     exception Pointer_already_freed = Wp.Pointer_already_freed
@@ -220,7 +220,7 @@ module WrappedArrayFromPointer (Wp : SimpleWrappedPointer) : WrappedArray =
     let read = Wp.read
     let unwrap = Wp.unwrap
     let free = Wp.free
-             
+
     let make_string s =
       let ptr = Wp.allocate_chars (String.length s + 1) in
       String.iteri (fun i c -> Wp.write ptr i c) s;
@@ -264,7 +264,7 @@ module WrappedArrayFromPointer (Wp : SimpleWrappedPointer) : WrappedArray =
     let _ =
       let open Serializable in
       serialize (SerializeList [SerializeString "gobble"])
-        
+
   end
 
 module WrappedArray_BigArray_Keepalive : WrappedArray =
@@ -274,7 +274,7 @@ module WrappedArray_BigArray_Roots : WrappedArray =
   WrappedArrayFromPointer (WrappedPointer_BigArray_Roots)
 
 module WrappedArray_NormalizAlloc : WrappedArray = struct
-  (** TODO: 
+  (** TODO:
       - Double free isn't protected against yet.
       - Only a list of strings is supported for now; arbitrary nesting
         raises an exception.
@@ -306,7 +306,7 @@ module WrappedArray_NormalizAlloc : WrappedArray = struct
   let _ptr_of_string (type a) (t : a t) : a Ctypes.ptr =
     match t with
     | CString p -> p
-    | CArray (p, _) -> 
+    | CArray (p, _) ->
        invalid_arg "Normalizffi: WrappedPointer: ptr_of_string: not a string"
 
   let ptr_of_array (type a) (t : a t) : a Ctypes.ptr =
@@ -344,7 +344,7 @@ module WrappedArray_NormalizAlloc : WrappedArray = struct
            (List.map (fun t -> to_voidp (ptr_of t)) l);
          CArray (arr, List.length l)
       | JustArray ->
-         invalid_arg "Normalizffi: WrappedPointer: make_array: 
+         invalid_arg "Normalizffi: WrappedPointer: make_array:
                       nested arrays not supported yet"
 
   let free_strings (arr, n) =
@@ -354,11 +354,11 @@ module WrappedArray_NormalizAlloc : WrappedArray = struct
       C.Functions.Memory.free (cast p)
     done;
     C.Functions.Memory.free (cast arr)
-    
+
   let write_ptr dst index src =
     let dst_ptr = ptr_of_array dst in
     (dst_ptr +@ index) <-@ from_voidp char (to_voidp (ptr_of src))
-    
+
   let write t index value = (ptr_of t) +@ index <-@ value
 
   let read t index = !@ ((ptr_of t) +@ index)
