@@ -42,7 +42,7 @@ let add_vector vectors vector: ('a list list * int, string) result =
           dim ambient_dim in
       Result.error error_str
 
-let add_vector_to_cone get set cone vec =
+let add_vector_to_cone get set vec cone =
   let* (matrix, dim) = add_vector (get cone) vec in
   if cone.ambient_dim = 0 || cone.ambient_dim = dim then
     Result.ok { (set cone matrix) with ambient_dim = dim}
@@ -53,48 +53,48 @@ let add_vector_to_cone get set cone vec =
     Result.error error_str
 
 (* Partial application yields weak monomorphic types *)
-let add_ray cone vec =
+let add_ray vec cone =
   add_vector_to_cone
     (fun cone -> cone.rays)
     (fun cone matrix -> { cone with rays = matrix })
-    cone vec
+    vec cone
 
-let add_subspace_generator cone vec =
+let add_subspace_generator vec cone =
   add_vector_to_cone
     (fun cone -> cone.subspace)
     (fun cone matrix -> { cone with subspace = matrix })
-    cone vec
+    vec cone
 
-let add_inequality cone vec =
+let add_inequality vec cone =
   add_vector_to_cone
     (fun cone -> cone.inequalities)
     (fun cone matrix -> { cone with inequalities = matrix })
-    cone vec
+    vec cone
 
-let add_lattice_equation cone vec =
+let add_lattice_equation vec cone =
   add_vector_to_cone
     (fun cone -> cone.lattice_equations)
     (fun cone matrix -> { cone with lattice_equations = matrix })
-    cone vec
+    vec cone
 
-let add_excluded_face cone vec =
+let add_excluded_face vec cone =
   add_vector_to_cone
     (fun cone -> cone.excluded_face_inequalities)
     (fun cone matrix -> { cone with excluded_face_inequalities = matrix })
-    cone vec
+    vec cone
 
-let add_vectors_to_cone add cone vecs  =
+let add_vectors_to_cone add vecs cone =
   List.fold_right
     (fun vec cone_opt ->
        let* cone' = cone_opt in
-       add cone' vec)
+       add vec cone')
     vecs (Result.ok cone)
 
-let add_rays cone vecs = add_vectors_to_cone add_ray cone vecs
-let add_subspace_generators cone vecs = add_vectors_to_cone add_subspace_generator cone vecs
-let add_inequalities cone vecs = add_vectors_to_cone add_inequality cone vecs
-let add_lattice_equations cone vecs = add_vectors_to_cone add_lattice_equation cone vecs
-let add_excluded_face_inequalities cone vecs = add_vectors_to_cone add_excluded_face cone vecs
+let add_rays vecs cone = add_vectors_to_cone add_ray vecs cone
+let add_subspace_generators vecs cone = add_vectors_to_cone add_subspace_generator vecs cone
+let add_inequalities vecs cone = add_vectors_to_cone add_inequality vecs cone
+let add_lattice_equations vecs cone = add_vectors_to_cone add_lattice_equation vecs cone
+let add_excluded_face_inequalities vecs cone = add_vectors_to_cone add_excluded_face vecs cone
 
 (* Treat cone as opaque *)
 
@@ -142,8 +142,8 @@ let identity_matrix n : FfiLib.zz list list =
 let negate_vectors ll =
   List.map (fun l -> List.map (fun x -> Mpzf.neg x) l) ll
 
-let add_equalities cone vecs =
-  add_inequalities cone (List.concat [vecs; negate_vectors vecs])
+let add_equalities vecs cone =
+  add_inequalities (List.concat [vecs; negate_vectors vecs]) cone
 
 let new_cone cone : homogeneous cone_ptr =
   let dim = cone.ambient_dim in
@@ -334,38 +334,40 @@ let pp fmt c =
   let inequalities = get_inequalities c in
   let equations = get_equations c in
   let congruences = get_congruences c in
-  Format.fprintf fmt "Printing cone:\n";
-  Format.fprintf fmt "Embedding dimension: %d\n" (get_embedding_dimension c);
-  Format.fprintf fmt "Rays:\n%a" pp_list_list rays;
-  Format.fprintf fmt "Lineality space generators:\n%a"
-    pp_list_list lineality_generators;
-  Format.fprintf fmt "Inequalities:\n%a" pp_list_list inequalities;
-  Format.fprintf fmt "Equations:\n%a" pp_list_list equations;
-  Format.fprintf fmt "Congruences:\n%a" pp_list_list congruences
+  Format.fprintf fmt "@[<v 0>Embedding dimension: %d@;" (get_embedding_dimension c);
+  Format.fprintf fmt "Rays: @[%a@]@;" pp_list_list rays;
+  Format.fprintf fmt "Lineality space generators: @[%a@]@;" pp_list_list lineality_generators;
+  Format.fprintf fmt "Inequalities: @[%a@]@;" pp_list_list inequalities;
+  Format.fprintf fmt "Equations: @[%a@]@;" pp_list_list equations;
+  Format.fprintf fmt "Congruences: @[%a@]@]" pp_list_list congruences
 
 let pp_hom fmt c =
-  pp fmt c;
-  (* let semiopen = is_semiopen c in
-     Format.fprintf fmt "Semiopen?: %b\n" semiopen; *)
-  Format.fprintf fmt "Dehomogenization: none\n"
+  Format.fprintf fmt "@[%a@\nDehomogenization: none@]" pp c
 
 let pp_inhom fmt c =
   let open FfiLib in
-  pp fmt c;
   let vertices = get_vertices c in
   let dehom = get_dehomogenization c in
-  Format.fprintf fmt "Vertices:\n%a" pp_list_list vertices;
-  Format.fprintf fmt "Dehomogenization:\n%a" pp_list_list dehom
+  Format.fprintf fmt "@[<v 0>%a@;Vertices: @[%a@]@;Dehomogenization: @[%a@]@]"
+    pp c
+    pp_list_list vertices
+    pp_list_list dehom
 
+let pp_hull fmt c =
+  let open FfiLib in
+  Format.fprintf fmt "@[<v 0>Hull inequalities: @[%a@]@;"
+    pp_list_list (get_int_hull_inequalities c);
+  Format.fprintf fmt "Hull equations: @[%a@]@]"
+    pp_list_list (get_int_hull_equations c)
+  
 let pp_cone fmt c =
   let open FfiLib in
-  Format.fprintf fmt "Printing cone:\n";
-  Format.fprintf fmt "Rays:\n%a" pp_list_list c.rays;
-  Format.fprintf fmt "Subspace:\n%a" pp_list_list c.subspace;
-  Format.fprintf fmt "Inequalities:\n%a" pp_list_list c.inequalities;
-  Format.fprintf fmt "Lattice equations:\n%a" pp_list_list c.lattice_equations;
-  Format.fprintf fmt "Excluded faces:\n%a" pp_list_list c.excluded_face_inequalities;
-  Format.fprintf fmt "Ambient dimension:%d" c.ambient_dim
+  Format.fprintf fmt "@[<v 0>Rays: @[%a@]@;" pp_list_list c.rays;
+  Format.fprintf fmt "Subspace:@[%a@]@;" pp_list_list c.subspace;
+  Format.fprintf fmt "Inequalities:@[%a@]@;" pp_list_list c.inequalities;
+  Format.fprintf fmt "Lattice equations:@[%a@]@;" pp_list_list c.lattice_equations;
+  Format.fprintf fmt "Excluded faces:@[%a@]@;" pp_list_list c.excluded_face_inequalities;
+  Format.fprintf fmt "Ambient dimension:%d@]" c.ambient_dim
 
 let print_hull_constraints s ineqs_eqns =
   let open FfiLib in

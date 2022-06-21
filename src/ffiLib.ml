@@ -55,9 +55,7 @@ let deserialize_int (x : char ptr) : string =
   go 0 ""
 
 let zz_of_integer ptr =
-  (* deserialize_int ptr |> Mpzf.of_string *)
   let s = deserialize_int ptr in
-  (* Format.printf "%s\n" s; *)
   Mpzf.of_string s
 
 let size_t_of_int = Unsigned.Size_t.of_int
@@ -128,6 +126,10 @@ let zz_matrix_of_two_dim_array (arr : two_dim_array structure) : zz list list =
 let zz_matrix_of_int_matrix m : zz list list =
   List.map (List.map Mpzf.of_int) m
 
-let pp_list_list fmt l =
-  let p = List.iter (fun x -> Format.fprintf fmt "%s, " (Mpzf.to_string x)) in
-  List.iter (fun x -> p x; Format.fprintf fmt "@;") l
+let pp_list_list fmt =
+  let pp_comma fmt () = Format.fprintf fmt ", " in
+  Format.fprintf fmt "@[<v 0>%a@]"
+    (Format.pp_print_list
+       (Format.pp_print_list ~pp_sep:pp_comma
+          (fun fmt x -> Format.fprintf fmt "%s" (Mpzf.to_string x)))
+    )

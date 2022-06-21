@@ -120,7 +120,7 @@ end
 
 module WrappedPointer_BigArray_Roots : SimpleWrappedPointer = struct
 
-  type pointer = int64
+  type pointer = nativeint
 
   exception Empty_array
   exception Pointer_already_freed               
@@ -137,8 +137,9 @@ module WrappedPointer_BigArray_Roots : SimpleWrappedPointer = struct
       let open Bigarray in
       let arr = Array1.create kind c_layout n in
       let root = Ctypes.Root.create arr in
-      let addr = Ctypes.raw_address_of_ptr root |> Int64.of_nativeint |> Int64.to_int in
-      Gc.finalise (fun a -> Format.printf "GC: Finalizing %x\n" addr) root;
+      let addr = Ctypes.raw_address_of_ptr root in
+      Gc.finalise (fun a -> Format.printf "GC: Finalizing %x\n"
+                              (Nativeint.to_int addr)) root;
       let obj_repr = Obj.repr arr in
       let dummy_tag = Obj.repr "Hello" in
       global_root := dummy_tag :: obj_repr :: !global_root;
@@ -152,7 +153,7 @@ module WrappedPointer_BigArray_Roots : SimpleWrappedPointer = struct
        *)
 
       Format.printf "registered root with address %x, (object, dummy) representation = (%d, %d)\n"
-        addr (Obj.tag obj_repr) (Obj.tag dummy_tag);
+        (Nativeint.to_int addr) (Obj.tag obj_repr) (Obj.tag dummy_tag);
       { roots = [root]
       ; pointer = Ctypes.bigarray_start Ctypes.array1 arr
       }
@@ -160,10 +161,10 @@ module WrappedPointer_BigArray_Roots : SimpleWrappedPointer = struct
   let allocate_chars n =
     allocate_array Bigarray.Char n
 
-  let allocate_ptrs n = allocate_array Bigarray.Int64 n
+  let allocate_ptrs n = allocate_array Bigarray.Nativeint n
 
   let raw_address ptr =
-    ptr |> to_voidp |> raw_address_of_ptr |> Int64.of_nativeint
+    ptr |> to_voidp |> raw_address_of_ptr
 
   let write_ptr dst index src =
     dst.roots <- List.append dst.roots src.roots;
@@ -375,4 +376,3 @@ end
 
 (* module WrappedArray = WrappedArray_BigArray_Keepalive *)
 module WrappedArray = WrappedArray_NormalizAlloc
-
