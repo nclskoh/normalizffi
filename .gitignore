@@ -3,3 +3,5 @@ _build/*
 _destdir/*
 Normaliz-offline/local
 Normaliz/local
+*.o
+test_stubs/test_stubs
