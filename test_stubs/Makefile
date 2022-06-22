@@ -17,6 +17,6 @@ manual_copy:
 	cp $(HEADERS) ./
 
 clean:
-	rm test_stubs *.o
+	rm test_stubs *.o $(notdir $(SOURCES)) $(notdir $(HEADERS))
 
 # LD_LIBRARY_PATH=../Normaliz-offline/local/lib ./test_stubs
