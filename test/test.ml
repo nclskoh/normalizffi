@@ -1,6 +1,8 @@
 open Normalizffi
 open OUnit
 
+let () = Normaliz.set_debug true
+
 let ( let* ) o f =
   match o with
   | Ok x -> f x

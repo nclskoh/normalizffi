@@ -10,17 +10,13 @@ struct NCone; // To hide C++
 
 typedef struct NCone NCone;
 
-NCone* new_cone(char** cone_generators,
-	       size_t num_cone_gens,
-	       char** subspace_generators,
-	       size_t num_subspace_gens,
-	       char** inequalities,
-	       size_t num_inequalities,
-	       char** lattice_equations,
-	       size_t num_lattice_equations,
-	       char** excluded_face_inequalities,
-	       size_t num_excluded_faces,
-	       size_t dimension);
+NCone* new_cone(char** cone_generators, size_t num_cone_gens,
+		char** subspace_generators, size_t num_subspace_gens,
+		char** inequalities, size_t num_inequalities,
+		char** lattice_generators, size_t num_lattice_gens,
+		char** lattice_equations, size_t num_lattice_equations,
+		char** excluded_face_inequalities, size_t num_excluded_faces,
+		size_t dimension);
 
 NCone* intersect_cone(NCone *c1, NCone *c2);
 

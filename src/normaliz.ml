@@ -98,7 +98,7 @@ let add_excluded_face_inequalities vecs cone = add_vectors_to_cone add_excluded_
 
 (* Treat cone as opaque *)
 
-type homogeneous = Homogeneous 
+type homogeneous = Homogeneous
 type inhomogeneous = Inhomogeneous
 
 let () =
@@ -166,7 +166,7 @@ let new_cone cone : homogeneous cone_ptr =
         let arr = integer_array_of_zz_list (List.concat l)
         in ( integer_array_start arr |> from_voidp C.Types.integer
            , Some arr)
-    in    
+    in
     let (rays_ptr, rays) = alloc_array cone.rays in
     let (subspace_gens_ptr, subspace_gens) = alloc_array cone.subspace in
     let (inequalities_ptr, inequalities) = alloc_array inequalities in
@@ -175,6 +175,11 @@ let new_cone cone : homogeneous cone_ptr =
     let (excluded_face_inequalities_ptr, excluded_face_inequalities) =
       alloc_array cone.excluded_face_inequalities
     in
+
+    (* For the computation of the Hilbert basis, we will always add the
+       standard basis as the lattice.
+     *)
+    let (lattice_gens_ptr, lattice_gens) = alloc_array (identity_matrix dim) in
     let open FfiLib in
     let ptr = Ptr (
                   C.Functions.Normaliz.new_cone
@@ -184,6 +189,8 @@ let new_cone cone : homogeneous cone_ptr =
                     (size_t_of_int num_subspace_gens)
                     inequalities_ptr
                     (size_t_of_int num_ineqs)
+                    lattice_gens_ptr
+                    (size_t_of_int dim)
                     lattice_equations_ptr
                     (size_t_of_int num_eqns)
                     excluded_face_inequalities_ptr
@@ -198,7 +205,7 @@ let new_cone cone : homogeneous cone_ptr =
     in
     List.iter free
       [ rays ; subspace_gens ; inequalities ;
-        lattice_equations ; excluded_face_inequalities ];
+        lattice_equations ; excluded_face_inequalities ; lattice_gens ];
     ptr
 
 let get_embedding_dimension cone =
@@ -359,7 +366,7 @@ let pp_hull fmt c =
     pp_list_list (get_int_hull_inequalities c);
   Format.fprintf fmt "Hull equations: @[%a@]@]"
     pp_list_list (get_int_hull_equations c)
-  
+
 let pp_cone fmt c =
   let open FfiLib in
   Format.fprintf fmt "@[<v 0>Rays: @[%a@]@;" pp_list_list c.rays;

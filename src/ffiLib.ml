@@ -13,7 +13,7 @@ let debug = ref false
 let set_debug flag =
   debug := flag
 
-(*  
+(*
 let logf fmt fmt_str =
   if !debug then Format.fprintf fmt fmt_str
   else Format.ifprintf fmt fmt_str
@@ -23,10 +23,10 @@ let log fmt_str = logf Format.std_formatter fmt_str
 
 type zz = Mpzf.t
 
-(** An integer is wrapped with the Ocaml value keeping its string contents 
+(** An integer is wrapped with the Ocaml value keeping its string contents
     alive. *)
 type wrapped_integer = char WrappedArray.t
-             
+
 type integer_array =
   { wrapped_ptr : WrappedArray.pointer WrappedArray.t
   ; arr_len : int

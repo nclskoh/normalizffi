@@ -183,6 +183,7 @@ extern "C"
 NCone* new_cone(char** cone_generators, size_t num_cone_gens,
 		char** subspace_generators, size_t num_subspace_gens,
 		char** inequalities, size_t num_inequalities,
+		char** lattice_generators, size_t num_lattice_gens,
 		char** lattice_equations, size_t num_lattice_equations,
 		char** excluded_face_inequalities, size_t num_excluded_faces,
 		size_t dimension)
@@ -196,8 +197,10 @@ NCone* new_cone(char** cone_generators, size_t num_cone_gens,
   auto cone_gens = vector_of(cone_generators, num_cone_gens, dimension);
   auto subspace_gens = vector_of(subspace_generators, num_subspace_gens, dimension);
   auto ineqs = vector_of(inequalities, num_inequalities, dimension);
+  auto lattice_gens = vector_of(lattice_generators, num_lattice_gens, dimension);
   auto lattice_eqns = vector_of(lattice_equations, num_lattice_equations, dimension);
   auto excluded_faces = vector_of(excluded_face_inequalities, num_excluded_faces, dimension);
+
   // auto dehom = vector_of(dehomogenization, dim_dehomogenization);
 
   if(cone_gens != nullptr) {
@@ -219,6 +222,13 @@ NCone* new_cone(char** cone_generators, size_t num_cone_gens,
       std::cout << "Inequalities: " << std::endl << *ineqs << std::endl;
     }
     input.insert({InputType::inequalities, *ineqs});
+  }
+
+  if(lattice_gens != nullptr) {
+    if(debug) {
+      std::cout << "Lattice generators: " << std::endl << *lattice_gens << std::endl;
+    }
+    input.insert({InputType::lattice, *lattice_gens});
   }
 
   if(lattice_eqns != nullptr) {
@@ -248,7 +258,9 @@ NCone* new_cone(char** cone_generators, size_t num_cone_gens,
 
   if(debug) {
     assert(c != nullptr);
-    std::cout << "New cone created.\n" << std::endl;
+    std::cout << "New cone created: " << std::endl;
+    print_cone(c);
+    std::cout << std::endl;
   }
 
   NCone* ncone = new NCone;
