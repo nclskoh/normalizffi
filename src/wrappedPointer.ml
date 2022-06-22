@@ -65,14 +65,14 @@ module WrappedPointer_BigArray_Keepalive : SimpleWrappedPointer = struct
     | ArrayPtr k -> k
 
   let allocate_chars n =
-    if n < 0 then raise Empty_array
+    if n <= 0 then raise Empty_array
     else
       let open Bigarray in
       let arr = Array1.create Char c_layout n in
       CharPtr (KeepCharPtr arr)
 
   let allocate_ptrs n =
-    if n < 0 then raise Empty_array
+    if n <= 0 then raise Empty_array
     else
       let open Bigarray in
       let arr = Array1.create Nativeint c_layout n in
@@ -132,7 +132,7 @@ module WrappedPointer_BigArray_Roots : SimpleWrappedPointer = struct
     }
 
   let allocate_array kind n =
-    if n < 0 then raise Empty_array
+    if n <= 0 then raise Empty_array
     else
       let open Bigarray in
       let arr = Array1.create kind c_layout n in

@@ -154,10 +154,10 @@ let new_cone cone : homogeneous cone_ptr =
   (* We always augment the cone with 1 >= 0 to prevent problems with
      dehomogenizing, which typically arises when the dehomogenizing component
      is possibly negative. *)
-  let (inequalities, num_ineqs) =
-    (one dim 0 :: cone.inequalities, List.length cone.inequalities + 1) in
   if dim = 0 then invalid_arg "normalizffi: normaliz: new_cone: ambient dimension is 0"
   else
+    let (inequalities, num_ineqs) =
+      (one dim 0 :: cone.inequalities, List.length cone.inequalities + 1) in
     let alloc_array l =
       if l = [] then
         (from_voidp C.Types.integer null, None)
