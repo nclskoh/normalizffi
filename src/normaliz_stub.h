@@ -46,6 +46,12 @@ two_dim_array* get_integer_hull_inequalities(NCone* c);
 
 two_dim_array* get_integer_hull_equations(NCone* c);
 
+two_dim_array* get_integer_hull_vertices(NCone* c);
+
+two_dim_array* get_integer_hull_extreme_rays(NCone* c);
+
+two_dim_array* get_integer_hull_lineality_space(NCone* c);
+
 two_dim_array* get_hilbert_basis(NCone* c);
 
 two_dim_array* get_module_generators(NCone* c);

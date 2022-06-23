@@ -100,6 +100,10 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
     let get_integer_hull_inequalities = get_property "get_integer_hull_inequalities"
     let get_integer_hull_equations = get_property "get_integer_hull_equations"
+    let get_integer_hull_vertices = get_property "get_integer_hull_vertices"
+    let get_integer_hull_extreme_rays = get_property "get_integer_hull_extreme_rays"
+    let get_integer_hull_lineality_space = get_property "get_integer_hull_lineality_space"
+
     let get_dehomogenization = get_property "get_dehomogenization"
     let get_hilbert_basis = get_property "get_hilbert_basis"
 

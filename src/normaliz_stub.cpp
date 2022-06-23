@@ -564,6 +564,60 @@ two_dim_array* get_integer_hull_equations(NCone* nc) {
 }
 
 extern "C"
+two_dim_array* get_integer_hull_vertices(NCone* nc) {
+  Cone<Integer>* c = nc->v;
+  if(debug) {
+    assert(c != nullptr);
+  }
+
+  auto c0_hull = c->getIntegerHullCone();
+  auto dehom = c->getDehomogenization();
+
+  vector<vector<Integer> > v{{dehom}};
+
+  NCone hull;
+  hull.v = &c0_hull;
+
+  return get_vertices(&hull);
+}
+
+extern "C"
+two_dim_array* get_integer_hull_extreme_rays(NCone* nc) {
+  Cone<Integer>* c = nc->v;
+  if(debug) {
+    assert(c != nullptr);
+  }
+
+  auto c0_hull = c->getIntegerHullCone();
+  auto dehom = c->getDehomogenization();
+
+  vector<vector<Integer> > v{{dehom}};
+
+  NCone hull;
+  hull.v = &c0_hull;
+
+  return get_extreme_rays(&hull);
+}
+
+extern "C"
+two_dim_array* get_integer_hull_lineality_space(NCone* nc) {
+  Cone<Integer>* c = nc->v;
+  if(debug) {
+    assert(c != nullptr);
+  }
+
+  auto c0_hull = c->getIntegerHullCone();
+  auto dehom = c->getDehomogenization();
+
+  vector<vector<Integer> > v{{dehom}};
+
+  NCone hull;
+  hull.v = &c0_hull;
+
+  return get_lineality_space(&hull);
+}
+
+extern "C"
 two_dim_array* get_hilbert_basis(NCone* nc) {
   Cone<Integer>* c = nc->v;
   auto basis = c->getHilbertBasis();
