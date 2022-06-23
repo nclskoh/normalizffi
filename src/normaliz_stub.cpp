@@ -23,14 +23,6 @@ void debug_normaliz(int flag) {
 typedef mpz_class Integer;
 // typedef long long Integer;
 
-/*
-typedef struct two_dim_array {
-  ocaml_integer* data;
-  size_t num_rows;
-  size_t num_cols;
-} two_dim_array;
-*/
-
 static
 vector<vector<Integer> >* vector_of(char** arr, size_t num_rows, size_t num_cols) {
   if(num_rows * num_cols == 0) {
