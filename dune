@@ -1,4 +1,4 @@
-(data_only_dirs Normaliz Normaliz-offline)
+(data_only_dirs Normaliz Normaliz-offline test_stubs)
 (include_subdirs unqualified)
 
 ; (library
