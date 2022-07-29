@@ -125,6 +125,46 @@ int hilbert_basis_test() {
 
 }
 
+int max_rank_submatrix_lex_test() {
+
+  // Having 0 in the first dimension is problematic
+  // smtlib/non-incremental/QF_NIA/UltimateAutomizer/linear_sea.ch_true-unreach-call.i_162.smt2
+
+  char big_int_1[] = "4294967295";
+  char big_minus_int_1[] = "-4294967295";
+  char big_int_2[] = "4294967296";
+  char big_minus_int_2[] = "-4294967296";
+
+  /*
+  char* generators[3 * 5] = { int_0, int_0, big_int_2, int_0, big_minus_int_1,
+			      int_0, big_int_2, int_0, big_minus_int_2, big_minus_int_1,
+			      int_0, int_0, big_minus_int_2, big_int_2, big_int_1
+  };
+  */
+
+  char* generators[3 * 5] = { int_0, int_0, int_2, int_0, int_minus_1,
+			      int_0, int_2, int_0, int_minus_2, int_minus_1,
+			      int_0, int_0, int_minus_2, int_2, int_1
+  };
+
+  // char* inequalities[1 * 5] = { int_1, int_0, int_0, int_0, int_0 };
+
+  NCone* cone = new_cone(generators, 3,
+			 nullptr, 0,
+			 // inequalities, 1,
+			 nullptr, 0,
+			 nullptr, 0,
+			 nullptr, 0,
+			 nullptr, 0,
+			 5);
+
+  auto hilbert_basis = get_hilbert_basis(cone);
+  print_two_dim_array(hilbert_basis);
+
+  return 0;
+
+}
+
 int integer_hull_test() {
 
   /*
@@ -231,8 +271,92 @@ int hola08() {
   return 0;
 }
 
+int qflia_cut_lemma_02_010() {
+  /*
+    This polyhedron has non-integral vertices, but is an integral
+    polyhedron according to Normaliz and Gomory-Chvatal.
+    Check: Is this because the vertex-ray-line decomposition returned
+    by Apron is non-unique?
+
+    [-1 * :-1, 1 * :2, -1 * :3, 1 * :4, -1 * :6, -1 * :9] >= 0
+    [-1 * :-1, 1 * :5, 1 * :6] >= 0
+    [1 * :-1, -1 * :2, 2 * :6, 1 * :8, -1 * :9] >= 0
+    [1 * :-1, 1 * :2, -2 * :3, 1 * :6] >= 0
+    [1 * :-1, -1 * :3, 2 * :6, 1 * :7, 1 * :8] >= 0
+    [1 * :-1, 1 * :6, 2 * :7, 1 * :8, 1 * :9] >= 0
+    [1 * :1, -1 * :4, 1 * :7, 1 * :8, 1 * :9] >= 0
+    [-1 * :2, 1 * :5, -1 * :7] >= 0
+    [1 * :2, -1 * :3, -1 * :4, -2 * :5] >= 0
+
+    -1, 0, 0,  1, -1,  1,  0, -1,  0, 0, -1,
+    -1, 0, 0,  0,  0,  0,  1,  1,  0, 0,  0
+     1, 0, 0, -1,  0,  0,  0,  2,  0, 1, -1,
+     1, 0, 0,  1, -2,  0,  0,  1,  0, 0,  0,
+     1, 0, 0,  0, -1,  0,  0,  2,  1, 1,  0,
+     1, 0, 0,  0,  0,  0,  0,  1,  2, 1,  1,
+     0, 0, 1,  0,  0, -1,  0,  0,  1, 1,  1,
+     0, 0, 0, -1,  0,  0,  1,  0, -1, 0,  0,
+     0, 0, 0,  1, -1, -1, -2,  0,  0, 0,  0
+  */
+
+  char* matrix[9 * 11] =
+    {
+     int_minus_1, int_0, int_0, int_1, int_minus_1, int_1,
+     int_0, int_minus_1, int_0, int_0, int_minus_1,
+
+     int_minus_1, int_0, int_0, int_0, int_0, int_0,
+     int_1, int_1, int_0, int_0, int_0,
+
+     int_1, int_0, int_0, int_minus_1, int_0, int_0,
+     int_0, int_2, int_0, int_1, int_minus_1,
+
+     int_1, int_0, int_0, int_1, int_minus_2, int_0, int_0,
+     int_1, int_0, int_0, int_0,
+
+     int_1, int_0, int_0, int_0, int_minus_1, int_0, int_0,
+     int_2, int_1, int_1, int_0,
+
+     int_1, int_0, int_0, int_0, int_0, int_0, int_0,
+     int_1, int_2, int_1, int_1,
+
+     int_0, int_0, int_1, int_0, int_0, int_minus_1, int_0,
+     int_0, int_1, int_1, int_1,
+
+     int_0, int_0, int_0, int_minus_1, int_0, int_0, int_1,
+     int_0, int_minus_1, int_0, int_0,
+
+     int_0, int_0, int_0, int_1, int_minus_1, int_minus_1, int_minus_2,
+     int_0, int_0, int_0, int_0
+  };
+
+  NCone* cone = new_cone(nullptr, 0,
+			 nullptr, 0,
+			 matrix, 9,
+			 nullptr, 0,
+			 nullptr, 0,
+			 nullptr, 0,
+			 11);
+  NCone* dehom = dehomogenize(cone);
+  hull(dehom);
+
+  auto hull_inequalities = get_integer_hull_inequalities(dehom);
+  std::cout << "Hull inequaliites:" << std::endl;
+  print_two_dim_array(hull_inequalities);
+  auto hull_equations = get_integer_hull_equations(dehom);
+  std::cout << "Hull equations:" << std::endl;
+  print_two_dim_array(hull_equations);
+
+  auto hull_vertices = get_integer_hull_vertices(dehom);
+  std::cout << "Hull vertices:" << std::endl;
+  print_two_dim_array(hull_vertices);
+
+  return 0;
+}
+
 int main(int argc, char** argv) {
-  hilbert_basis_test();
-  integer_hull_test();
+  // hilbert_basis_test();
+  // integer_hull_test();
+  // qflia_cut_lemma_02_010();
+  max_rank_submatrix_lex_test();
   return 0;
 }
