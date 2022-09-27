@@ -21,11 +21,9 @@ if [ "x$NMZ_EXTENDED_TESTS" != x ]; then
 fi
 
 echo "installing shared"
-echo "CONFIGURE_FLAGS is: $CONFIGURE_FLAGS"
-echo "CPPFLAGS=$CPPFLAGS"
 
 # NK: Need libnormaliz to be PIC.
-CPPFLAGS="${CPP_FLAGS} -fPIC "
+CPPFLAGS="${CPP_FLAGS} -fPIC"
 NMZ_SHARED=y
 
 mkdir -p build
