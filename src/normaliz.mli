@@ -74,11 +74,7 @@ val add_lattice_equations : Mpzf.t list list -> Mpzf.t cone ->
 val add_excluded_face_inequalities : Mpzf.t list list -> Mpzf.t cone -> 
                                      (Mpzf.t cone, string) result
 
-(** Construct a cone in Normaliz.
-    The first coordinate x0 is assumed to correspond to the constant dimension,
-    and the constraint x0 >= 0 is automatically added to make the cone pointed,
-    which is what Normaliz assumes.
- *)
+(** Construct a cone in Normaliz. *)
 val new_cone : zz cone -> homogeneous cone_ptr
 
 (** For ctypes to link properly. *)

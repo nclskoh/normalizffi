@@ -151,13 +151,14 @@ let new_cone cone : homogeneous cone_ptr =
   let num_subspace_gens = List.length cone.subspace in
   let num_eqns = List.length cone.lattice_equations in
   let num_excluded_faces = List.length cone.excluded_face_inequalities in
-  (* We always augment the cone with 1 >= 0 to prevent problems with
-     dehomogenizing, which typically arises when the dehomogenizing component
-     is possibly negative. *)
   if dim = 0 then invalid_arg "normalizffi: normaliz: new_cone: ambient dimension is 0"
   else
+    (*
     let (inequalities, num_ineqs) =
       (one dim 0 :: cone.inequalities, List.length cone.inequalities + 1) in
+     *)
+    let inequalities = cone.inequalities in
+    let num_ineqs = List.length cone.inequalities in
     let alloc_array l =
       if l = [] then
         (from_voidp C.Types.integer null, None)
