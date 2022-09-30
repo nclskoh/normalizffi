@@ -19,7 +19,7 @@ cd Normaliz-patch; ./patch-offline.sh
 opam install ctypes-foreign gmp
 ```
 
-2. Pin the package and install. In `normalizffi`:
+3. Pin the package and install. In `normalizffi`:
 
 ```
 opam pin .
