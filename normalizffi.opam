@@ -14,7 +14,7 @@ depends: [
   "odoc" {with-doc}
 ]
 build: [
-  ["make"]
+  [make]
   ["dune" "subst"] {dev}
   [
     "dune"
