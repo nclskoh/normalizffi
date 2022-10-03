@@ -14,4 +14,5 @@
   (synopsis "Ocaml bindings for the C++ Normaliz library")
   (description "")
   (depends
-  (ocaml (>= 4.09)) (dune (>= 3.2))))
+   (ocaml (>= 4.09)) (dune (>= 3.2))
+   (ctypes-foreign (>= 0.18)) (gmp (>= 6.2.1))))
