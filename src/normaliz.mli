@@ -38,6 +38,9 @@ type 'a cone_ptr
 
 val set_debug : bool -> unit
 
+(** Do all computations using big integers directly *)
+val set_big_int : bool -> unit
+
 (** Create an empty cone *)
 val empty_cone : Mpzf.t cone
 

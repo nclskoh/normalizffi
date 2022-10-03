@@ -62,6 +62,8 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
     let debug_normaliz = foreign "debug_normaliz" (int @-> returning void)
 
+    let compute_using_big_int = foreign "compute_using_big_int" (int @-> returning void)
+
     let new_cone = foreign "new_cone"
                      (ptr integer @-> size_t (* cone generators *)
                       @-> ptr integer @-> size_t (* subspace generators *)

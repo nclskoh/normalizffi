@@ -6,6 +6,8 @@
 
 void debug_normaliz(int flag);
 
+void compute_using_big_int(int flag);
+
 struct NCone; // To hide C++
 
 typedef struct NCone NCone;

@@ -1,6 +1,7 @@
 open Ctypes
 
 let debug = ref false
+let big_int = ref true
 
 let ( let* ) o f =
   match o with
@@ -10,6 +11,11 @@ let ( let* ) o f =
 let set_debug flag =
   debug := flag;
   let f = C.Functions.Normaliz.debug_normaliz in
+  if flag then f 1 else f 0
+
+let set_big_int flag =
+  big_int := flag;
+  let f = C.Functions.Normaliz.compute_using_big_int in
   if flag then f 1 else f 0
 
 type 'a cone = {

@@ -10,6 +10,7 @@ using namespace libnormaliz;
 typedef mpz_class Integer;
 
 static int debug = 0;
+static int use_big_int = 1;
 
 typedef struct NCone {
   Cone<Integer>* v;
@@ -18,6 +19,11 @@ typedef struct NCone {
 extern "C"
 void debug_normaliz(int flag) {
   debug = flag;
+}
+
+extern "C"
+void compute_using_big_int(int flag) {
+  use_big_int = flag;
 }
 
 typedef mpz_class Integer;
@@ -248,6 +254,10 @@ NCone* new_cone(char** cone_generators, size_t num_cone_gens,
 
   Cone<Integer>* c = new Cone<Integer>(input);
 
+  if(use_big_int) {
+    c->compute(ConeProperty::BigInt);
+  }
+
   if(debug) {
     assert(c != nullptr);
     std::cout << "New cone created: " << std::endl;
@@ -333,7 +343,7 @@ NCone* intersect_cone(NCone *nc1, NCone *nc2) {
   }
 
   if(debug) {
-    std::cout << "Intersection computed!" << std::endl;
+    std::cout << "Intersection computed." << std::endl;
     c0->compute(ConeProperty::ExtremeRays, ConeProperty::MaximalSubspace);
     auto rays = c0->getExtremeRays();
     std::cout << "Generators of intersected cone: " << rays << std::endl;
