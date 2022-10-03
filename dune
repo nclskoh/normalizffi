@@ -49,6 +49,7 @@
 (rule
  (deps (source_tree Normaliz-offline))
  (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dllnauty.so libnauty.a)
+ (enabled_if (<> %{ocaml-config:system} macosx))
  (action
   (no-infer
    (progn
@@ -59,3 +60,20 @@
     (copy Normaliz-offline/local/lib/libflint.a libflint.a)
     (copy Normaliz-offline/local/lib/dllnauty.so dllnauty.so)
     (copy Normaliz-offline/local/lib/libnauty.a libnauty.a)))))
+
+(rule
+ (deps (source_tree Normaliz-offline))
+ (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dllnauty.so libnauty.a)
+ (enabled_if (= %{ocaml-config:system} macosx))
+ (action
+  (no-infer
+   (progn
+    (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -dynamiclib -shared -fPIC -std=c++14 -o dllnauty.so -L. -lnauty))
+    (copy Normaliz-offline/local/lib/libnormaliz.dylib dllnormaliz.so)
+    (copy Normaliz-offline/local/lib/libnormaliz.a libnormaliz.a)
+    (copy Normaliz-offline/local/lib/libflint.dylib dllflint.so)
+    (copy Normaliz-offline/local/lib/libflint.a libflint.a)
+    (copy Normaliz-offline/local/lib/dllnauty.so dllnauty.so)
+    (copy Normaliz-offline/local/lib/libnauty.a libnauty.a)))))
+
+

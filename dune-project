@@ -10,8 +10,9 @@
 (authors "Nicolas Koh")
 (maintainers "ckoh@princeton.edu")
 (package
-  (name normalizffi)
-  (synopsis "Ocaml bindings for the C++ Normaliz library")
-  (description "")
-  (depends
-  (ocaml (>= 4.09)) (dune (>= 3.2))))
+ (name normalizffi)
+ (synopsis "Ocaml bindings for the C++ Normaliz library")
+ (description "")
+ (depends
+  (ocaml (>= 4.09)) (dune (>= 3.2)) mlgmpidl))
+
