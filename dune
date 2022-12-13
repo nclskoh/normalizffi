@@ -9,11 +9,32 @@
 ;   (foreign_archives normaliz_stubs flint normaliz nauty)
 ;   (c_library_flags (-lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)))
 
+(rule
+  (target link_flags.sexp)
+  (action (write-file link_flags.sexp "(-std=c++14)"))
+  (enabled_if (= %{ocaml-config:system} macosx)))
+
+(rule
+  (target link_flags.sexp)
+  (action (write-file link_flags.sexp "()"))
+  (enabled_if (<> %{ocaml-config:system} macosx)))
+
 (foreign_library
  (archive_name normaliz_stubs)
  (language cxx)
  (names normaliz_stub flint_stub custom_memory)
+ (flags (:standard) (:include link_flags.sexp))
  (include_dirs ./Normaliz-offline/local/include))
+
+ (rule
+  (target lib_flags.sexp)
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lomp -lnormaliz -lflint -lnauty)"))
+  (enabled_if (= %{ocaml-config:system} macosx)))
+
+(rule
+  (target lib_flags.sexp)
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)"))
+  (enabled_if (<> %{ocaml-config:system} macosx)))
 
 (library
  (name normalizffi)
@@ -38,7 +59,7 @@
   (generated_types Types_generated)
   (generated_entry_point C))
  (foreign_archives normaliz_stubs flint normaliz nauty)
- (c_library_flags (-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)))
+ (c_library_flags (:include lib_flags.sexp)))
 
 (executable
  (flags (:standard -w -32))
