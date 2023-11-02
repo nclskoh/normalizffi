@@ -14,6 +14,7 @@ depends: [
   "odoc" {with-doc}
   "ctypes" {>= "0.20.1"}
   "ctypes-foreign" {>= "0.18.0"}
+  "mlgmpidl"
 ]
 build: [
   [make]

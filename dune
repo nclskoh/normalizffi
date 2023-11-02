@@ -41,7 +41,7 @@
  (public_name normalizffi)
  (modules (:standard \ test))
  (libraries ctypes.foreign gmp)
- (flags (:standard -w -9-27))
+ (flags (:standard -w -9-27-32))
  (ctypes
   (external_library_name stubs)
   (type_description
