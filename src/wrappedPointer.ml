@@ -207,73 +207,6 @@ module type WrappedArray = sig
 
 end
 
-module WrappedArrayFromPointer (Wp : SimpleWrappedPointer) : WrappedArray =
-  struct
-
-    type pointer = Wp.pointer
-    exception Empty_array = Wp.Empty_array
-    exception Pointer_already_freed = Wp.Pointer_already_freed
-
-    type 'a t = 'a Wp.t
-
-    let write_ptr = Wp.write_ptr
-    let write = Wp.write
-    let read = Wp.read
-    let unwrap = Wp.unwrap
-    let free = Wp.free
-
-    let make_string s =
-      let ptr = Wp.allocate_chars (String.length s + 1) in
-      String.iteri (fun i c -> Wp.write ptr i c) s;
-      ptr
-
-    let make_array l =
-      if l = [] then raise Wp.Empty_array
-      else
-        let parent = Wp.allocate_ptrs (List.length l) in
-        List.iteri
-          (fun i wrapped -> Wp.write_ptr parent i wrapped) l;
-        parent
-
-    module Serializable = struct
-      (** TODO: Redundant now... *)
-      let serialize_string s =
-        let ptr = Wp.allocate_chars (String.length s + 1) in
-        String.iteri (fun i c -> Wp.write ptr i c) s;
-        ptr
-
-      type !_ serializable =
-        | SerializeString : string -> char serializable
-        | SerializeList : 'a serializable list -> pointer serializable
-
-      let rec serialize : 'a. 'a serializable -> 'a Wp.t =
-        fun (type a) (l : a serializable)
-            : a Wp.t ->
-              (match l with
-               | SerializeList l ->
-                  let children = List.map serialize l in
-                  let parent = Wp.allocate_ptrs (List.length l) in
-                  List.iteri
-                    (fun i wrapped -> Wp.write_ptr parent i wrapped) children;
-                  parent
-               | SerializeString s -> serialize_string s
-              )
-
-      (* let allocate t = WrappedPointer.unwrap (serialize t) |> Ctypes.to_voidp *)
-    end
-
-    let _ =
-      let open Serializable in
-      serialize (SerializeList [SerializeString "gobble"])
-
-  end
-
-module WrappedArray_BigArray_Keepalive : WrappedArray =
-  WrappedArrayFromPointer (WrappedPointer_BigArray_Keepalive)
-
-module WrappedArray_BigArray_Roots : WrappedArray =
-  WrappedArrayFromPointer (WrappedPointer_BigArray_Roots)
-
 module WrappedArray_NormalizAlloc : WrappedArray = struct
   (** TODO:
       - Double free isn't protected against yet.
@@ -375,5 +308,4 @@ module WrappedArray_NormalizAlloc : WrappedArray = struct
 
 end
 
-(* module WrappedArray = WrappedArray_BigArray_Keepalive *)
 module WrappedArray = WrappedArray_NormalizAlloc
