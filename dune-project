@@ -1,7 +1,7 @@
-(lang dune 3.2)
+(lang dune 3.7)
 (name normalizffi)
 (version 0.1)
-(using ctypes 0.1)
+(using ctypes 0.3)
 
 (generate_opam_files false)
 
