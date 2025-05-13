@@ -90,7 +90,7 @@ E_ANTIC_SHA256=8328e6490129dfec7f4aa478ebd54dc07686bd5e5e7f5f30dcf20c0f11b67f60
 
 export DOWNLOAD_DIR="${PWD}"/download
 export FLINT_PACKAGE=flint-${FLINT_VERSION}.tar.gz
-export MPFR_PACKAGE=mpfr-${MPFR_VERSION}.tar.gz
+export MPFR_PACKAGE=mpfr-${MPFR_VERSION}.tar.xz
 export NAUTY_PACKAGE=nauty${NAUTY_VERSION}.tar.gz
 
 echo "**************"
