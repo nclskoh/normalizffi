@@ -1,0 +1,367 @@
+\documentclass[12pt,a4paper]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+%\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{array}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{dsfont}
+\usepackage{makeidx}
+
+\usepackage{booktabs}
+
+%\usepackage[ignoreunlbld,nomsgs]{refcheck}
+
+\usepackage{pgf, tikz}
+\usepackage{color}
+
+% !TeX spellcheck = en_US
+
+%\textwidth=15cm \textheight=22cm \topmargin=0.5cm
+%\oddsidemargin=0.5cm \evensidemargin=0.5cm
+
+\usepackage[T1]{fontenc}
+
+\usepackage[scaled=0.8]{beramono}
+
+\usepackage{fancyvrb} \RecustomVerbatimEnvironment{Verbatim}{Verbatim}
+{xleftmargin=15pt, frame=single, fontsize=\small}
+
+
+\newcounter{listi}
+\newcommand{\stdli}{ \topsep0ex \partopsep0ex % .5ex plus.25ex minus.125ex%
+	\parsep.2ex plus.1ex minus.1ex \itemsep0ex% .5ex plus.25ex minus.125ex%
+	\leftmargin2.5em \labelwidth2em \labelsep.5em \rightmargin0em}% \samepage }
+\newenvironment{arab}{\begin{list}{\textup{(\arabic{listi})}}%
+		{\usecounter{listi}\stdli}}{\end{list}}
+\newenvironment{rome}{\begin{list}{\textup{(\roman{listi})}}%
+		{\usecounter{listi}\stdli}}{\end{list}}
+\newenvironment{latin}{\begin{list}{\textup{(\alph{listi})}}%
+		{\usecounter{listi}\stdli}}{\end{list}}
+\renewenvironment{itemize}{\begin{list}{{$\bullet$}}{\stdli}}{\end{list}}
+\newenvironment{myverb}{\begin{small}}{\end{small}\pagebreak[2]}  %%%%%  \vspace{-0.8\baselineskip}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+\let\phi=\varphi
+
+\def\CC{{\mathbb C}}
+\def\ZZ{{\mathbb Z}}
+\def\QQ{{\mathbb Q}}
+\def\RR{{\mathbb R}}
+\def\EE{{\mathbb E}}
+\def\AA{{\mathbb A}}
+\def\PP{{\mathbb P}}
+\def\NN{{\mathbb N}}
+
+\def\cL{{\mathcal L}}
+\def\cZ{{\mathcal Z}}
+
+\def\Ker{\operatorname{Ker}}
+\def\Im{\operatorname{Im}}
+\DeclareMathOperator{\gp}{gp}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\aff}{aff}
+\DeclareMathOperator{\cone}{cone}
+\DeclareMathOperator{\rec}{rec}
+\DeclareMathOperator{\mrank}{mrank}
+\DeclareMathOperator{\Hilb}{Hilb}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\Cl}{Cl}
+\DeclareMathOperator{\para}{par}
+\DeclareMathOperator{\FPdim}{FPdim}
+
+\DeclareMathOperator{\totdeg}{totdeg}
+
+
+\def\cG{{\mathcal G}}
+\def\cR{{\mathcal R}}
+
+\let\hat=\widehat
+\let\tilde=\widetilde
+\let\Bar=\overline
+
+\let\iso=\cong
+
+\let\epsilon=\varepsilon
+\def\discuss#1{\marginparsep=1em\marginparwidth=60pt
+	\marginpar{\tt \footnotesize \raggedright #1}}
+
+\definecolor{darkgray}{gray}{0.00}
+
+\addtokomafont{section}{\color{darkgray}}
+
+\setkomafont{sectionentry}{\large}
+
+\addtokomafont{subsection}{\color{darkgray}}
+
+\addtokomafont{subsubsection}{\normalsize}
+
+\parindent=0pt \parskip=4pt
+
+\setcounter{tocdepth}{3}
+
+%\def\Normaliz#1+{\textsf{Normaliz}}
+%\def\jNormaliz#1+{\textsf{jNormaliz}}
+
+\def\itemtt[#1]{\index{#1@\textbf{\ttt{#1}}}\item[\textbf{\ttt{#1}}]}
+\def\itemtta[#1]#2{\index{#2@\textbf{\ttt{#1}}}\item[\textbf{\ttt{#1}}]}
+
+\def\ttt{\texttt}
+
+\makeindex
+
+\def\version{3.10.4}
+\def\NmzDir{normaliz-\version}
+
+\hyphenation{semi-open}
+
+%\includeonly{Appendix}
+%\includeonly{Monoid}
+
+\begin{document}
+\vspace*{2cm}
+
+\renewcommand{\indexname}{Index of keywords}
+
+\centerline{\Large\textbf{Normaliz \version}}
+
+\vspace*{1.5cm}
+
+\begin{center}Winfried Bruns\qquad Max Horn\\[14pt]
+	Team member for fusion rings: Sébastien Palcoux\\[14pt]
+	Former Normaliz~3 team members: Tim R\"omer, Richard Sieg,\\ Christof S\"oger and Ulrich von der Ohe\\[14pt]
+	Normaliz~2 team member: Bogdan Ichim\\[14pt]
+	\url{https://normaliz.uos.de}\qquad\qquad\qquad
+	\url{https://github.com/Normaliz}\\[14pt]
+	\url{mailto:normaliz@uos.de}\\[14pt]
+	\url{https://hub.docker.com/r/normaliz/normaliz/}\\[14pt]
+	\url{https://mybinder.org/v2/gh/Normaliz/NormalizJupyter/master}\\[14pt]
+	Short reference: \verb|NmzShortRef.pdf|
+\end{center}
+
+
+
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  INTRODUCTION  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{Intro}
+\include{Discrete}
+\include{Monoid}
+\include{Input}
+\include{Options}
+\include{Advanced}
+\include{Algebraic}
+\include{OptFiles}
+\include{Technical}
+\include{Appendix}
+\newpage
+
+\addcontentsline{toc}{section}{References}
+\begin{thebibliography}{15.}
+\small
+
+\bibitem{4ti2} 
+4ti2 team. 4ti2-A software package
+for algebraic, geometric and combinatorial problems on linear
+spaces. Available at \url{https://github.com/4ti2/4ti2}.
+
+\bibitem{CoCoA}
+J.~Abbott, A.~M.~Bigatti and G.~Lagorio,
+\emph{CoCoA-5: a system for doing Computations in Commutative Algebra}.
+Available at \url{http://cocoa.dima.unige.it}.
+
+\bibitem{ABPP}
+M.A. Alekseyev, W. Bruns, S. Palcoux and F. V. Petrov, \emph{Classification of modular data of integral modular fusion categories up to rank 12}. Preprint \url{arXiv:2302.01613}.
+
+\bibitem{AI}
+V.~Almendra and B.~Ichim,
+\emph{jNormaliz~1.7}.
+Available at \url{https://normaliz.uos.de}.
+
+\bibitem{LatInt}
+V.~Baldoni, N.~Berline, J.~A.~De~Loera, B.~Dutra,
+M.~K\"oppe, S.~Moreinis, G.~Pinto, M.~Vergne and J.~Wu,
+\emph{A User's Guide for LattE integrale~v1.7.2, 2013}.
+Software package LattE is available at \url{https://www.math.ucdavis.edu/~latte/}.
+
+\bibitem{Bremner}
+D.~Bremner, M.~D.~Sikiri\'c, D.~V.~Pasechnik, Th.~Rehn and A.~Sch\"urmann,
+\emph{Computing symmetry groups of polyhedra}.
+LMS J.\ Comp.\ Math.\ 17 (2014), 565--581.
+
+\bibitem{has}
+St.~ Brumme,
+\emph{Hash library}.
+Package available at \url{https://create.stephan-brumme.com/}.
+
+\bibitem{BruAuto}
+W. Bruns, \emph{Automorphism groups and normal forms in Normaliz.} Res. Math. Sci. 9 (2022), no. 2, Paper No. 20, 15 pp.
+
+\bibitem{BruVol}
+W. Bruns, \emph{Polytope volume in Normaliz.}
+São Paulo J. Math. Sci.
+\url{https://doi.org/10.1007/s40863-022-00317-9}
+
+\bibitem{BGOW}
+W.~Bruns, P.~Garcia-Sanchez, C.~O'Neill and D.~Wilburne,
+\emph{Wilf's conjecture in fixed multiplicity}.
+% Preprint \url{arXiv:1903.04342}.
+Int.\ J.\ Algebra Comp.\ 30 (2020), 861--882.
+
+\bibitem{BG}
+W.~Bruns and J.~Gubeladze,
+\emph{Polytopes, rings, and K-theory}.
+Springer, 2009.
+
+\bibitem{BHIKS}
+W.~Bruns, R.~Hemmecke, B.~Ichim, M.~K\"oppe and C.~S\"oger,
+\emph{Challenging computations of Hilbert bases of cones associated with algebraic statistics}.
+Exp.\ Math.\ 20 (2011), 25--33.
+
+\bibitem{BI}
+W.~Bruns and B.~Ichim,
+\emph{Normaliz: algorithms for rational cones and affine monoids}.
+J.\ Algebra 324 (2010) 1098--1113.
+
+\bibitem{BI2}
+W.~Bruns and B.~Ichim,
+\emph{Polytope volume by descent in the face lattice and applications in social choice}.
+% Preprint \url{arXiv:1807.02835}.
+Math.\ Prog.\ Comp. 113 (2020), 415--442.
+
+\bibitem{BIS}
+W.~Bruns, B.~Ichim and C.~S\"oger,
+\emph{The power of pyramid decomposition in Normaliz}.
+J.\ Symb.\ Comp.\ 74 (2016), 513--536.
+
+\bibitem{BIS2}
+W.~Bruns, B.~Ichim and C.~S\"oger,
+\emph{Computations of volumes and Ehrhart series in four candidates elections}.
+Ann.\ Oper.\ Res.\ 280 (2019), 241--265.
+
+\bibitem{BK02}
+W.~Bruns and R.~Koch,
+\emph{Computing the integral closure of an affine semigroup}.
+Univ.\ Iagell.\ Acta Math.\ 39 (2001), 59--70.
+
+\bibitem{BSS}
+W.~Bruns, R.~Sieg and C.~S\"oger,
+\emph{Normaliz~2013--2016}.
+% To appear in the final report of the DFG~SPP~1489.
+% Preprint \url{arXiv:1611.07965}.
+In
+G.~B\"ockle, W.~Decker and G.~Malle, editors,
+\emph{Algorithmic and Experimental Methods in Algebra, Geometry, and Number Theory},
+pages~123--146.
+Springer, 2018.
+
+\bibitem{BS}
+W.~Bruns and C.~S\"oger,
+\emph{The computation of weighted Ehrhart series in Normaliz}.
+J.\ Symb.\ Comp.\ 68 (2015), 75--86.
+
+\bibitem{vinci} B. B\"{u}eler and A. Enge, \emph{Vinci.} Package available from \url{https://www.math.u-bordeaux.fr/~aenge/}
+
+\bibitem{practical}	
+B. Büeler, A. Enge, K. Fukuda, \emph{Exact volume computation for polytopes: a practical study.} In: Polytopes - combinatorics and computation (Oberwolfach, 1997), pp. 131 -- 154,
+DMV Sem. 29, Birkhäuser, Basel, 2000.
+
+\bibitem{DLHK}	
+J. A. De Loera, R. Hemmecke and M. Köppe.
+Algebraic and geometric ideas in the theory of discrete optimization.
+MOS-SIAM Series on Optimization, 14. Society for Industrial and Applied Mathematics (SIAM), Philadelphia 2013.
+
+\bibitem{e-antic}
+V.~Delecroix,
+\emph{embedded algebraic number fields (on top of antic)},
+package available at \url{https://github.com/flatsurf/e-antic}.
+
+\bibitem{EGNO}
+P.~Etingof, S.~Gelaki, D.~Nikshych, and V.~Ostrik, {\em Tensor Categories}, American Mathematical Society, (2015).
+
+\bibitem{Filli} 
+P. Filliman, \emph{The volume of duals and sections of polytopes. } Mathematika 37 (1992), 67--80.
+
+\bibitem{GAP-NmzInterface}
+S.~Gutsche, M.~Horn and C.~S\"oger,
+\emph{NormalizInterface for GAP}.
+Available at \url{https://github.com/gap-packages/NormalizInterface}.
+
+\bibitem{PyNormaliz}
+S.~Gutsche and R.~Sieg,
+\emph{PyNormaliz - an interface to Normaliz from python}.
+Available at \url{https://github.com/Normaliz/PyNormaliz}.
+
+\bibitem{Flint}
+W.~B.~Hart, F.~Johansson and S.~Pancratz,
+\emph{FLINT: Fast Library for Number Theory}.
+Available at \url{https://flintlib.org}.
+
+\bibitem{HM}
+Hemmecke and P. N. Malkin. Computing generating sets of lattice ideals and Markov bases of
+lattices. J. Symb. Comp. 44, 1463--1476 (2009).
+
+\bibitem{Lawrence} J. Lawrence, \emph{Polytope volume computation.} Math. Comp. 57 (1991), 259--271.
+
+\bibitem{KV}
+M.~K\"oppe and S.~Verdoolaege,
+\emph{Computing parametric rational generating functions with a primal Barvinok algorithm}.
+Electron.\ J.\ Comb.\ 15, No.\ 1, Research Paper~R16, 19~p.\ (2008).
+
+\bibitem{nauty}
+B.~D.~McKay and A.~Piperno,
+\emph{Practical graph isomorphism,~II}.
+J.\ Symbolic Comput.\ 60 (2014), 94--112.
+
+\bibitem{Ost}
+V. Ostrik, \emph{Pivotal fusion categories of rank 3.} Mosc. Math. J. 15 (2015), no. 2, 373--396, 405.
+
+\bibitem{Po}
+L.~Pottier,
+\emph{The Euclide algorithm in dimension~$n$}.
+Research report, ISSAC~96, ACM Press 1996.
+
+\bibitem{Sch}
+A.~Sch\"urmann,
+\emph{Exploiting polyhedral symmetries in social choice}.
+Social Choice and Welfare 40 (2013), 1097--1110.
+
+\bibitem{Stu}
+B. Sturmfels,
+\emph{Gröbner baes and convex polytopes}.
+American Mathematical Society 1996.
+\end{thebibliography}
+\newpage
+
+\addcontentsline{toc}{section}{\indexname}
+\printindex
+\end{document}
+
+Relations do not select a
+sublattice of $\ZZ^d$ or a subcone of $\RR^d$, but define a
+monoid as a quotient of $\ZZ_+^d$ modulo a system of
+congruences (in the semigroup sense!).
+
+The rows of the input matrix of this type are interpreted as
+generators of a subgroup $U\subset\ZZ^d$, and Normaliz computes an affine monoid and its normalization as explained in Section~\ref{binomials}.
+
+Set $G=\ZZ^d/U$ and $L=G/\textup{torsion}(G)$. Then the ambient lattice
+is $\AA=\ZZ^r$, $r=\rank L$, and the efficient lattice is $L$, realized
+as a sublattice of $\AA$. Normaliz computes the image $M$ of $\ZZ^d_+$ in $L$ and its normalization. To this end, $M$ is embedded into a lattice $\ZZ$, $r=\rank M$. There is no canonical choice for such an mebdding, but if possible, Normaliz finds an embedding into $\ZZ_+^r$.
