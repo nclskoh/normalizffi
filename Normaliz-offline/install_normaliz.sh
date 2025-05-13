@@ -10,7 +10,7 @@ if [ "$OSTYPE" == "msys" ]; then
 	cp ../install_scripts_opt/header_files_for_Makefile.classic/version.h libnormaliz
 	cp ../install_scripts_opt/header_files_for_Makefile.classic/nmz_config.h libnormaliz
 	make -f Makefile.classic clean
-	make -f Makefile.classic -j8
+	make -f Makefile.classic -j2
 	make -f Makefile.classic install
 	echo "Normaliz installation for MS Windows/MSYS2 complete"
 	exit 0
@@ -49,13 +49,17 @@ fi
 #	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --disable-shared --with-nauty=no --with-cocoa=no"
 # fi
 
+# NK: Need libnormaliz to be PIC.
+CPPFLAGS="${CPP_FLAGS} -fPIC"
+NMZ_SHARED=y
+
 mkdir -p build
 cd build
 
 ../configure ${CONFIGURE_FLAGS} CPPFLAGS="${CPPFLAGS}" LDFLAGS="${LDFLAGS} -Wl,-s" $EXTRA_FLAGS --srcdir=..
 
 make clean
-make -j8
+make -j2 VERBOSE=1
 make install
 ls ../local/bin
 if [ "x$NMZ_SHARED" == x ]; then
@@ -65,7 +69,7 @@ if [ "x$NMZ_SHARED" == x ]; then
 	# replace shared binary by static one
 	rm source/normaliz
 #	fi
-    make -j4 LDFLAGS="${LDFLAGS} -all-static"
+    make -j2 LDFLAGS="${LDFLAGS} -all-static"
     make install
 	strip --strip-unneeded --remove-section=.comment --remove-section=.note ${PREFIX}/lib/libnormaliz.a
 fi
