@@ -1,0 +1,103 @@
+(data_only_dirs Normaliz Normaliz-offline test_stubs)
+(include_subdirs unqualified)
+
+; (library
+;   (name	normalizffi)
+;   (public_name normalizffi)
+;   (modules (:standard \ test))
+;   (libraries ctypes.foreign gmp)
+;   (foreign_archives normaliz_stubs flint normaliz nauty)
+;   (c_library_flags (-lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty)))
+
+(rule
+  (target link_flags.sexp)
+  (action (write-file link_flags.sexp "(-std=c++14)"))
+  (enabled_if (= %{ocaml-config:system} macosx)))
+
+(rule
+  (target link_flags.sexp)
+  (action (write-file link_flags.sexp "()"))
+  (enabled_if (<> %{ocaml-config:system} macosx)))
+
+(foreign_library
+ (archive_name normaliz_stubs)
+ (language cxx)
+ (names normaliz_stub flint_stub custom_memory)
+ (flags (:standard) (:include link_flags.sexp))
+ (include_dirs ./Normaliz-offline/local/include))
+
+ (rule
+  (target lib_flags.sexp)
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lomp -lnormaliz -lflint -lnauty -lmpfr)"))
+  (enabled_if (= %{ocaml-config:system} macosx)))
+
+(rule
+  (target lib_flags.sexp)
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty -lmpfr)"))
+  (enabled_if (<> %{ocaml-config:system} macosx)))
+
+(library
+ (name normalizffi)
+ (public_name normalizffi)
+ (modules (:standard \ test))
+ (libraries ctypes.foreign gmp)
+ (flags (:standard -w -9-27-32-69))
+ (ctypes
+  (external_library_name stubs)
+  (type_description
+   (instance Types)
+   (functor Type_description))
+  (function_description
+   (instance Functions)
+   (functor Function_description)
+   (concurrency sequential))
+  (build_flags_resolver
+   (vendored (c_flags :standard -I%{project_root}/Normaliz-offline/local/include -Isrc)
+    (c_library_flags (:standard -lnormaliz_stubs -lstdc++))))
+  (headers (preamble "#include \"normaliz_stub.h\"\n#include \"flint_stub.h\"\n#include \"custom_memory.h\""))
+  ; (headers (include normaliz_stub.h flint_stub.h))
+  (generated_types Types_generated)
+  (generated_entry_point C))
+ (foreign_archives normaliz_stubs mpfr flint normaliz nauty)
+ (c_library_flags (:include lib_flags.sexp)))
+
+(executable
+ (flags (:standard -w -32))
+ (name test)
+ (modules test)
+ (libraries normalizffi ounit2))
+
+(rule
+ (deps (source_tree Normaliz-offline))
+ (targets dllnormaliz.so libnormaliz.a dllmpfr.so libmpfr.a dllflint.so libflint.a dllnauty.so libnauty.a)
+ (enabled_if (<> %{ocaml-config:system} macosx))
+ (action
+  (no-infer
+   (progn
+    (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -shared -fPIC -o dllnauty.so -L. -lnauty))
+    (copy Normaliz-offline/local/lib/libnormaliz.so dllnormaliz.so)
+    (copy Normaliz-offline/local/lib/libnormaliz.a libnormaliz.a)
+    (copy Normaliz-offline/local/lib/libmpfr.a libmpfr.a)
+    (copy Normaliz-offline/local/lib/libmpfr.so dlllibmpfr.so)
+    (copy Normaliz-offline/local/lib/libflint.so dllflint.so)
+    (copy Normaliz-offline/local/lib/libflint.a libflint.a)
+    (copy Normaliz-offline/local/lib/dllnauty.so dllnauty.so)
+    (copy Normaliz-offline/local/lib/libnauty.a libnauty.a)))))
+    
+
+(rule
+ (deps (source_tree Normaliz-offline))
+ (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dllnauty.so libnauty.a)
+ (enabled_if (= %{ocaml-config:system} macosx))
+ (action
+  (no-infer
+   (progn
+    (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -dynamiclib -shared -fPIC -std=c++14 -o dllnauty.so -L. -lnauty))
+    (copy Normaliz-offline/local/lib/libnormaliz.dylib dllnormaliz.so)
+    (copy Normaliz-offline/local/lib/libnormaliz.a libnormaliz.a)
+    (copy Normaliz-offline/local/lib/libflint.dylib dllflint.so)
+    (copy Normaliz-offline/local/lib/libflint.a libflint.a)
+    (copy Normaliz-offline/local/lib/dllnauty.so dllnauty.so)
+    (copy Normaliz-offline/local/lib/libnauty.a libnauty.a)))))
+
+
