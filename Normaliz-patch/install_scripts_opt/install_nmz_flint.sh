@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+m#!/usr/bin/env bash
 
 set -e
 
@@ -6,13 +6,22 @@ echo "::group::flint"
 
 source $(dirname "$0")/common.sh
 
+# NK:
+CXXFLAGS="-fPIC ${CPPFLAGS}"
+CFLAGS="-fPIC"
+
 CONFIGURE_FLAGS="--prefix=${PREFIX}"
 
-if [ "$OSTYPE" != "msys" ]; then
-	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
-else # only static here, we take shared from MSYS repository
-	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=${MSYS_STANDARD_LOC} --with-mpfr=${MSYS_STANDARD_LOC} --disable-shared"
-fi
+# NK:
+CONFIGURE_FLAGS="${CONFIGURE_FLAGS} CXXFLAGS=${CXXFLAGS} CFLAGS=${CFLAGS}"
+
+# if [ "$OSTYPE" != "msys" ]; then
+# 	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
+# else # only static here, we take shared from MSYS repository
+# 	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=${MSYS_STANDARD_LOC} --with-mpfr=${MSYS_STANDARD_LOC} --disable-shared"
+# fi
+
+CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
 
 if [ "$GMP_INSTALLDIR" != "" ]; then
     CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=${GMP_INSTALLDIR}"

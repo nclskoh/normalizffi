@@ -6,7 +6,14 @@ echo "::group::flint"
 
 source $(dirname "$0")/common.sh
 
+# NK:
+CXXFLAGS="-fPIC"
+CFLAGS="-fPIC"
+
 CONFIGURE_FLAGS="--prefix=${PREFIX}"
+
+# NK:
+CONFIGURE_FLAGS="${CONFIGURE_FLAGS} CXXFLAGS=${CXXFLAGS} CFLAGS=${CFLAGS}"
 
 if [ "$OSTYPE" != "msys" ]; then
 	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
