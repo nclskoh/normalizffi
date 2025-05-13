@@ -10,3 +10,4 @@ source ./install_scripts_opt/common.sh
 ./download.sh ${NAUTY_URL} ${NAUTY_SHA256}
 
 mv *.tar.gz download/
+mv *.tar.xz download/
