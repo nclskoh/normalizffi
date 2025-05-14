@@ -28,12 +28,12 @@
 
 (rule
   (target lib_flags.sexp)
-  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lomp -lnormaliz -lflint -lnauty -lmpfr)"))
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lnormaliz -lflint -lnauty -lmpfr -lgmpxx -lgomp -lgmp)"))
   (enabled_if (= %{ocaml-config:system} macosx)))
 
 (rule
   (target lib_flags.sexp)
-  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -lnauty -lmpfr)"))
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lnormaliz -lflint -lnauty -lmpfr -lgmpxx -lgomp -lgmp)"))
   (enabled_if (<> %{ocaml-config:system} macosx)))
 
 (library
