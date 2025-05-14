@@ -7,7 +7,7 @@ echo "::group::flint"
 source $(dirname "$0")/common.sh
 
 # NK:
-CXXFLAGS="-fPIC"
+CXXFLAGS="-fPIC ${CPPFLAGS}"
 CFLAGS="-fPIC"
 
 CONFIGURE_FLAGS="--prefix=${PREFIX}"
@@ -15,11 +15,13 @@ CONFIGURE_FLAGS="--prefix=${PREFIX}"
 # NK:
 CONFIGURE_FLAGS="${CONFIGURE_FLAGS} CXXFLAGS=${CXXFLAGS} CFLAGS=${CFLAGS}"
 
-if [ "$OSTYPE" != "msys" ]; then
-	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
-else # only static here, we take shared from MSYS repository
-	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=${MSYS_STANDARD_LOC} --with-mpfr=${MSYS_STANDARD_LOC} --disable-shared"
-fi
+# if [ "$OSTYPE" != "msys" ]; then
+# 	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
+# else # only static here, we take shared from MSYS repository
+# 	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=${MSYS_STANDARD_LOC} --with-mpfr=${MSYS_STANDARD_LOC} --disable-shared"
+# fi
+
+CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
 
 if [ "$GMP_INSTALLDIR" != "" ]; then
     CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=${GMP_INSTALLDIR}"
@@ -51,4 +53,5 @@ fi
 ## sed -i s/"-Wl,"// Makefile.subdirs
 ## fi
 # make -j4 # verbose
+make -j2
 make install -j2
