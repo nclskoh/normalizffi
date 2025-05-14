@@ -1,0 +1,92 @@
+lib: [
+  "_build/install/default/lib/normalizffi/META"
+  "_build/install/default/lib/normalizffi/c.ml"
+  "_build/install/default/lib/normalizffi/dune-package"
+  "_build/install/default/lib/normalizffi/libflint.a"
+  "_build/install/default/lib/normalizffi/libmpfr.a"
+  "_build/install/default/lib/normalizffi/libnauty.a"
+  "_build/install/default/lib/normalizffi/libnormaliz.a"
+  "_build/install/default/lib/normalizffi/libnormaliz_stubs.a"
+  "_build/install/default/lib/normalizffi/libnormalizffi_stubs.a"
+  "_build/install/default/lib/normalizffi/normalizffi.a"
+  "_build/install/default/lib/normalizffi/normalizffi.cma"
+  "_build/install/default/lib/normalizffi/normalizffi.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi.cmxa"
+  "_build/install/default/lib/normalizffi/normalizffi__.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__.ml"
+  "_build/install/default/lib/normalizffi/normalizffi__C.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__C.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__C.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__FfiLib.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__FfiLib.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__FfiLib.cmti"
+  "_build/install/default/lib/normalizffi/normalizffi__FfiLib.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Flint.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Flint.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Flint.cmti"
+  "_build/install/default/lib/normalizffi/normalizffi__Flint.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Function_description.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Function_description.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Function_description.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Normaliz.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Normaliz.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Normaliz.cmti"
+  "_build/install/default/lib/normalizffi/normalizffi__Normaliz.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__c_generated_functions__Function_description__Functions.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__c_generated_functions__Function_description__Functions.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__c_generated_functions__Function_description__Functions.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__c_generated_types.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__c_generated_types.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__c_generated_types.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__function_gen__Function_description__Functions.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__function_gen__Function_description__Functions.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__function_gen__Function_description__Functions.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__type_gen.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__type_gen.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Stubs__type_gen.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Type_description.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Type_description.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Type_description.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__Types_generated.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__Types_generated.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__Types_generated.cmx"
+  "_build/install/default/lib/normalizffi/normalizffi__WrappedPointer.cmi"
+  "_build/install/default/lib/normalizffi/normalizffi__WrappedPointer.cmt"
+  "_build/install/default/lib/normalizffi/normalizffi__WrappedPointer.cmti"
+  "_build/install/default/lib/normalizffi/normalizffi__WrappedPointer.cmx"
+  "_build/install/default/lib/normalizffi/opam"
+  "_build/install/default/lib/normalizffi/src/ffiLib.ml" {"src/ffiLib.ml"}
+  "_build/install/default/lib/normalizffi/src/ffiLib.mli" {"src/ffiLib.mli"}
+  "_build/install/default/lib/normalizffi/src/flint.ml" {"src/flint.ml"}
+  "_build/install/default/lib/normalizffi/src/flint.mli" {"src/flint.mli"}
+  "_build/install/default/lib/normalizffi/src/function_description.ml" {"src/function_description.ml"}
+  "_build/install/default/lib/normalizffi/src/normaliz.ml" {"src/normaliz.ml"}
+  "_build/install/default/lib/normalizffi/src/normaliz.mli" {"src/normaliz.mli"}
+  "_build/install/default/lib/normalizffi/src/normalizffi.ml" {"src/normalizffi.ml"}
+  "_build/install/default/lib/normalizffi/src/type_description.ml" {"src/type_description.ml"}
+  "_build/install/default/lib/normalizffi/src/wrappedPointer.ml" {"src/wrappedPointer.ml"}
+  "_build/install/default/lib/normalizffi/src/wrappedPointer.mli" {"src/wrappedPointer.mli"}
+  "_build/install/default/lib/normalizffi/stubs__c_generated_functions__Function_description__Functions.ml"
+  "_build/install/default/lib/normalizffi/stubs__c_generated_types.ml"
+  "_build/install/default/lib/normalizffi/stubs__function_gen__Function_description__Functions.ml"
+  "_build/install/default/lib/normalizffi/stubs__type_gen.ml"
+  "_build/install/default/lib/normalizffi/types_generated.ml"
+]
+libexec: [
+  "_build/install/default/lib/normalizffi/normalizffi.cmxs"
+]
+doc: [
+  "_build/install/default/doc/normalizffi/README.md"
+]
+stublibs: [
+  "_build/install/default/lib/stublibs/dllflint.so"
+  "_build/install/default/lib/stublibs/dllmpfr.so"
+  "_build/install/default/lib/stublibs/dllnauty.so"
+  "_build/install/default/lib/stublibs/dllnormaliz.so"
+  "_build/install/default/lib/stublibs/dllnormaliz_stubs.so"
+  "_build/install/default/lib/stublibs/dllnormalizffi_stubs.so"
+]
