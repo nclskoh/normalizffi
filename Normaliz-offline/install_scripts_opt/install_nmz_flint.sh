@@ -14,6 +14,9 @@ CONFIGURE_FLAGS="--prefix=${PREFIX}"
 
 # NK:
 CONFIGURE_FLAGS="${CONFIGURE_FLAGS} CXXFLAGS=${CXXFLAGS} CFLAGS=${CFLAGS}"
+CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-pic=yes --enable-shared"
+
+echo "Flint flags: ${CONFIGURE_FLAGS}"
 
 # if [ "$OSTYPE" != "msys" ]; then
 # 	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
@@ -35,8 +38,6 @@ FLINT_URL="https://flintlib.org/download/flint-${FLINT_VERSION}.tar.gz"
 FLINT_SHA256=7b311a00503a863881eb8177dbeb84322f29399f3d7d72f3b1a4c9ba1d5794b4
 
 echo "Installing FLINT..."
-
-echo "${CONFIGURE_FLAGS}"
 
 mkdir -p ${NMZ_OPT_DIR}/Flint_source/
 cd ${NMZ_OPT_DIR}/Flint_source
