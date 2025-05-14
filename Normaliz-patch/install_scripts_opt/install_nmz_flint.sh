@@ -7,7 +7,7 @@ echo "::group::flint"
 source $(dirname "$0")/common.sh
 
 # NK:
-CXXFLAGS="-fPIC ${CPPFLAGS}"
+CXXFLAGS="-fPIC"
 CFLAGS="-fPIC"
 
 CONFIGURE_FLAGS="--prefix=${PREFIX}"
