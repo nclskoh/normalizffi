@@ -18,6 +18,8 @@ if [ "$GMP_INSTALLDIR" != "" ]; then
     CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=$GMP_INSTALLDIR"
 fi
 
+# NK
+CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-pic=yes --enable-shared"
 
 echo "MPFR flags"
 echo $CONFIGURE_FLAGS

@@ -26,7 +26,7 @@
  (flags (:standard) (:include link_flags.sexp))
  (include_dirs ./Normaliz-offline/local/include))
 
- (rule
+(rule
   (target lib_flags.sexp)
   (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lomp -lnormaliz -lflint -lnauty -lmpfr)"))
   (enabled_if (= %{ocaml-config:system} macosx)))
@@ -40,7 +40,7 @@
  (name normalizffi)
  (public_name normalizffi)
  (modules (:standard \ test))
- (libraries ctypes.foreign gmp)
+ (libraries ctypes.foreign gmp zarith)
  (flags (:standard -w -9-27-32-69))
  (ctypes
   (external_library_name stubs)
@@ -78,16 +78,15 @@
     (copy Normaliz-offline/local/lib/libnormaliz.so dllnormaliz.so)
     (copy Normaliz-offline/local/lib/libnormaliz.a libnormaliz.a)
     (copy Normaliz-offline/local/lib/libmpfr.a libmpfr.a)
-    (copy Normaliz-offline/local/lib/libmpfr.so dlllibmpfr.so)
+    (copy Normaliz-offline/local/lib/libmpfr.so dllmpfr.so)
     (copy Normaliz-offline/local/lib/libflint.so dllflint.so)
     (copy Normaliz-offline/local/lib/libflint.a libflint.a)
     (copy Normaliz-offline/local/lib/dllnauty.so dllnauty.so)
     (copy Normaliz-offline/local/lib/libnauty.a libnauty.a)))))
-    
 
 (rule
  (deps (source_tree Normaliz-offline))
- (targets dllnormaliz.so libnormaliz.a dllflint.so libflint.a dllnauty.so libnauty.a)
+ (targets dllnormaliz.so libnormaliz.a dllmpfr.so libmpfr.a dllflint.so libflint.a dllnauty.so libnauty.a)
  (enabled_if (= %{ocaml-config:system} macosx))
  (action
   (no-infer
@@ -95,6 +94,8 @@
     (chdir Normaliz-offline/local/lib (run %{env:CC=gcc} -dynamiclib -shared -fPIC -std=c++14 -o dllnauty.so -L. -lnauty))
     (copy Normaliz-offline/local/lib/libnormaliz.dylib dllnormaliz.so)
     (copy Normaliz-offline/local/lib/libnormaliz.a libnormaliz.a)
+    (copy Normaliz-offline/local/lib/libmpfr.a libmpfr.a)
+    (copy Normaliz-offline/local/lib/libmpfr.so dllmpfr.so)
     (copy Normaliz-offline/local/lib/libflint.dylib dllflint.so)
     (copy Normaliz-offline/local/lib/libflint.a libflint.a)
     (copy Normaliz-offline/local/lib/dllnauty.so dllnauty.so)
