@@ -21,7 +21,9 @@ let logf fmt fmt_str =
 let log fmt_str = logf Format.std_formatter fmt_str
  *)
 
-type zz = Mpzf.t
+(* type zz = Mpzf.t *)
+
+type zz = Z.t
 
 (** An integer is wrapped with the Ocaml value keeping its string contents
     alive. *)
@@ -36,7 +38,7 @@ let wrapped_integer_start p = WrappedArray.unwrap p
 
 let free_wrapped_integer p = WrappedArray.free p
 
-let wrapped_integer_of_zz x = Mpzf.to_string x |> WrappedArray.make_string
+let wrapped_integer_of_zz x = Z.to_string x |> WrappedArray.make_string
 
 let deserialize_int (x : char ptr) : string =
   let rec go i s =
@@ -56,7 +58,7 @@ let deserialize_int (x : char ptr) : string =
 
 let zz_of_integer ptr =
   let s = deserialize_int ptr in
-  Mpzf.of_string s
+  Z.of_string s
 
 let size_t_of_int = Unsigned.Size_t.of_int
 let int_of_size_t x = Int64.to_int (Unsigned.Size_t.to_int64 x)
@@ -64,7 +66,7 @@ let int_of_size_t x = Int64.to_int (Unsigned.Size_t.to_int64 x)
 let integer_array_of_zz_list (l : zz list) : integer_array =
   let wrapped_ptr =
     WrappedArray.make_array
-      (List.map (fun x -> WrappedArray.make_string (Mpzf.to_string x)) l) in
+      (List.map (fun x -> WrappedArray.make_string (Z.to_string x)) l) in
   { wrapped_ptr ; arr_len = List.length l }
 
 let integer_array_start { wrapped_ptr ; _ } =
@@ -121,15 +123,15 @@ let zz_matrix_of_two_dim_array (arr : two_dim_array structure) : zz list list =
   let data = getf arr two_dim_array_data in
   let cast p = Ctypes.from_voidp (ptr char) p in
   let mat = gather_as_matrix m n (cast data) in
-  List.map (fun r -> List.map (fun x -> Mpzf.of_string (deserialize_int x)) r) mat
+  List.map (fun r -> List.map (fun x -> Z.of_string (deserialize_int x)) r) mat
 
 let zz_matrix_of_int_matrix m : zz list list =
-  List.map (List.map Mpzf.of_int) m
+  List.map (List.map Z.of_int) m
 
 let pp_list_list fmt =
   let pp_comma fmt () = Format.fprintf fmt ", " in
   Format.fprintf fmt "@[<v 0>%a@]"
     (Format.pp_print_list
        (Format.pp_print_list ~pp_sep:pp_comma
-          (fun fmt x -> Format.fprintf fmt "%s" (Mpzf.to_string x)))
+          (fun fmt x -> Format.fprintf fmt "%s" (Z.to_string x)))
     )

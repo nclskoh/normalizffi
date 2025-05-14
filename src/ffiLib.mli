@@ -9,7 +9,7 @@ val ( let* ) : ('a, 'b) result -> ('a -> ('c, 'b) result) -> ('c, 'b) result
 val set_debug : bool -> unit
 
 (** Integers as seen by client *)
-type zz = Mpzf.t
+type zz = Z.t
 
 (** An integer allocated in C memory can be wrapped or unwrapped.
     A wrapped integer is one that is protected against garbage collection

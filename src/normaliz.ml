@@ -126,7 +126,7 @@ let dimensions (l : 'a list list) : int * int =
 let rec zeros n : FfiLib.zz list =
   assert (n >= 0);
   if n = 0 then []
-  else Mpzf.of_int 0 :: zeros (n - 1)
+  else Z.of_int 0 :: zeros (n - 1)
 
 (*
 let minus_one n : zz list =
@@ -136,7 +136,7 @@ let minus_one n : zz list =
 
 let one n pos : FfiLib.zz list =
   assert (n > 0);
-  List.concat [zeros pos; [Mpzf.of_int 1]; zeros (n - pos - 1)]
+  List.concat [zeros pos; [Z.of_int 1]; zeros (n - pos - 1)]
 
 let identity_matrix n : FfiLib.zz list list =
   assert (n > 0);
@@ -146,7 +146,7 @@ let identity_matrix n : FfiLib.zz list list =
   List.map (one n) (dec (n - 1))
 
 let negate_vectors ll =
-  List.map (fun l -> List.map (fun x -> Mpzf.neg x) l) ll
+  List.map (fun l -> List.map (fun x -> Z.neg x) l) ll
 
 let add_equalities vecs cone =
   add_inequalities (List.concat [vecs; negate_vectors vecs]) cone

@@ -84,7 +84,8 @@ let denom_matrix_of_rational_matrix (rm_ptr : C.Types.rational_matrix_ptr)
 let new_matrix (generators : zz list list): C.Types.rational_matrix_ptr =
   log "normalizffi: Flint: new_matrix: serializing: @[%a@]@;" pp_list_list generators;
   let arr = integer_array_of_zz_list (List.concat generators) in
-  let denom = wrapped_integer_of_zz (Mpzf.of_int 1) in
+  (* let denom = wrapped_integer_of_zz (Mpzf.of_int 1) in *)
+  let denom = wrapped_integer_of_zz (Z.of_int 1) in
   let num_rows = List.length generators in
   let num_cols = if num_rows = 0 then 0 else List.length (List.hd generators) in
   let mat = C.Functions.Flint.matrix_from_string_array

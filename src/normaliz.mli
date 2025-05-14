@@ -42,24 +42,24 @@ val set_debug : bool -> unit
 val set_big_int : bool -> unit
 
 (** Create an empty cone *)
-val empty_cone : Mpzf.t cone
+val empty_cone : Z.t cone
 
 (** Add conic generators of a cone, to the cone, provided that dimensions match. *)
-val add_rays : Mpzf.t list list -> Mpzf.t cone -> (Mpzf.t cone, string) result
+val add_rays : Z.t list list -> Z.t cone -> (Z.t cone, string) result
 
 (** Add generators of a subspace to the cone, provided that dimensions match.
     This is the same as [add_generators] applied to a list of vectors and their
     negation. *)
-val add_subspace_generators : Mpzf.t list list -> Mpzf.t cone ->
-                              (Mpzf.t cone, string) result
+val add_subspace_generators : Z.t list list -> Z.t cone ->
+                              (Z.t cone, string) result
 
 (** Add inequalities each of the form [a0; a1; a2; ...; an] representing
     a0 x0 + a1 x1 + ... + an xn >= 0, to the cone, provided that dimensions match. *)
-val add_inequalities : Mpzf.t list list -> Mpzf.t cone -> (Mpzf.t cone, string) result
+val add_inequalities : Z.t list list -> Z.t cone -> (Z.t cone, string) result
 
 (** Add equalities each of the form [a0; a1; a2; ...; an] representing
     a0 x0 + a1 x1 + ... + an xn = 0, to the cone, provided that dimensions match. *)
-val add_equalities : Mpzf.t list list -> Mpzf.t cone  -> (Mpzf.t cone, string) result
+val add_equalities : Z.t list list -> Z.t cone  -> (Z.t cone, string) result
 
 (** Add lattice equations, each of the form [a0; a1; a2; ...; an] representing
     a0 x0 + a1 x1 + ... + an xn = 0, provided that dimensions match.
@@ -69,13 +69,13 @@ val add_equalities : Mpzf.t list list -> Mpzf.t cone  -> (Mpzf.t cone, string) r
     of other behaviors yet to be figured out. Hence, it is best to avoid these;
     add equations as two inequalities using [add_inequalities] instead.
 *)
-val add_lattice_equations : Mpzf.t list list -> Mpzf.t cone ->
-                            (Mpzf.t cone, string) result
+val add_lattice_equations : Z.t list list -> Z.t cone ->
+                            (Z.t cone, string) result
 
 (** Add inequalities each of the form [a0; a1; a2; ...; an] representing
     a0 + a1 x1 + ... + an xn > 0, to the cone, provided that dimensions match. *)
-val add_excluded_face_inequalities : Mpzf.t list list -> Mpzf.t cone -> 
-                                     (Mpzf.t cone, string) result
+val add_excluded_face_inequalities : Z.t list list -> Z.t cone -> 
+                                     (Z.t cone, string) result
 
 (** Construct a cone in Normaliz. *)
 val new_cone : zz cone -> homogeneous cone_ptr

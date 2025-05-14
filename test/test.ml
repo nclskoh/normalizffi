@@ -18,7 +18,7 @@ let pp_list_list fmt =
   Format.fprintf fmt "@[<v 0>%a@]"
     (Format.pp_print_list
        (Format.pp_print_list ~pp_sep:pp_comma
-          (fun fmt x -> Format.fprintf fmt "%s" (Mpzf.to_string x)))
+          (fun fmt x -> Format.fprintf fmt "%s" (Z.to_string x)))
     )
 
 let is_subset eq l1 l2 =
@@ -35,12 +35,12 @@ let vectors_eq l1 l2 = is_eq vector_eq l1 l2
 
 let ( === ) l1 l2 = vectors_eq l1 l2
 
-let zzify l = List.map (fun r -> List.map Mpzf.of_int r) l
+let zzify l = List.map (fun r -> List.map Z.of_int r) l
 
 module HelperTests = struct
 
   let test_int () =
-    let m i = Mpzf.of_int i in
+    let m i = Z.of_int i in
     let l1 = [ m 1; m 2; m 3 ] in
     let l2 = [ m 3; m 2; m 4; m 1] in
     "test_int" @? is_subset (=) l1 l2
@@ -62,21 +62,21 @@ module NormalizHelper = struct
   open Normaliz
 
   type standard_cone_data =
-    { rays : Mpzf.t list list
-    ; lineality : Mpzf.t list list
-    ; inequalities : Mpzf.t list list
-    ; equations : Mpzf.t list list
+    { rays : Z.t list list
+    ; lineality : Z.t list list
+    ; inequalities : Z.t list list
+    ; equations : Z.t list list
     ; embedding_dimension : int
     }
 
   type inhomogeneous_cone_data =
-    { vertices : Mpzf.t list list
-    ; dehomogenization : Mpzf.t list list
+    { vertices : Z.t list list
+    ; dehomogenization : Z.t list list
     }
 
   type hull_data =
-    { hull_inequalities : Mpzf.t list list
-    ; hull_equations : Mpzf.t list list
+    { hull_inequalities : Z.t list list
+    ; hull_equations : Z.t list list
     }
 
   let get_standard_data ptr =
@@ -134,7 +134,7 @@ module NormalizTests = struct
     let constraints = [ [0; 1 ; 0]
                       ; [k; -1 ; -k]
                       ; [0; -1; k] ]
-                      |> List.map (fun r -> List.map Mpzf.of_int r) in
+                      |> List.map (fun r -> List.map Z.of_int r) in
     empty_cone |> add_inequalities constraints |> Result.get_ok
 
   let expected_triangle_vertical_integer_hull k =
@@ -268,7 +268,7 @@ let test_normaliz () =
     (* Homogenize in the first coordinate, lineality in the last coordinate *)
     let tri_gens = [[1; 0; 0; 0]; [2; 0; 3; 0]; [2; 3; 0; 0]] in
     let lineality_gens = [[0; 0; 0; 1]; [0; 0; 0; -1]] in
-    List.map (fun l -> List.map Mpzf.of_int l) (List.concat [tri_gens; lineality_gens]) in
+    List.map (fun l -> List.map Z.of_int l) (List.concat [tri_gens; lineality_gens]) in
   let* c1 = Normaliz.empty_cone |> Normaliz.add_rays rational_triangle_gens in
   let c1_ptr = Normaliz.new_cone c1 in
   Format.printf "test1: %a\n" Normaliz.pp_hom c1_ptr;
@@ -299,7 +299,7 @@ let test_qfnia_calypto_000797 () =
                ; [255; 0; -1; 0; 0; 0]
                ; [255; 0; 0; 0; 0; -1]
                ; [134217728; -1; 0; 0; 0; 0]
-               ] |> List.map (List.map Mpzf.of_int)
+               ] |> List.map (List.map Z.of_int)
   in
   let cone = Normaliz.empty_cone
              |> Normaliz.add_inequalities matrix
