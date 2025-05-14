@@ -1,5 +1,5 @@
 all: ./Normaliz-offline/local/lib/libnormaliz.so
-	echo "running dune..."; ls; dune build --verbose; echo "Make done"
+	echo "running dune..."; ls; dune build -p normalizffi --verbose; echo "Make done"
 
 ./Normaliz-offline/local/lib/libnormaliz.so:
 	cd ./Normaliz-offline; \
@@ -12,4 +12,5 @@ all: ./Normaliz-offline/local/lib/libnormaliz.so
 clean:
 	rm -r Normaliz-offline/local
 	rm -r Normaliz-offline/build
+	rm -r Normaliz-offline/nmz_opt_lib/*
 
