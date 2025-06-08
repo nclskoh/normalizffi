@@ -1,0 +1,4 @@
+[submodule "Normaliz"]
+	path = Normaliz
+	url = https://github.com/nclskoh/Normaliz/
+	branch = version-3.10.5
