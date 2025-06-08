@@ -15,49 +15,6 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
   end
 
-  module Flint = struct
-
-    let debug_flint = foreign "debug_flint" (int @-> returning void)
-
-    let matrix_from_string_array =
-      foreign "matrix_from_string_array" (ptr void @-> slong @-> slong
-                                          @-> ptr void
-                                          @-> returning rational_matrix_ptr)
-
-    let hermitize =
-      foreign "make_hnf" (rational_matrix_ptr @-> returning void)
-
-    let matrix_to_two_dim_array =
-      foreign "matrix_contents"
-        (rational_matrix_ptr @-> returning (ptr Types.two_dim_array))
-
-    let matrix_denom =
-      foreign "matrix_denominator" (rational_matrix_ptr @-> returning integer)
-
-    let extend_hnf_to_basis =
-      foreign "extend_hnf_to_basis"
-        (rational_matrix_ptr @-> returning rational_matrix_ptr)
-
-    let matrix_inverse =
-      foreign "matrix_inverse"
-        (rational_matrix_ptr @-> returning rational_matrix_ptr)
-
-    let matrix_multiply =
-      foreign "matrix_multiply" (rational_matrix_ptr @->
-                                   rational_matrix_ptr @->
-                                     returning rational_matrix_ptr)
-
-    let rank = foreign "rank" (rational_matrix_ptr @-> returning slong)
-
-    let transpose = foreign "transpose"
-                      (rational_matrix_ptr @-> returning rational_matrix_ptr)
-
-    let solve = foreign "solve" (rational_matrix_ptr
-                                 @-> rational_matrix_ptr
-                                 @-> returning rational_matrix_ptr)
-
-  end
-
   module Normaliz = struct
 
     let debug_normaliz = foreign "debug_normaliz" (int @-> returning void)

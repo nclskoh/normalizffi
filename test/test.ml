@@ -274,35 +274,6 @@ let test_normaliz () =
   Format.printf "test1: %a\n" Normaliz.pp_hom c1_ptr;
   Result.ok c1_ptr
 
-let test_flint () =
-  let () = Flint.set_debug true in
-  let zzify = List.map Mpzf.of_int in
-  let rec e n i =
-    if n = 0 then [] else if i = 0 then (1 :: e (n-1) (i-1)) else (0 :: e (n-1) (i-1))
-  in
-  let rec diagonal m n i =
-    if m = 0 then [] else (e n i) :: diagonal (m-1) n (i + 1) in
-  let rec go n =
-    if n = 0 then ()
-    else
-      let mat = List.map zzify (diagonal n n 0) in
-      let () = Format.printf "matrix: @[<v 0>%a@]@;" pp_list_list mat in
-      let mat = Flint.new_matrix mat in
-      Flint.hermitize mat;
-      let rank = Flint.rank mat in
-      let rec take n l =
-        if n = 0 then [] else
-          match l with
-          | [] -> []
-          | (x :: l) -> x :: take (n-1) l in
-      let _result =
-        Flint.denom_matrix_of_rational_matrix mat
-        |> snd
-        |> take rank (* The rows after rank should be all zeros *)
-      in
-      go (n-1)
-  in
-  go 15
 
 let test_qfnia_calypto_000797 () =
   (*
@@ -341,35 +312,3 @@ let test_qfnia_calypto_000797 () =
   Format.printf "Calypto hull: @[<v 0>inequalities: @[%a@]@; equalities: @[%a@]@]@;"
     pp_list_list inequalities
     pp_list_list equations
-
-let test_gc () =
-  Flint.set_debug true;
-  let matrix = [ [0; 0; 0; 0; 0; 1]
-               ; [0; 0; 0; 0; 1; 0]
-               ; [0; 0; 0; 1; 0; 0]
-               ; [0; 0; 1; 0; 0; 0]
-               ; [0; 1; 0; 0; 0; 0]
-               ; [127; 0; 0; -1; 0; 0]
-               ; [127; 0; 0; 0; -1; 0]
-               ; [255; 0; -1; 0; 0; 0]
-               ; [255; 0; 0; 0; 0; -1]
-               ; [134217728; -1; 0; 0; 0; 0]
-               ] |> List.map (List.map Mpzf.of_int)
-  in
-  ignore (Flint.new_matrix matrix);
-  Gc.compact ();
-  ignore (Flint.new_matrix matrix);
-  Gc.compact ();
-  ignore (Flint.new_matrix matrix);
-  Gc.compact ()
-
-let () =
-  (* Gc.set {(Gc.get ()) with Gc.verbose = 0x4FF}; *)
-  Gc.set {(Gc.get ()) with Gc.verbose = 0x01};
-  Format.printf "Hello world\n";
-  (* ignore (test_normaliz ()); *)
-  (* ignore (test_flint ()) *)
-  (* ignore (test_qfnia_calypto_000797 ()) *)
-  (* ignore (test_gc ()); *)
-  ignore (run_test_tt HelperTests.suite);
-  ignore (run_test_tt NormalizTests.suite)
