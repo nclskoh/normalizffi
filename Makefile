@@ -13,3 +13,4 @@ clean:
 	rm -r Normaliz-offline/local
 	rm -r Normaliz-offline/build
 	find Normaliz-offline/nmz_opt_lib/* -maxdepth 0 -type d -exec rm -rf '{}' \;
+	rm -r _build
