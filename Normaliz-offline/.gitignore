@@ -80,7 +80,7 @@ source/gperftools/*
 
 # build files etc.
 homepage/*-Dateien/*
-nmz_opt_lib/*
+# nmz_opt_lib/*
 local/*
 /Makefile
 /Makefile.in
