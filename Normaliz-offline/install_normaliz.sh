@@ -58,7 +58,8 @@ cd build
 
 ../configure ${CONFIGURE_FLAGS} CPPFLAGS="${CPPFLAGS}" LDFLAGS="${LDFLAGS} -Wl,-s" $EXTRA_FLAGS --srcdir=..
 
-make clean
+# NK: Comment out make clean here.
+# make clean
 make -j8
 make install
 ls ../local/bin
