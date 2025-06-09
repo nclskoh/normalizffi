@@ -56,6 +56,11 @@ NMZ_SHARED=y
 mkdir -p build
 cd build
 
+echo "NK: Configuring normaliz"
+echo "NK: CONFIGURE_FLAGS: ${CONFIGURE_FLAGS}"
+echo "NK: CPPFLAGS: ${CPPFLAGS}"
+echo "NK: LDFLAGS: ${LDFLAGS}"
+echo "NK: ${EXTRA_FLAGS}"
 ../configure ${CONFIGURE_FLAGS} CPPFLAGS="${CPPFLAGS}" LDFLAGS="${LDFLAGS} -Wl,-s" $EXTRA_FLAGS --srcdir=..
 
 # NK: Comment out make clean here.
