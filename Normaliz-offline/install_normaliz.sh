@@ -60,7 +60,11 @@ cd build
 
 # NK: Comment out make clean here.
 # make clean
+
+echo "NK: Making normaliz"
 make -j8
+
+echo "NK: Make install here"
 make install
 ls ../local/bin
 if [ "x$NMZ_SHARED" == x ]; then
