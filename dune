@@ -28,12 +28,12 @@
 
  (rule
   (target lib_flags.sexp)
-  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lomp -lnormaliz)"))
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lomp -lnormaliz -lflint)"))
   (enabled_if (= %{ocaml-config:system} macosx)))
 
 (rule
   (target lib_flags.sexp)
-  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz)"))
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint)"))
   (enabled_if (<> %{ocaml-config:system} macosx)))
 
 (library
@@ -52,7 +52,8 @@
    (functor Function_description)
    (concurrency sequential))
   (build_flags_resolver
-   (vendored (c_flags :standard -I%{project_root}/Normaliz-offline/local/include -Isrc)
+   (vendored
+    (c_flags :standard -I%{project_root}/Normaliz-offline/local/include -Isrc)
     (c_library_flags (:standard -lnormaliz_stubs -lstdc++))))
   (headers (preamble "#include \"normaliz_stub.h\"\n#include \"custom_memory.h\""))
   ; (headers (include normaliz_stub.h))

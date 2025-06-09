@@ -1,0 +1,315 @@
+## default normaliz bin
+ifndef (NORMALIZ)
+  NORMALIZ = ../source/normaliz
+endif
+
+#NICE = nice -n19
+#NORMPARA += -c
+#NORMPARA += -x=1
+
+ifeq ($(STRICT),yes)
+DIFF = diff -b
+else
+DIFF = diff -b -I ".*embedding.*\|.*resulting.*\|.*triangulation.*\|.*float.*\|.*fixed.*"
+#DIFF = diff -b
+endif
+
+
+TEST_FILES_DEG = $(patsubst %.in,%.diff,$(wildcard test-degenerate/*.in))
+TEST_FILES_S = $(patsubst %.in,%.diff,$(wildcard test-s/*.in))
+TEST_FILES_V = $(patsubst %.in,%.diff,$(wildcard test-v/*.in))
+TEST_FILES_N = $(patsubst %.in,%.diff,$(wildcard test-n/*.in))
+TEST_FILES_NN = $(patsubst %.in,%.diff,$(wildcard test-nn/*.in))
+TEST_FILES_W = $(patsubst %.in,%.diff,$(wildcard test-w/*.in))
+TEST_FILES_MM = $(patsubst %.in,%.diff,$(wildcard test-mm/*.in))
+TEST_FILES_H = $(patsubst %.in,%.diff,$(wildcard test-h/*.in))
+TEST_FILES_P = $(patsubst %.in,%.diff,$(wildcard test-p/*.in))
+TEST_FILES_Q = $(patsubst %.in,%.diff,$(wildcard test-q/*.in))
+TEST_FILES_1 = $(patsubst %.in,%.diff,$(wildcard test-1/*.in))
+TEST_FILES_D = $(patsubst %.in,%.diff,$(wildcard test-d/*.in))
+TEST_FILES_D1 = $(patsubst %.in,%.diff,$(wildcard test-d1/*.in))
+TEST_FILES_DN = $(patsubst %.in,%.diff,$(wildcard test-dnn/*.in))
+TEST_FILES_R1 = $(patsubst %.in,%.diff,$(wildcard test-r1/*.in))
+TEST_FILES_DEFAULT = $(patsubst %.in,%.diff,$(wildcard test-/*.in))
+TEST_FILES_HH = $(patsubst %.in,%.diff,$(wildcard test-hh/*.in))
+TEST_FILES_HH_INTHULL = $(patsubst %.in,%.IntHull.diff,$(wildcard test-hh/*.in))
+TEST_FILES_INT = $(patsubst %.in,%.diff,$(wildcard test-Int/*.in))
+TEST_FILES_PR = $(patsubst %.in,%.diff,$(wildcard test-pr/*.in))
+TEST_FILES_PR_PROJCONE = $(patsubst %.in,%.ProjectCone.diff,$(wildcard test-pr/*.in))
+TEST_FILES_SPECIAL = $(patsubst %.in,%.diff,$(wildcard test-Special/*.in))
+TEST_FILES_LARGE = $(patsubst %.in,%.diff,$(wildcard test-LARGE/*.in))
+TEST_FILES_FUS = $(patsubst %.in,%.diff,$(wildcard test-fus/*.in))
+TEST_FILES_PATCH = $(patsubst %.in,%.diff,$(wildcard test-patch/*.in))
+
+TEST_FILES_NF = $(patsubst %.in,%.diff,$(wildcard test-nf/*.in))
+TEST_FILES_NF_HH = $(patsubst %.in,%.diff,$(wildcard test-nf-hh/*.in))
+TEST_FILES_NF_HH_INTHULL = $(patsubst %.in,%.IntHull.diff,$(wildcard test-nf-hh/*.in))
+TEST_FILES_DEGQ = $(patsubst %.in,%.diff,$(wildcard test-Qdegenerate/*.in))
+
+TEST_FILES_DEC = $(patsubst %.in,%.diff,$(wildcard test-dec/*.in))
+TEST_FILES_DEC_TRI = $(patsubst %.in,%.tri.diff,$(wildcard test-dec/*.in))
+TEST_FILES_AUT = $(patsubst %.in,%.diff,$(wildcard test-Aut/*.in))
+TEST_FILES_AUT_AUT = $(patsubst %.in,%.aut.diff,$(wildcard test-Aut/*.in))
+TEST_FILES_NF_AUT = $(patsubst %.in,%.diff,$(wildcard test-nf-Aut/*.in))
+TEST_FILES_NF_AUT_AUT = $(patsubst %.in,%.aut.diff,$(wildcard test-nf-Aut/*.in))
+
+TEST_FILES_STD = $(patsubst %.in,%.diff,$(wildcard test-StDec/*.in))
+TEST_FILES_STD_DEC = $(patsubst %.in,%.dec.diff,$(wildcard test-StDec/*.in))
+
+TEST_FILES_FAC = $(patsubst %.in,%.diff,$(wildcard test-Fac/*.in))
+TEST_FILES_FAC_FAC = $(patsubst %.in,%.fac.diff,$(wildcard test-Fac/*.in))
+
+TEST_FILES_INC = $(patsubst %.in,%.diff,$(wildcard test-Inc/*.in))
+TEST_FILES_INC_INC = $(patsubst %.in,%.inc.diff,$(wildcard test-Inc/*.in))
+
+TEST_FILES_GEN = $(patsubst %.in,%.diff,$(wildcard test-gen/*.in))
+TEST_FILES_GEN_GEN = $(patsubst %.in,%.gen.diff,$(wildcard test-gen/*.in))
+
+TEST_FILES_CST = $(patsubst %.in,%.diff,$(wildcard test-cst/*.in))
+TEST_FILES_CST_CST = $(patsubst %.in,%.cst.diff,$(wildcard test-cst/*.in))
+
+TEST_FILES_MRK = $(patsubst %.in,%.diff,$(wildcard test-mrk/*.in))
+TEST_FILES_MRK_MRK = $(patsubst %.in,%.mrk.diff,$(wildcard test-mrk/*.in))
+
+TEST_FILES_GRB = $(patsubst %.in,%.diff,$(wildcard test-grb/*.in))
+TEST_FILES_GRB_GRB = $(patsubst %.in,%.grb.diff,$(wildcard test-grb/*.in))
+
+TEST_FILES_IND = $(patsubst %.in,%.diff,$(wildcard test-ind/*.in))
+TEST_FILES_IND_IND = $(patsubst %.in,%.ind.diff,$(wildcard test-ind/*.in))
+
+
+
+
+all: tests testv testn test1 testN testq testp testd testh testdefault testd1 testdnn testr1 testM testw testH testpr testdeg testDec testStDec testFac testInc testgen testcst testSpecial testclo testmrk testgrb testfus testind
+
+## Don't include testLARGE into all! It requires the optional libraries and runs very long.
+
+testdeg: $(TEST_FILES_DEG)
+tests: $(TEST_FILES_S)
+testv: $(TEST_FILES_V)
+testN: $(TEST_FILES_NN)
+testw: $(TEST_FILES_W)
+testn: $(TEST_FILES_N)
+testh: $(TEST_FILES_H)
+testp: $(TEST_FILES_P)
+testq: $(TEST_FILES_Q)
+test1: $(TEST_FILES_1)
+testdefault: $(TEST_FILES_DEFAULT)
+testd: $(TEST_FILES_D)
+testd1: $(TEST_FILES_D1)
+testdnn: $(TEST_FILES_DN)
+testr1: $(TEST_FILES_R1)
+testM: $(TEST_FILES_MM)
+testInt: $(TEST_FILES_INT)
+testnf: $(TEST_FILES_NF)
+testdegQ: $(TEST_FILES_DEGQ)
+testSpecial: $(TEST_FILES_SPECIAL)
+testLARGE: $(TEST_FILES_LARGE)
+testfus: $(TEST_FILES_FUS)
+
+# testpatch takes very long. Mut be run separately.
+testpatch: $(TEST_FILES_PATCH)
+
+testH: $(TEST_FILES_HH) $(TEST_FILES_HH_INTHULL)
+testDec: $(TEST_FILES_DEC) $(TEST_FILES_DEC_TRI)
+testpr: $(TEST_FILES_PR) $(TEST_FILES_PR_PROJCONE)
+testnfH: $(TEST_FILES_NF_HH) $(TEST_FILES_NF_HH_INTHULL)
+testAut: $(TEST_FILES_AUT) $(TEST_FILES_AUT_AUT)
+testnfAut: $(TEST_FILES_NF_AUT) $(TEST_FILES_NF_AUT_AUT)
+testStDec: $(TEST_FILES_STD) $(TEST_FILES_STD_DEC)
+testFac: $(TEST_FILES_FAC) $(TEST_FILES_FAC_FAC)
+testInc: $(TEST_FILES_INC) $(TEST_FILES_INC_INC)
+testgen: $(TEST_FILES_GEN) $(TEST_FILES_GEN_GEN)
+testcst: $(TEST_FILES_CST) $(TEST_FILES_CST_CST)
+testmrk: $(TEST_FILES_MRK) $(TEST_FILES_MRK_MRK)
+testgrb: $(TEST_FILES_GRB) $(TEST_FILES_GRB_GRB)
+testind: $(TEST_FILES_IND) $(TEST_FILES_IND_IND)
+
+# the next test is only inderted for code coverage
+# calling all "new" command line options
+# that are tested via options in input files
+#or are left to be chosen by Normaliz
+testclo: test-clopt/whow.out
+
+test-clopt/whow.out: $(NORMALIZ) test-clopt/whow.in
+	$(NICE) $(NORMALIZ) -DTtyCbjViGS test-clopt/whow --NoSuppHypsOutput --LongLong
+	mkdir -p Dummy
+	$(NICE) $(NORMALIZ) -JoeFv test-clopt/whow --all-files --NoExtRaysOutput  --OutputDir=Dummy
+	$(NICE) $(NORMALIZ) -kB test-clopt/whow.in --ignore --files --NoMatricesOutput --WritePreComp
+	$(NICE) $(NORMALIZ)  -MP test-clopt/whow --gen --cst --ht1 --lat --mod --ext --egn --esp --typ  --msp
+	$(NICE) $(NORMALIZ)  --help > /dev/null
+	$(NICE) $(NORMALIZ)  --version
+	rm -f blabla12345*
+
+total: all testInt testnf testnfH testdegQ testAut testnfAut
+
+msys: all testAut
+
+#compare rule
+## the double diff below is NOT a mistake.
+## The goal is to print the diff on stdout AND into the diff file.
+## make would not stop after tee, since tee is successful.
+## Therefore the second diff
+%.diff: %.out %.ref
+ifeq ($(OUTPUTCHECK),yes)
+	@ $(DIFF) $*.ref $*.ref > $*.diff
+else
+ifeq ($(STRICT),yes)
+	@ $(DIFF) $*.ref $*.out | tee $*.diff
+	$(DIFF) $*.ref $*.out > $*.diff
+else
+	@ cp $*.out $*.out_test
+	@ sed  -i.orig 's/ ~[^)]*)/)/g'  $*.out_test
+	@ rm $*.out_test.orig
+	@ sed 's/ ~[^)]*)/)/g'  $*.ref |  $(DIFF) $*.out_test - | tee $*.diff
+	@ sed 's/ ~[^)]*)/)/g'  $*.ref |  $(DIFF) $*.out_test - > $*.diff
+	@ rm $*.out_test
+endif
+endif
+
+#ignore comparison for some extremely sensitive tests
+test-/5x5PF.diff: test-/5x5PF.out test-/5x5PF.ref
+	-$(DIFF) test-/5x5PF.ref test-/5x5PF.out > test-/5x5PF.diff
+
+#rules to generate the test files
+test-degenerate/%.out: $(NORMALIZ) test-degenerate/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-degenerate/$*
+test-s/%.out: $(NORMALIZ) test-s/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -s test-s/$*
+test-v/%.out: $(NORMALIZ) test-v/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -v test-v/$*
+test-1/%.out: $(NORMALIZ) test-1/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -1 test-1/$*
+test-n/%.out: $(NORMALIZ) test-n/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -n test-n/$*
+test-nn/%.out: $(NORMALIZ) test-nn/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -N -f test-nn/$*
+test-w/%.out: $(NORMALIZ) test-w/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -w -x=1 test-w/$*
+test-mm/%.out: $(NORMALIZ) test-mm/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -M test-mm/$*
+test-p/%.out: $(NORMALIZ) test-p/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -p test-p/$*
+test-q/%.out: $(NORMALIZ) test-q/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -q test-q/$*
+test-d/%.out: $(NORMALIZ) test-d/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -d test-d/$*
+test-h/%.out: $(NORMALIZ) test-h/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -h test-h/$*
+test-/%.out: $(NORMALIZ) test-/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -c --inv test-/$* > /dev/null
+test-d1/%.out: $(NORMALIZ) test-d1/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -d1 test-d1/$*
+test-dnn/%.out: $(NORMALIZ) test-dnn/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -dN test-dnn/$*
+test-r1/%.out: $(NORMALIZ) test-r1/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -r1 test-r1/$*
+test-LARGE/%.out: $(NORMALIZ) test-LARGE/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -x=16 test-LARGE/$*
+test-fus/%.out: $(NORMALIZ) test-fus/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA)  test-fus/$*
+
+test-Qdegenerate/%.out: $(NORMALIZ) test-Qdegenerate/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-Qdegenerate/$*
+test-nf/%.out: $(NORMALIZ) test-nf/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -c test-nf/$* > /dev/null
+test-nf-hh/%.out test-nf-hh/%.IntHull.out: $(NORMALIZ) test-nf-hh/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -H test-nf-hh/$*
+
+# for the next rules with two targets USING PATTERNS, make will execute it only once
+# to create the two target files
+test-hh/%.out test-hh/%.IntHull.out: $(NORMALIZ) test-hh/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -H test-hh/$*
+test-pr/%.out test-pr/%.ProjectCone.out: $(NORMALIZ) test-pr/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-pr/$*
+test-dec/%.out test-dec/%.tri: $(NORMALIZ) test-dec/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-dec/$*
+test-Aut/%.out test-Aut/%.aut: $(NORMALIZ) test-Aut/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -c test-Aut/$* > /dev/null
+test-nf-Aut/%.out test-nf-Aut/%.aut: $(NORMALIZ) test-nf-Aut/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-nf-Aut/$*
+test-Int/%.out: $(NORMALIZ) test-Int/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -c --inv test-Int/$* > /dev/null
+test-Special/%.out: $(NORMALIZ) test-Special/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -ca test-Special/$* > /dev/null
+test-StDec/%.out test-StDec/%.dec: $(NORMALIZ) test-StDec/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-StDec/$*
+test-Fac/%.out test-Fac/%.fac: $(NORMALIZ) test-Fac/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-Fac/$*
+test-Inc/%.out test-Inc/%.inc: $(NORMALIZ) test-Inc/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-Inc/$*
+test-gen/%.out test-gen/%.gen: $(NORMALIZ) test-gen/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -N --gen test-gen/$*
+test-cst/%.out test-cst/%.cst: $(NORMALIZ) test-cst/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) -s --cst test-cst/$*
+test-mrk/%.out test-mrk/%.mrk: $(NORMALIZ) test-mrk/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-mrk/$*
+test-grb/%.out test-grb/%.grb: $(NORMALIZ) test-grb/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-grb/$*
+test-ind/%.out test-ind/%.ind: $(NORMALIZ) test-ind/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-ind/$*
+
+test-patch/%.out: $(NORMALIZ) test-patch/%.in
+	$(NICE) $(NORMALIZ) $(NORMPARA) test-patch/$*
+
+clean:
+	-rm -f test-*/*.diff
+	-rm -f test-*/*.out_1
+	-rm -f test-*/*.ref_1
+	-rm -f test-*/*.out_test
+
+distclean: clean
+	-rm -f test-*/*.out
+
+.PRECIOUS: test-degenerate/%.out
+.PRECIOUS: test-s/%.out
+.PRECIOUS: test-v/%.out
+.PRECIOUS: test-1/%.out
+.PRECIOUS: test-n/%.out
+.PRECIOUS: test-nn/%.out
+.PRECIOUS: test-w/%.out
+.PRECIOUS: test-mm/%.out
+.PRECIOUS: test-p/%.out
+.PRECIOUS: test-q/%.out
+.PRECIOUS: test-d/%.out
+.PRECIOUS: test-d1/%.out
+.PRECIOUS: test-dnn/%.out
+.PRECIOUS: test-r1/%.out
+.PRECIOUS: test-h/%.out
+.PRECIOUS: test-/%.out
+.PRECIOUS: test-hh/%.out
+.PRECIOUS: test-pr/%.out
+.PRECIOUS: test-Int/%.out
+.PRECIOUS: test-dec/%.out
+.PRECIOUS: test-dec/%.tri
+.PRECIOUS: test-Special/%.out
+.PRECIOUS: test-Aut/%.aut
+.PRECIOUS: test-Aut/%.out
+.PRECIOUS: test-nf-Aut/%.aut
+.PRECIOUS: test-nf-Aut/%.out
+.PRECIOUS: test-StDec/%.out
+.PRECIOUS: test-StDec/%.dec
+.PRECIOUS: test-Fac/%out
+.PRECIOUS: test-Fac/%.fac
+.PRECIOUS: test-Inc/%out
+.PRECIOUS: test-Inc/%.inc
+.PRECIOUS: test-gen/%.out
+.PRECIOUS: test-gen/%.gen
+.PRECIOUS: test-cst/%.out
+.PRECIOUS: test-cst/%.gen
+.PRECIOUS: test-LARGE/%.out
+.PRECIOUS: test-Fac/%.out
+.PRECIOUS: test-Inc/%.out
+.PRECIOUS: test-mrk/%.out
+.PRECIOUS: test-mrk/%.mrk
+.PRECIOUS: test-grb/%.out
+.PRECIOUS: test-grb/%.grb
+.PRECIOUS: test-ind/%.ind
+.PRECIOUS: test-ind/%.out
+.PRECIOUS: test-clopt/whow.out
+.PRECIOUS: test-nf/%.out test-nf-hh/%.out  test-nf-hh/%.IntHull.out test-Qdegenerate/%.out
+.PRECIOUS: test-patch/%.out
+.PRECIOUS: test-fus/%.out
+
+.PHONY: all testdefault tests testn test1 testN testw testp testh testd testd1 testdnn testH clean distclean testInt testSpecial testdeg testFac testpatch testfus
+.PHONY: testnf testnfH testdegQ testAut testnfAut testStDec testInc testLARGE testgen testcst testclo testDec

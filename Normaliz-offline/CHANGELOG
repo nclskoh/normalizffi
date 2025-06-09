@@ -1,0 +1,353 @@
+# ChangeLog
+
+## 3.10.5]  2025-06-05
+
+-- bugfix in minimization of Markov bases with degree bound
+-- ExploitAutomsVectors activated
+-- NoQuasiPolynomial and OnlyCyclotomicHilbSer introduced
+-- better options for Hilbert series of monoids and symmetrization
+-- induction matrices for noncommutative fusion rings of rank <= 8
+
+## [3.10.4]  2024-10-13
+
+-- Computation goal InductionMatrices for fuasion rings
+-- Ring homomorphiams dereived from induction matrices
+-- directive suppress_coord_trans
+
+## [3.10.3]  2024-05-31
+
+-- computation goals SingleFusionRing and ModularGradings.
+-- Algorithmic variant UseModularGrading.
+
+## [3.10.2]  2024-02-20
+
+-- extensive improvements for fusion rings: computation, input and output
+-- extensive improvements of the patching variant of project-and-lift, algorithms and HPC management
+-- orbit versions of (dual) face lattice and f-vectors
+-- processing lists of input files
+
+## [3.10.1]  2023-06-25
+
+-- extensive improvements in the patching algorithm for lattice points
+-- weight vectors for Gröbner bases of lattice ideals
+-- time bound can be set (so far only in project-and-lift)
+-- option NoOutputOnInterrupt.
+
+## [3.10.0]  2023-01-20
+
+-- improvements in patching algorithm with polynomial equations
+-- input types monoid, lattice_ideal (changed), toric_ideal, normal_toric_ideal
+-- Markov and Gröbner bases of lattice ideals, representations of reducible elements
+-- packed format of files with binomials on request
+-- Hilbert series for all positive affine monoids
+-- Computation of the singular locus
+-- bug fixes
+
+## [3.9.4]  2022-08-14
+
+-- Positive systems
+-- Polynomial constraints for lattice points
+-- Coarse project-and-lift
+-- Patching algorithm in project-and-lift
+
+## [3.9.3]  2022-04-21
+
+-- MS Windows binary with all optional libraries
+-- option NoHilbertBasisOutput added
+-- short reference added
+-- Bug fixes
+-- Normaliz.lib for Singular updated
+
+## [3.9.2]  2022-02-07
+
+-- compilation for MS Windows under MSYS.
+-- bug fixes and improvements
+-- extension of sparse vectors to ranges of indices
+-- unit_matrix as an input type.
+-- output file with precomputed data as input for future computations
+-- cone constructor from Normaliz input file
+-- Slight modification of reduction.cpp to prevent errors in clang compilations
+
+## [3.9.1] 2021-09-01
+
+-- better handling of distributed computation
+-- Python 2 builds dropped
+-- bugfix and improvement of hollow triangulation
+-- compatibility for operator < in dynamic_bitset with boost::dynamic_bitset
+
+## [3.9.0] 2021-07-02
+
+-- volume and integral by signed decomposition
+-- variant ExploitIsosMult added to volume by descent
+-- InputAutomorphisms and AmbientAutomorphisms
+-- SHA256 hash values for certain data
+-- Placing and pulling triangulations
+
+## [3.8.10] 2021-02-05
+
+-- change from Travis to GitHub actions
+-- improvement of configure.ac for finding nauty
+-- data structure changed for triangulations and decompositions
+-- PyNormaliz added to manual
+
+## [3.8.9] 2020-09-25
+
+-- extreme rays in floating point available
+-- TriangulationGenerators replace Generators
+
+## [3.8.8] 2020-08-25
+
+-- dual versions of face lattice, f-vector and incidence
+-- rational lattices
+
+## [3.8.7] 2020-07-25
+
+-- improvements in finding dependencies
+-- addition of IsEmptySemiopen and CoveringFace
+-- source file structure changed
+-- input in libnormaliz
+
+## [3.8.6] 2020-06-17
+
+-- tests for installation in SageMath
+
+
+## [3.8.5] 2020-06-20
+
+-- several small improvements
+-- significant improvement in computation of integer hulls
+-- refined triangulations added
+
+## [3.8.4] 2020-02-20
+
+-- completely revised precomputed_data
+-- numerous fixes of small inaccuracies
+-- especially for "mixed" input (generators and
+   constraints simultaneously)
+-- many additional tests and improvement of
+   build infrastructure
+-- new package layout for the releases
+-- update of nauty and CoCoALib releases
+
+## [3.8.3] 2019-11-26
+
+-- repair of modifyCone
+
+## [3.8.2] 2019-11-23
+
+-- removed dependency on Boost by own bitset class
+-- improvements in convex hull algorithm
+-- internal representation of scalable renf_class_elem
+   vector with integral coefficients
+-- improvements in build infrastructure
+
+## [3.8.1] 2019-09-30
+
+-- bugfix codimension in face lattice output
+-- update of Flint installation to avoid PIE clash
+-- improve nauty installation
+
+## [3.8.0] 2019-09-10
+
+-- bugfix triangulation and cone decomposition
+-- computation of automorphism groups
+-- Computation goal Incidence added
+-- SCIP removed
+
+## [3.7.4] 2019-07-31
+
+-- bugfix in face lattice computation
+-- nmz_config.h indicates optional packages
+
+## [3.7.3] 2019-06-09
+
+-- "Dybamic" added
+-- modifyCone added
+-- VPATH builds in install scripts
+
+## [3.7.2] 2019-04-25
+
+-- update to PyNormaliz 2.2
+
+## [3.7.1] 2019-04-23
+
+-- output now a class of libnormaliz
+-- introduction of nmz_config.h
+
+## [3.7.0] 2019-04-15
+
+-- QNormaliz realized within Normaliz
+-- alignment of manual and code
+-- NumberLatticePoints added
+-- FaceLattice and FVector added
+-- use of refurbished e-antic based on Flint 2.5.2
+
+## [3.6.3] 2018-08-21
+
+-- configure.ac back to "old" treatment of Flint
+
+## [3.6.2] 2018-07-31
+
+-- Better handling of degenerate polytopes
+
+## [3.6.1] 2018-07-07
+
+-- Improvements in build scripts
+-- Introduction of NoGradingDenom and better treatment of polytopes
+-- Refinements in the computation of volumes
+
+## [3.6.0] 2018-05-31
+
+-- QNormaliz with e-antic included in release
+-- Computation goal EhrhartQuasipolynomial introduced, use of KeepOrder extended
+-- Hilbert basis of recession cone can be set as precomputed data
+-- improved installation and build system
+
+## [3.5.4] 2018-04-13
+
+-- triangulation, cone and Stanley decomposition available for cones over polytopes
+   defined by inhomogeneous data
+-- EhrhartSeries introduced as a computation goal
+-- QNormaliz extended to algebraic polytopes (outside of release)
+
+## [3.5.3] 2018-04-03
+
+-- repair of performance loss
+-- bug fixes
+
+## [3.5.2] 2018-03-11
+
+-- Descent algorithm for volumes of polytopes
+-- recession rank also computed from Hilbert basis
+-- install scripts improved for Mac OS
+-- bug fixes
+
+## [3.5.1] 2018-01-15
+
+-- Uniqueness in output of not uniquely determined results (bases of sublattices, equations),
+   necessary to make all tests yield the same results on all systems
+
+## [3.5.0] 2017-12-11
+
+-- LLL reduced coordinates for coordinate dependent algorithms
+-- Expansion of Hilbert series and weighted Ehrhart series
+-- projection of cones
+-- Euclidean volumes
+-- Flint as an optional library
+-- Dockerfile
+-- install scripts
+
+## [3.4.1] 2017-11-15
+
+-- bugfix
+
+## [3.4.0] 2017-08-20
+
+-- limit of parallelization via libnormaliz (and default limit of 8 threads)
+-- floating point numbers in input
+-- project-and-lift algorithm for lattice points in polytopes (default choice), also with a floating point variant
+-- subdivision of large simplices by project-and-lift (default choice)
+-- option to suppress output of extreme rays (can look rather ugly)
+-- use of Scip optional, even if Normaliz has been built with Scip
+-- fast Gorenstein test
+-- restriction of number of significant coefficients of quasipolynomial
+-- definition of semi-open parallelepipeds in input and output of their lattice points
+
+## [3.3.0] 2017-05-15
+
+-- inclusion of NmzIntegrate in libnormaliz
+-- rational numbers in input
+-- improvement of polynomial arithmetic
+-- controlled interruption
+
+## [3.2.1] 2017-02-22
+
+-- automatic choice of symmetrization
+-- change to HSOP from of Hilbert series possible after computation
+-- fits PyNormaliz 1.4
+
+## [3.2.0] 2017-01-01
+
+-- constraints in symbolic format
+-- a better implementation of Approximate and its use in the inhomogeneous case,
+-- option Symmetzrize that produces symmetrized input for and runs nmzIntegrate and runs on it,
+-- QNormaliz, a version of Normaliz using coordinates in an extension of the rational numbers
+   (restricted to convex hull computations and triangulation),
+-- further automatic choices of algorithmic variants.
+
+## [3.1.4] 2016-11-26
+- automatic choice of dual or primal algorithm (unless fixed by the user)
+--extension of ConeProperty, constructors based on Matrix<Integer>, additional functions for retrieval of results
+
+## [3.1.3] 2016-09-28
+- bug fixes
+
+## [3.1.2] 2016-08-25
+- additional autotools build system
+- sparse vectors and matrices in input files added
+- choice of output directory added
+- option HSOP added
+
+## [3.1.1] 2016-04-05
+- index of unit group extension added
+- formatted vectors matrices in input files added
+- "constraints" in input files added
+- transposed matrices in input file added
+
+## [3.1.0] 2016-02-04
+
+- support for nonpointed cones / input of subspace
+- new computation goals: IsIntegrallyClosed and WitnessNotIntegrallyClosed
+- new computation goal: IntegerHull
+- new computation goal: ConeDecomposition
+
+## [3.0.0] - 2015-09-18
+- new, more natural comfortable input syntax (with backward compatibility)
+- standardization of output improved, especially for Hilbert series (not backward compatible)
+- new computation goals: module generators over original monoid and class group
+- Additional input types, in particular generators for lattices; free combination of generators and constraints
+- computation goals can be set in the input file
+- long options available
+- automatic choice of integer type
+- improved linear algebra with much better protection against overflows
+- reduction of the arithmetical complexity by subdivision of large simplicial cones and bottom decomposition based on SCIP and approximation methods
+- improvement of Fourier-Motzkin elimination by ordering the generators
+
+## [2.12.2] - 2014-01-22
+- bug fix in volume computation "-v"
+- change max_rank_submatrix back to pre2.12 version, avoids some overflows
+
+## [2.12.1] - 2014-10-23
+- bug fix in dual algorithm
+- workaround for compiler bug in intel windows compiler for -v
+
+## [2.12.0] - 2014-10-17
+- dual algorithm thoroughly revised
+- internal parallelization of simplicial cones with large determinants
+- improvement of linear algebra
+
+## [2.11.2] - 2014
+- improvement of intermediate reduction
+- bug fix
+
+## [2.11.1] - 2014
+- bug fix
+
+## [2.11.0] - 2014-04-30
+- addition of inhomogeneous input possibilities
+- Hilbert series of semiopen cones.
+- integral approximation of rational polytopes.
+- lattice points in polytopes via the dual algorithm.
+- improvement in Fourier-Motzkin elimination by better use of pyramid decomposition.
+- substantial improvement in computing ``large'' simplicial cones.
+
+## [2.10.1] - 2013-06-27
+- bug fix (wrong multiplicity in computation mode -v (volume) for some non-integral polytopes)
+
+## [2.10.0] - 2013-05-13
+- now avoids the production of duplicates of candidates for the Hilbert basis
+- improvement of NmzIntegrate
+- corrections in the output forwarded to NmzIntegrate
+
+
+

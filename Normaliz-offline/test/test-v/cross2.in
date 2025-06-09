@@ -1,0 +1,8 @@
+amb_space 3
+polytope 4
+1 0
+0 1
+-1 0
+0 -1
+LongLong
+Descent

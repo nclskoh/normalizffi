@@ -1,7 +1,10 @@
 *~
 _build/*
 _destdir/*
+
 Normaliz-offline/local
+Normaliz-offline/build
 Normaliz/local
+Normaliz
 *.o
 test_stubs/test_stubs

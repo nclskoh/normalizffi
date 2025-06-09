@@ -1,0 +1,125 @@
+##
+## Makefile configuration for normaliz
+## (for the classic build system)
+##
+CXX = g++
+#CXX = clang++-13
+CXXFLAGS += -std=c++14 -Wall -pedantic -Wno-sign-compare -Wno-deprecated  -funroll-loops -fPIC -g
+#CXXFLAGS += -march=native
+#CXXFLAGS += -pg      ## profiling
+#CXXFLAGS += -DNDEBUG ## disables asserts
+
+GMPFLAGS = -lgmpxx -lgmp
+INSTALLDIR = $(PWD)/../local
+OPT_LIB_ROOT=$(INSTALLDIR)
+
+CXXFLAGS += -I .. -I . -I $(OPT_LIB_ROOT)/include
+CXXFLAGS += -DNMZ_MAKEFILE_CLASSIC ## this avoids reading nmz_config.h
+LINKFLAGS = -L $(PWD)/libnormaliz -L $(OPT_LIB_ROOT)/lib
+
+# settings for default Linux static
+LIBLINK = libnormaliz/libnormaliz.a
+LIBNAME = libnormaliz.a
+EXENAME = libnormaliz
+
+MPFRLIB = -lmpfr
+FLINTLIB = -lflint
+
+# development?
+ifeq ($(NMZ_DEBUG),yes)
+	CXXFLAGS += -g3 -DNMZ_DEBUG
+else
+  CXXFLAGS += -O3
+endif
+
+ifeq ($(NMZ_32),yes)
+  CXXFLAGS += -m32
+endif
+
+ifeq ($(NMZ_EXTENDED_TESTS),yes)
+  CXXFLAGS += -DNMZ_EXTENDED_TESTS
+endif
+
+# MinGW is for production
+ifeq ($(MSYSTEM),MINGW64)
+  $(info MSYS detected, only static build possible)
+  NMZ_DEVELOP=no
+  CXXFLAGS += -static # only static possible
+  CXXFLAGS += -mnop-fun-dllimport
+  EXENAME = normaliz.exe
+  # MPFRLIB = -lmpfr.dll # if used will link against true dll
+  # FLINTLIB = -lflint.dll # ditto
+endif
+
+# development?
+ifeq ($(NMZ_DEVELOP),no)
+  STRIP_FLAGS = -Wl,-s
+else
+  CXXFLAGS += -DNMZ_DEVELOP # avoids reading version.h
+endif
+
+## use OpenMP?
+ifeq ($(OPENMP),no)
+  CXXFLAGS += -Wno-unknown-pragmas
+else
+  CXXFLAGS += -fopenmp ## g++
+  ##CXXFLAGS += -fopenmp=libgomp ## clang++
+endif
+
+ifeq ($(GPERFTOOLS),yes)
+  CXXFLAGS += -DNMZ_GPERF
+  PERFFLAGS = -lprofiler
+endif
+
+#gperftools or NMZ_SHARED?
+# for MSYS fixed to static above
+ifneq ($(MSYSTEM),MINGW64)
+	ifeq ($(NMZ_SHARED),yes)
+		 LINKFLAGS += -Wl,-rpath=$(INSTALLDIR)/lib -Wl,-rpath=$(PWD)/libnormaliz
+		 # CXXFLAGS += -shared
+		 LIBLINK = libnormaliz/libnormaliz.so
+		 LIBNAME = libnormaliz.so
+	else
+		CXXFLAGS += -static
+	endif
+endif
+
+ifeq ($(NAKED),yes) ## switches off all optional libraries
+else
+  # skip nauty?
+  ifeq ($(NAUTY),no)
+  else
+    CXXFLAGS += -DNMZ_NAUTY -DNMZ_NAUTYNAUTY -DNMZ_NAUTY_TLS
+    NAUTYFLAGS = -lnauty
+  endif
+
+  # skip hash-library?
+  ifeq ($(HASHLIBRARY),no)
+  else
+    CXXFLAGS += -DNMZ_HASHLIBRARY
+    HASHLIBRARYFLAGS = -lsha256
+  endif
+
+  ##use COCOA?
+  ifneq ($(COCOA),no)
+    CXXFLAGS += -DNMZ_COCOA #  -DCoCoA_THREADSAFE_HACK
+    COCOAFLAGS = -lcocoa
+  endif
+
+  ##use EANTIC?
+  ifeq ($(EANTIC),no)
+    ##use FLINT?
+    ifneq ($(FLINT),no)
+      CXXFLAGS += -DNMZ_FLINT
+      FLINTFLAGS = $(FLINTLIB) $(MPFRLIB)
+    endif
+  else
+    CXXFLAGS += -DENFNORMALIZ -DNMZ_FLINT
+    EANTICFLAGS = -leanticxx -leantic  $(FLINTLIB) $(MPFRLIB)
+  endif ## EANTIC
+endif ## NAKED
+
+LINKFLAGS +=  $(COCOAFLAGS) $(EANTICFLAGS) $(FLINTFLAGS) $(NAUTYFLAGS) $(HASHLIBRARYFLAGS)  $(GMPFLAGS) $(PERFFLAGS) $(STRIP_FLAGS)
+
+#$(PERFFLAGS)
+## -lprofiler -lunwind -llzma
