@@ -55,7 +55,7 @@ test/*/*.out_1
 *.toc
 *.log
 *.backup
-*.gz
+# *.gz
 *.blg
 *.bbl
 *.ilg
