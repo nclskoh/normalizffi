@@ -3,8 +3,8 @@
 
 # ignore normaliz executables
 normaliz
-normaliz_*
-normaliz-*
+# normaliz_* # NK: BUG: This ignores source/libnormaliz/normaliz_exception.h
+# normaliz-* # NK: This ignores test/normaliz-windows.sh
 *.exe
 
 # ignore executable tools
