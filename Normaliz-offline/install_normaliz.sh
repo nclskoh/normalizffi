@@ -63,8 +63,7 @@ echo "NK: LDFLAGS: ${LDFLAGS}"
 echo "NK: ${EXTRA_FLAGS}"
 ../configure ${CONFIGURE_FLAGS} CPPFLAGS="${CPPFLAGS}" LDFLAGS="${LDFLAGS} -Wl,-s" $EXTRA_FLAGS --srcdir=..
 
-# NK: Comment out make clean here.
-# make clean
+make clean
 
 echo "NK: Making normaliz"
 make -j8
