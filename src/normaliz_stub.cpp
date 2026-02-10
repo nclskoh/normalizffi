@@ -411,7 +411,7 @@ extern "C" void hull(NCone* nc) {
   // but for some reason, it doesn't seem to work...
   c->compute(ConeProperty::SupportHyperplanes);
   
-  c->compute(ConeProperty::IntegerHull, ConeProperty::LatticePoints);
+  c->compute(ConeProperty::IntegerHull);
 
   if(debug) {
     auto c0_hull = c->getIntegerHullCone();
