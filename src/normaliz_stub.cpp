@@ -405,6 +405,12 @@ extern "C" void hull(NCone* nc) {
     print_cone(c);
   }
 
+  // Possible bug in Normaliz, or a misunderstanding of the interface somewhere.
+  // Computing ConeProperty::IntegerHull requires supporting hyperplanes to be computed.
+  // The source code of Normaliz suggests that this is done internally when computing IntegerHull,
+  // but for some reason, it doesn't seem to work...
+  c->compute(ConeProperty::SupportHyperplanes);
+  
   c->compute(ConeProperty::IntegerHull, ConeProperty::LatticePoints);
 
   if(debug) {
