@@ -4822,7 +4822,7 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
 
     // cout << "FFFF " << ToCompute.full_cone_goals(using_renf<Integer>()) << endl;
 
-    cout << "Normaliz compute: is_Computed just before full cone goals"<< is_Computed << endl;
+    cout << "Normaliz compute: is_Computed just before full cone goals "<< is_Computed << endl;
 
     if (ToCompute.full_cone_goals(using_renf<Integer>()).any()) {
         cout << "Normaliz compute: Computing generators due to full_cone_goals" << endl;
@@ -4834,6 +4834,8 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
         cout << "Normaliz compute: Skipping generators in full_cone_goals" << endl;
     }
     ToCompute.reset(is_Computed);
+
+    cout << "Normaliz compute: is_Computed just after full cone goals "<< is_Computed << endl;
 
     try_multiplicity_of_para(ToCompute);
     ToCompute.reset(is_Computed);
