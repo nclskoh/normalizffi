@@ -4679,11 +4679,9 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     // Checking and setting of computation goals done
     //***********************************************
 
-    /*
     cout << "ToCompute   " << ToCompute << endl;
     cout << "is_Computed "<< is_Computed << endl;
     cout << "inhomogen   " << inhomogeneous << endl;
-    */
 
     compute_ambient_automorphisms(ToCompute);
     compute_input_automorphisms(ToCompute);
@@ -4826,6 +4824,8 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
         if (!isComputed(ConeProperty::Generators)) {
             throw FatalException("Could not get Generators.");
         }
+    } else {
+        cout << "Normaliz compute: Generators not computed" << endl;
     }
     ToCompute.reset(is_Computed);
 
@@ -4891,7 +4891,10 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     check_Gorenstein(ToCompute);
 
     if (ToCompute.test(ConeProperty::IntegerHull)) {
+        cout << "Normaliz compute: computing integer hull" << endl;
         compute_integer_hull();
+    } else {
+        cout << "Normaliz compute: skipping integer hull" << endl;
     }
 
     compute_refined_triangulation(ToCompute);
