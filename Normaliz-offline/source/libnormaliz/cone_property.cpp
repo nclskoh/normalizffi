@@ -778,7 +778,7 @@ void ConeProperties::set_preconditions(bool inhomogeneous, bool numberfield) {
     // SupportHyperplanes ==> ExtremeRays
     if (CPs.test(ConeProperty::SupportHyperplanes)) {
         // NK: Debug
-        std::cout << "Setting precondition extreme rays for support hyperplane" << endl;
+        // std::cout << "Setting precondition extreme rays for support hyperplane" << endl;
         
         CPs.set(ConeProperty::ExtremeRays);
     }
@@ -801,7 +801,7 @@ void ConeProperties::set_preconditions(bool inhomogeneous, bool numberfield) {
 
     if (CPs.test(ConeProperty::SupportHyperplanes)) {
         // NK: Debug
-        std::cout << "Setting precondition extreme rays for support hyperplane (at end)" << endl;
+        // std::cout << "Setting precondition extreme rays for support hyperplane (at end)" << endl;
         
         CPs.set(ConeProperty::ExtremeRays);
     }

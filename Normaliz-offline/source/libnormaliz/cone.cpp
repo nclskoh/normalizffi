@@ -3761,16 +3761,16 @@ void Cone<Integer>::compute_integer_hull() {
     }
 
     // NK: Debug
-    cout << "compute_integer_hull(): is_Computed before SupportHyperplanes "<< is_Computed << endl;
-    cout << "inhomogen   " << inhomogeneous << endl;
+    // cout << "compute_integer_hull(): is_Computed before SupportHyperplanes "<< is_Computed << endl;
+    // cout << "inhomogen   " << inhomogeneous << endl;
 
     compute(ConeProperty::SupportHyperplanes, ConeProperty::MaximalSubspace);
 
     // NK: Debug
-    cout << "compute_integer_hull(): is_Computed after SupportHyperplanes "<< is_Computed << endl;
-    cout << "inhomogen   " << inhomogeneous << endl;
-    
-    cout << "compute_integer_hull(): using_renf<Integer>() = " << using_renf<Integer>() << endl;
+    // cout << "compute_integer_hull(): is_Computed after SupportHyperplanes "<< is_Computed << endl;
+    // cout << "inhomogen   " << inhomogeneous << endl;
+    // 
+    // cout << "compute_integer_hull(): using_renf<Integer>() = " << using_renf<Integer>() << endl;
 
     Matrix<Integer> IntHullGen;
     vector<Integer> IntHullDehom;
@@ -3787,15 +3787,16 @@ void Cone<Integer>::compute_integer_hull() {
         IntHullDehom = Dehomogenization;
         if (using_renf<Integer>()) {
             // NK: using_renf<Integer>() is true when EANTIC is set (ENFNORMALIZ = true)
-            cout << "compute_integer_hull(): Using module generators..." << endl;
+            // cout << "compute_integer_hull(): Using module generators..." << endl;
+            
             IntHullGen = ModuleGenerators;
         }
         else {
             // NK: using_renf<Integer>() is false by default, 
             // and we use extreme rays of the recession cone.
-            cout << "compute_integer_hull(): Using extreme rays of recession cone..." << endl;
+            // cout << "compute_integer_hull(): Using extreme rays of recession cone..." << endl;
             
-            // NK: Check if this actually computes extreme rays...
+            // NK: Fix bug
             compute(ConeProperty::ExtremeRays);
             // cout << "compute_integer_hull(): are extreme rays now computed? "<< is_Computed << endl;
 
@@ -4452,9 +4453,9 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
 #endif
 
     // NK: Debug
-    cout << "compute(), on entry: ToCompute   " << ToCompute << endl;
-    cout << "compute(), on entry: is_Computed "<< is_Computed << endl;
-    cout << "compute(), on entry: inhomogen   " << inhomogeneous << endl;
+    // cout << "compute(), on entry: ToCompute   " << ToCompute << endl;
+    // cout << "compute(), on entry: is_Computed "<< is_Computed << endl;
+    // cout << "compute(), on entry: inhomogen   " << inhomogeneous << endl;
 
     size_t nr_computed_at_start = is_Computed.count();
     bool possibly_interrupted =  false;
@@ -4466,9 +4467,9 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     handle_dynamic(ToCompute);
 
     // NK: Debug
-    cout << "compute(), after handle_dynamic: ToCompute   " << ToCompute << endl;
-    cout << "compute(): is_Computed "<< is_Computed << endl;
-    cout << "compute(): inhomogen   " << inhomogeneous << endl;
+    // cout << "compute(), after handle_dynamic: ToCompute   " << ToCompute << endl;
+    // cout << "compute(): is_Computed "<< is_Computed << endl;
+    // cout << "compute(): inhomogen   " << inhomogeneous << endl;
 
     set_parallelization();
     nmz_interrupted = 0;
@@ -4604,29 +4605,29 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
         if (ToCompute.test(ConeProperty::FullConeDynamic))  // if integer hull is to be computed
         {
             // NK: Debug
-            cout << "compute(), before FullConeDynamic: ToCompute   " << ToCompute << endl;
-            cout << "compute(): is_Computed "<< is_Computed << endl;
+            // cout << "compute(), before FullConeDynamic: ToCompute   " << ToCompute << endl;
+            // cout << "compute(): is_Computed "<< is_Computed << endl;
             
             compute(ConeProperty::MaximalSubspace, ConeProperty::FullConeDynamic);
 
             // NK: Debug
-            cout << "compute(), after FullConeDynamic: ToCompute   " << ToCompute << endl;
-            cout << "compute(): is_Computed "<< is_Computed << endl;
+            // cout << "compute(), after FullConeDynamic: ToCompute   " << ToCompute << endl;
+            // cout << "compute(): is_Computed "<< is_Computed << endl;
         }
         else {
             // NK: Debug
-            cout << "compute(), before MaximalSubspace: ToCompute   " << ToCompute << endl;
-            cout << "compute(): is_Computed "<< is_Computed << endl;
+            // cout << "compute(), before MaximalSubspace: ToCompute   " << ToCompute << endl;
+            // cout << "compute(): is_Computed "<< is_Computed << endl;
             
             compute(ConeProperty::MaximalSubspace);
 
             // NK: Debug
-            cout << "compute(), after MaximalSubspace: ToCompute   " << ToCompute << endl;
-            cout << "compute(): is_Computed "<< is_Computed << endl;
+            // cout << "compute(), after MaximalSubspace: ToCompute   " << ToCompute << endl;
+            // cout << "compute(): is_Computed "<< is_Computed << endl;
         }
     } {
         // NK: Debug
-        cout << "compute(), skipping MaximalSubspace and FullConeDynamic: ToCompute   " << ToCompute << endl;
+        // cout << "compute(), skipping MaximalSubspace and FullConeDynamic: ToCompute   " << ToCompute << endl;
     }
 
     /*
@@ -4671,12 +4672,12 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
         ToCompute.check_fusion_ring_props();
 
     // NK: Debug
-    cout << "compute(): before setting preconditions: ToCompute   " << ToCompute << endl;
+    // cout << "compute(): before setting preconditions: ToCompute   " << ToCompute << endl;
     
     ToCompute.set_preconditions(inhomogeneous, using_renf<Integer>());
     
     // NK: Debug
-    cout << "compute(): after setting preconditions: ToCompute   " << ToCompute << endl;
+    // cout << "compute(): after setting preconditions: ToCompute   " << ToCompute << endl;
     
     make_modular_gradings(ToCompute);
 
@@ -4695,12 +4696,12 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
 
     if (ToCompute.test(ConeProperty::Sublattice) && !isComputed(ConeProperty::Generators)) {
         // NK: Debug
-        cout << "compute(): Adding extreme rays and support hyperplanes to goals" << endl;
+        // cout << "compute(): Adding extreme rays and support hyperplanes to goals" << endl;
 
         ToCompute.set(ConeProperty::ExtremeRays, ConeProperty::SupportHyperplanes);
     } else {
         // NK: Debug
-        cout << "compute(): Skip adding extreme rays and support hyperplanes to goals" << endl;
+        // cout << "compute(): Skip adding extreme rays and support hyperplanes to goals" << endl;
     }
 
     ToCompute.check_sanity(inhomogeneous);
@@ -4720,11 +4721,11 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     ToCompute.check_sanity(inhomogeneous);
 
     // NK: Debug
-    cout << "compute(): before reset ToCompute: ToCompute   " << ToCompute << endl;
+    // cout << "compute(): before reset ToCompute: ToCompute   " << ToCompute << endl;
 
     ToCompute.reset(is_Computed);
 
-    cout << "compute(): after reset ToCompute: ToCompute   " << ToCompute << endl;
+    // cout << "compute(): after reset ToCompute: ToCompute   " << ToCompute << endl;
 
     if (ToCompute.none()) {
         LEAVE_CONE return ConeProperties();
@@ -4744,15 +4745,15 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     // to protect against intermediate computations of generators in interactive use
     if (ToCompute.test(ConeProperty::ModuleGeneratorsOverOriginalMonoid) || ToCompute.test(ConeProperty::IsIntegrallyClosed)) {
         // NK: Debug
-        cout << "compute(): Reset extreme rays in is_Computed. Is ModuleGeneratorsOverOriginalMonoid a goal? " 
-            << ToCompute.test(ConeProperty::ModuleGeneratorsOverOriginalMonoid) << endl;
-        cout << "compute(): is_Computed before reset "<< is_Computed << endl;
+        // cout << "compute(): Reset extreme rays in is_Computed. Is ModuleGeneratorsOverOriginalMonoid a goal? " 
+        //     << ToCompute.test(ConeProperty::ModuleGeneratorsOverOriginalMonoid) << endl;
+        // cout << "compute(): is_Computed before reset "<< is_Computed << endl;
 
         Generators = InputGenerators;
         is_Computed.reset(ConeProperty::ExtremeRays);
 
         // NK:
-        cout << "compute(): is_Computed reset to "<< is_Computed << endl;
+        // cout << "compute(): is_Computed reset to "<< is_Computed << endl;
     }
 
     //***********************************************
@@ -4760,9 +4761,9 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     //***********************************************
 
     // NK: Original debug messages from Normaliz
-    cout << "ToCompute   " << ToCompute << endl;
-    cout << "is_Computed "<< is_Computed << endl;
-    cout << "inhomogen   " << inhomogeneous << endl;
+    // cout << "ToCompute   " << ToCompute << endl;
+    // cout << "is_Computed "<< is_Computed << endl;
+    // cout << "inhomogen   " << inhomogeneous << endl;
 
     compute_ambient_automorphisms(ToCompute);
     compute_input_automorphisms(ToCompute);
@@ -4781,10 +4782,10 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
 
     // NK: Add debug messages here
     if (conversion_done) {
-        "Normaliz compute: Computing generators due to conversion_done";
+        // cout << "Normaliz compute: Computing generators due to conversion_done" << endl;;
         compute_generators(ToCompute);
     } else {
-        "Normaliz compute: Skipping generators in conversion_done";
+        // cout << "Normaliz compute: Skipping generators in conversion_done" << endl;;
     }
 
     ToCompute.reset(is_Computed);
@@ -4905,25 +4906,25 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     // cout << "FFFF " << ToCompute.full_cone_goals(using_renf<Integer>()) << endl;
 
     // NK: Debug messages
-    cout << "Normaliz compute: is_Computed just before full cone goals "<< is_Computed << endl;
-    cout << "ToCompute   " << ToCompute << endl;
+    // cout << "Normaliz compute: is_Computed just before full cone goals "<< is_Computed << endl;
+    // cout << "ToCompute   " << ToCompute << endl;
 
     if (ToCompute.full_cone_goals(using_renf<Integer>()).any()) {
         // NK: Debug
-        cout << "Normaliz compute: Computing generators due to full_cone_goals" << endl;
+        // cout << "Normaliz compute: Computing generators due to full_cone_goals" << endl;
         compute_generators(ToCompute);
         if (!isComputed(ConeProperty::Generators)) {
             throw FatalException("Could not get Generators.");
         }
     } else {
         // NK: Debug
-        cout << "Normaliz compute: Skipping generators in full_cone_goals" << endl;
+        // cout << "Normaliz compute: Skipping generators in full_cone_goals" << endl;
     }
     ToCompute.reset(is_Computed);
 
     // NK: Debug messages
-    cout << "Normaliz compute: is_Computed just after full cone goals " << is_Computed << endl;
-    cout << "ToCompute   " << ToCompute << endl;
+    // cout << "Normaliz compute: is_Computed just after full cone goals " << is_Computed << endl;
+    // cout << "ToCompute   " << ToCompute << endl;
 
     try_multiplicity_of_para(ToCompute);
     ToCompute.reset(is_Computed);
@@ -4956,8 +4957,8 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     // the actual computation
 
     // NK: Debug
-    cout << "Normaliz compute: is_Computed just before checking support hyperplanes " << is_Computed << endl;
-    cout << "ToCompute   " << ToCompute << endl;
+    // cout << "Normaliz compute: is_Computed just before checking support hyperplanes " << is_Computed << endl;
+    // cout << "ToCompute   " << ToCompute << endl;
 
     if (isComputed(ConeProperty::SupportHyperplanes) && using_renf<Integer>())
         ToCompute.reset(ConeProperty::DefaultMode);  // in this case Default = SupportHyperplanes
@@ -4966,8 +4967,8 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     /* cout << "UUUU All  " << ToCompute << endl;*/
 
     // NK: Debug
-    cout << "Normaliz compute: is_Computed just after checking support hyperplanes " << is_Computed << endl;
-    cout << "ToCompute   " << ToCompute << endl;
+    // cout << "Normaliz compute: is_Computed just after checking support hyperplanes " << is_Computed << endl;
+    // cout << "ToCompute   " << ToCompute << endl;
 
     // the computation of the full cone
     if (ToCompute.full_cone_goals(using_renf<Integer>()).any()) {
@@ -4995,16 +4996,16 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     check_Gorenstein(ToCompute);
 
     // NK: Debug
-    cout << "Normaliz compute: is_Computed just before checking if we should compute integer hulls " << is_Computed << endl;
-    cout << "ToCompute   " << ToCompute << endl;
+    // cout << "Normaliz compute: is_Computed just before checking if we should compute integer hulls " << is_Computed << endl;
+    // cout << "ToCompute   " << ToCompute << endl;
 
     if (ToCompute.test(ConeProperty::IntegerHull)) {
         // NK: Debug
-        cout << "Normaliz compute: computing integer hull" << endl;
+        // cout << "Normaliz compute: computing integer hull" << endl;
         compute_integer_hull();
     } else {
         // NK: Debug
-        cout << "Normaliz compute: skipping integer hull" << endl;
+        // cout << "Normaliz compute: skipping integer hull" << endl;
     }
 
     compute_refined_triangulation(ToCompute);
