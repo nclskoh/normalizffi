@@ -409,7 +409,10 @@ extern "C" void hull(NCone* nc) {
   // Computing ConeProperty::IntegerHull requires supporting hyperplanes to be computed.
   // The source code of Normaliz suggests that this is done internally when computing IntegerHull,
   // but for some reason, it doesn't seem to work...
+
+  std::cout << "Stub: Computing support hyperplanes eagerly";
   c->compute(ConeProperty::SupportHyperplanes);
+  std::cout << "Stub: Now computing integer hull";
   
   c->compute(ConeProperty::IntegerHull);
 
