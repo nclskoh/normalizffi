@@ -405,14 +405,15 @@ extern "C" void hull(NCone* nc) {
     print_cone(c);
   }
 
-  // Possible bug in Normaliz, or a misunderstanding of the interface somewhere.
-  // Computing ConeProperty::IntegerHull requires supporting hyperplanes to be computed.
-  // The source code of Normaliz suggests that this is done internally when computing IntegerHull,
-  // but for some reason, it doesn't seem to work...
-
-  // std::cout << "Stub: Computing support hyperplanes eagerly" << std::endl;;
+  // Normaliz has a bug where extreme rays have to be computed before the
+  // integer hull is computed.
+  // Computing SupportHyperplanes should trigger extreme ray computation as a
+  // precondition, but there is currently a path where this does not happen.
+  // Code in Normaliz has been changed to explicitly compute extreme rays before 
+  // computing the integer hull, so the following is no longer needed.
+  // std::cout << "Stub: Computing support hyperplanes eagerly to trigger extreme ray computation" << std::endl;;
   // c->compute(ConeProperty::SupportHyperplanes);
-  std::cout << "Stub: Now computing integer hull" << std::endl;
+  // std::cout << "Stub: Now computing integer hull" << std::endl;
   
   c->compute(ConeProperty::IntegerHull);
 

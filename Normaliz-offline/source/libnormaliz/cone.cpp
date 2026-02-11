@@ -3796,8 +3796,8 @@ void Cone<Integer>::compute_integer_hull() {
             cout << "compute_integer_hull(): Using extreme rays of recession cone..." << endl;
             
             // NK: Check if this actually computes extreme rays...
-            // compute(ConeProperty::ExtremeRays);
-            cout << "compute_integer_hull(): are extreme rays now computed? "<< is_Computed << endl;
+            compute(ConeProperty::ExtremeRays);
+            // cout << "compute_integer_hull(): are extreme rays now computed? "<< is_Computed << endl;
 
             IntHullGen = ExtremeRaysRecCone;  // not defined in case of renf_elem_class
             IntHullGen.append(ModuleGenerators);
