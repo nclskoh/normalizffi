@@ -4602,9 +4602,31 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     if (BasisMaxSubspace.nr_of_rows() > 0 && !isComputed(ConeProperty::MaximalSubspace)) {
         BasisMaxSubspace = Matrix<Integer>(0, dim);
         if (ToCompute.test(ConeProperty::FullConeDynamic))  // if integer hull is to be computed
+        {
+            // NK: Debug
+            cout << "compute(), before FullConeDynamic: ToCompute   " << ToCompute << endl;
+            cout << "compute(): is_Computed "<< is_Computed << endl;
+            
             compute(ConeProperty::MaximalSubspace, ConeProperty::FullConeDynamic);
-        else
+
+            // NK: Debug
+            cout << "compute(), after FullConeDynamic: ToCompute   " << ToCompute << endl;
+            cout << "compute(): is_Computed "<< is_Computed << endl;
+        }
+        else {
+            // NK: Debug
+            cout << "compute(), before MaximalSubspace: ToCompute   " << ToCompute << endl;
+            cout << "compute(): is_Computed "<< is_Computed << endl;
+            
             compute(ConeProperty::MaximalSubspace);
+
+            // NK: Debug
+            cout << "compute(), after MaximalSubspace: ToCompute   " << ToCompute << endl;
+            cout << "compute(): is_Computed "<< is_Computed << endl;
+        }
+    } {
+        // NK: Debug
+        cout << "compute(), skipping MaximalSubspace and FullConeDynamic: ToCompute   " << ToCompute << endl;
     }
 
     /*
