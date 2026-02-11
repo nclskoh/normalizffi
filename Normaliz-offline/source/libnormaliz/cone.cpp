@@ -4698,8 +4698,12 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
         LEAVE_CONE return ConeProperties();
     }
 
-    if (conversion_done)
+    if (conversion_done) {
+        "Normaliz compute: Computing generators due to conversion_done";
         compute_generators(ToCompute);
+    } else {
+        "Normaliz compute: Skipping generators in conversion_done";
+    }
 
     ToCompute.reset(is_Computed);
     if (ToCompute.none()) {       // IMPORTANT: do not use goals() at this point because it would prevent
@@ -4818,14 +4822,16 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
 
     // cout << "FFFF " << ToCompute.full_cone_goals(using_renf<Integer>()) << endl;
 
+    cout << "Normaliz compute: is_Computed just before full cone goals"<< is_Computed << endl;
+
     if (ToCompute.full_cone_goals(using_renf<Integer>()).any()) {
-        cout << "Normaliz compute: Computing generators" << endl;
+        cout << "Normaliz compute: Computing generators due to full_cone_goals" << endl;
         compute_generators(ToCompute);
         if (!isComputed(ConeProperty::Generators)) {
             throw FatalException("Could not get Generators.");
         }
     } else {
-        cout << "Normaliz compute: Generators not computed" << endl;
+        cout << "Normaliz compute: Skipping generators in full_cone_goals" << endl;
     }
     ToCompute.reset(is_Computed);
 
@@ -4859,11 +4865,15 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
 
     // the actual computation
 
+    cout << "Normaliz compute: is_Computed just before checking support hyperplanes" << is_Computed << endl;
+
     if (isComputed(ConeProperty::SupportHyperplanes) && using_renf<Integer>())
         ToCompute.reset(ConeProperty::DefaultMode);  // in this case Default = SupportHyperplanes
 
     // cout << "UUUU " << ToCompute.full_cone_goals(using_renf<Integer>()) << endl;
     /* cout << "UUUU All  " << ToCompute << endl;*/
+
+    cout << "Normaliz compute: is_Computed just after checking support hyperplanes" << is_Computed << endl;
 
     // the computation of the full cone
     if (ToCompute.full_cone_goals(using_renf<Integer>()).any()) {
@@ -4889,6 +4899,8 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     compute_volume(ToCompute);
 
     check_Gorenstein(ToCompute);
+
+    cout << "Normaliz compute: is_Computed just before checking if we should compute integer hulls" << is_Computed << endl;
 
     if (ToCompute.test(ConeProperty::IntegerHull)) {
         cout << "Normaliz compute: computing integer hull" << endl;
