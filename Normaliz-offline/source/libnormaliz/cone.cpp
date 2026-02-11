@@ -4451,6 +4451,11 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     }
 #endif
 
+    // NK: Debug
+    cout << "compute(), on entry: ToCompute   " << ToCompute << endl;
+    cout << "compute(), on entry: is_Computed "<< is_Computed << endl;
+    cout << "compute(), on entry: inhomogen   " << inhomogeneous << endl;
+
     size_t nr_computed_at_start = is_Computed.count();
     bool possibly_interrupted =  false;
     if(ToCompute.test(ConeProperty::WitnessNotIntegrallyClosed) ||
@@ -4459,6 +4464,11 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     }
 
     handle_dynamic(ToCompute);
+
+    // NK: Debug
+    cout << "compute(), after handle_dynamic: ToCompute   " << ToCompute << endl;
+    cout << "compute(): is_Computed "<< is_Computed << endl;
+    cout << "compute(): inhomogen   " << inhomogeneous << endl;
 
     set_parallelization();
     nmz_interrupted = 0;
@@ -4655,8 +4665,15 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     if (using_renf<Integer>())
         ToCompute.check_Q_permissible(true);  // after implications!
 
-    if (ToCompute.test(ConeProperty::Sublattice) && !isComputed(ConeProperty::Generators))
+    if (ToCompute.test(ConeProperty::Sublattice) && !isComputed(ConeProperty::Generators)) {
+        // NK: Debug
+        cout << "compute(): Adding extreme rays and support hyperplanes to goals" << endl;
+
         ToCompute.set(ConeProperty::ExtremeRays, ConeProperty::SupportHyperplanes);
+    } else {
+        // NK: Debug
+        cout << "compute(): Skip adding extreme rays and support hyperplanes to goals" << endl;
+    }
 
     ToCompute.check_sanity(inhomogeneous);
     if (inhomogeneous) {
