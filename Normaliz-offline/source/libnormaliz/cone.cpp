@@ -3760,15 +3760,15 @@ void Cone<Integer>::compute_integer_hull() {
         verboseOutput() << "Computing integer hull" << endl;
     }
 
-    cout << "compute_integer_hull(): ToCompute before SupportHyperplane  " << ToCompute << endl;
-    cout << "is_Computed "<< is_Computed << endl;
+    cout << "compute_integer_hull(): is_Computed after SupportHyperplanes "<< is_Computed << endl;
     cout << "inhomogen   " << inhomogeneous << endl;
 
     compute(ConeProperty::SupportHyperplanes, ConeProperty::MaximalSubspace);
 
-    cout << "compute_integer_hull(): ToCompute after SupportHyperplane  " << ToCompute << endl;
-    cout << "is_Computed "<< is_Computed << endl;
+    cout << "compute_integer_hull(): is_Computed after SupportHyperplanes "<< is_Computed << endl;
     cout << "inhomogen   " << inhomogeneous << endl;
+    
+    cout << "compute_integer_hull(): using_renf<Integer>() = " << using_renf<Integer>() << endl;
 
     Matrix<Integer> IntHullGen;
     vector<Integer> IntHullDehom;
@@ -3783,9 +3783,12 @@ void Cone<Integer>::compute_integer_hull() {
             (using_renf<Integer>() && !isComputed(ConeProperty::ModuleGenerators)))
             IntHullComputable = false;
         IntHullDehom = Dehomogenization;
-        if (using_renf<Integer>())
+        if (using_renf<Integer>()) {
+            cout << "compute_integer_hull(): Using module generators..." << endl;
             IntHullGen = ModuleGenerators;
+        }
         else {
+            cout << "compute_integer_hull(): Using extreme rays of recession cone..." << endl;
             IntHullGen = ExtremeRaysRecCone;  // not defined in case of renf_elem_class
             IntHullGen.append(ModuleGenerators);
         }
