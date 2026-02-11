@@ -3760,7 +3760,15 @@ void Cone<Integer>::compute_integer_hull() {
         verboseOutput() << "Computing integer hull" << endl;
     }
 
+    cout << "compute_integer_hull(): ToCompute before SupportHyperplane  " << ToCompute << endl;
+    cout << "is_Computed "<< is_Computed << endl;
+    cout << "inhomogen   " << inhomogeneous << endl;
+
     compute(ConeProperty::SupportHyperplanes, ConeProperty::MaximalSubspace);
+
+    cout << "compute_integer_hull(): ToCompute after SupportHyperplane  " << ToCompute << endl;
+    cout << "is_Computed "<< is_Computed << endl;
+    cout << "inhomogen   " << inhomogeneous << endl;
 
     Matrix<Integer> IntHullGen;
     vector<Integer> IntHullDehom;
