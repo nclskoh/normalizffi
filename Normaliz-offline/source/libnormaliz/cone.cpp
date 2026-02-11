@@ -4691,7 +4691,13 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     // ToCompute.set_default_goals(inhomogeneous,using_renf<renf_elem_class>());
     ToCompute.check_sanity(inhomogeneous);
 
+    // NK: Debug
+    cout << "compute(): before reset ToCompute: ToCompute   " << ToCompute << endl;
+
     ToCompute.reset(is_Computed);
+
+    cout << "compute(): after reset ToCompute: ToCompute   " << ToCompute << endl;
+
     if (ToCompute.none()) {
         LEAVE_CONE return ConeProperties();
     }
@@ -4709,8 +4715,16 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
 
     // to protect against intermediate computations of generators in interactive use
     if (ToCompute.test(ConeProperty::ModuleGeneratorsOverOriginalMonoid) || ToCompute.test(ConeProperty::IsIntegrallyClosed)) {
+        // NK: Debug
+        cout << "compute(): Reset extreme rays in is_Computed. Is ModuleGeneratorsOverOriginalMonoid a goal? " 
+            << ToCompute.test(ConeProperty::ModuleGeneratorsOverOriginalMonoid) << endl;
+        cout << "compute(): is_Computed before reset "<< is_Computed << endl;
+
         Generators = InputGenerators;
         is_Computed.reset(ConeProperty::ExtremeRays);
+
+        // NK:
+        cout << "compute(): is_Computed reset to "<< is_Computed << endl;
     }
 
     //***********************************************
