@@ -3760,7 +3760,6 @@ void Cone<Integer>::compute_integer_hull() {
         verboseOutput() << "Computing integer hull" << endl;
     }
 
-    cout << "compute_integer_hull: Computing support hyerplane";
     compute(ConeProperty::SupportHyperplanes, ConeProperty::MaximalSubspace);
 
     Matrix<Integer> IntHullGen;
@@ -4822,6 +4821,7 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
     // cout << "FFFF " << ToCompute.full_cone_goals(using_renf<Integer>()) << endl;
 
     if (ToCompute.full_cone_goals(using_renf<Integer>()).any()) {
+        cout << "Normaliz compute: Computing generators" << endl;
         compute_generators(ToCompute);
         if (!isComputed(ConeProperty::Generators)) {
             throw FatalException("Could not get Generators.");
