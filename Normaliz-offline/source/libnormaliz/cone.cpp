@@ -4670,8 +4670,14 @@ ConeProperties Cone<Integer>::compute(ConeProperties ToCompute) {
         || ToCompute.test(ConeProperty::ModularGradings) || is_fusion)
         ToCompute.check_fusion_ring_props();
 
+    // NK: Debug
+    cout << "compute(): before setting preconditions: ToCompute   " << ToCompute << endl;
+    
     ToCompute.set_preconditions(inhomogeneous, using_renf<Integer>());
-
+    
+    // NK: Debug
+    cout << "compute(): after setting preconditions: ToCompute   " << ToCompute << endl;
+    
     make_modular_gradings(ToCompute);
 
     ToCompute.reset(is_Computed);

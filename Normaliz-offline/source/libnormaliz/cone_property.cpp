@@ -776,8 +776,12 @@ void ConeProperties::set_preconditions(bool inhomogeneous, bool numberfield) {
         CPs.set(ConeProperty::AffineDim);
 
     // SupportHyperplanes ==> ExtremeRays
-    if (CPs.test(ConeProperty::SupportHyperplanes))
+    if (CPs.test(ConeProperty::SupportHyperplanes)) {
+        // NK: Debug
+        std::cout << "Setting precondition extreme rays for support hyperplane" << endl;
+        
         CPs.set(ConeProperty::ExtremeRays);
+    }
 
     if (!CPs.test(ConeProperty::DefaultMode))
         return;
@@ -795,8 +799,12 @@ void ConeProperties::set_preconditions(bool inhomogeneous, bool numberfield) {
         CPs.set(ConeProperty::SupportHyperplanes);
     }
 
-    if (CPs.test(ConeProperty::SupportHyperplanes))
+    if (CPs.test(ConeProperty::SupportHyperplanes)) {
+        // NK: Debug
+        std::cout << "Setting precondition extreme rays for support hyperplane (at end)" << endl;
+        
         CPs.set(ConeProperty::ExtremeRays);
+    }
 }
 
 void ConeProperties::check_compatibility_with_polynomial_constraints(bool inhomogeneous){
