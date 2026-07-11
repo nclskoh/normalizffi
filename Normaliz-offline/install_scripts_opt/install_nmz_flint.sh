@@ -8,7 +8,7 @@ source $(dirname "$0")/common.sh
 
 # NK: Need PIC for libflint
 
-CONFIGURE_FLAGS="--prefix=${PREFIX} --enable-shared=yes --enable-static=yes --with-pic=yes"
+CONFIGURE_FLAGS="--prefix=${PREFIX} --libdir=${PREFIX}/lib --enable-shared=yes --enable-static=yes --with-pic=yes"
 
 # if [ "$OSTYPE" != "msys" ]; then
 # 	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"

@@ -7,7 +7,7 @@ echo "::group::mpfr"
 source $(dirname "$0")/common.sh
 
 # NK: Make PIC
-CONFIGURE_FLAGS="--prefix=${PREFIX} --enable-shared=yes --with-pic=yes"
+CONFIGURE_FLAGS="--prefix=${PREFIX} --libdir=${PREFIX}/lib --enable-shared=yes --with-pic=yes"
 
 if [ "$OSTYPE" != "msys" ]; then
 	CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-mpfr=${PREFIX}"
