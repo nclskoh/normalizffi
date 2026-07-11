@@ -11,13 +11,7 @@
 
 (rule
   (target link_flags.sexp)
-  (action (write-file link_flags.sexp "(-std=c++14)"))
-  (enabled_if (= %{ocaml-config:system} macosx)))
-
-(rule
-  (target link_flags.sexp)
-  (action (write-file link_flags.sexp "()"))
-  (enabled_if (<> %{ocaml-config:system} macosx)))
+  (action (write-file link_flags.sexp "(-std=c++14)")))
 
 (foreign_library
  (archive_name normaliz_stubs)
@@ -66,7 +60,8 @@
  (flags (:standard -w -32))
  (name test)
  (modules test)
- (libraries normalizffi ounit2))
+ (libraries normalizffi ounit2)
+ (link_flags -cclib -leanticxx))
 
 (rule
  (deps (source_tree Normaliz-offline))
