@@ -21,7 +21,7 @@ fi
 source $(dirname "$0")/install_scripts_opt/common.sh
 
 
-CONFIGURE_FLAGS="--prefix=${PREFIX}"
+CONFIGURE_FLAGS="--prefix=${PREFIX} --libdir=${PREFIX}/lib"
 if [ "$GMP_INSTALLDIR" != "" ]; then
     CONFIGURE_FLAGS="${CONFIGURE_FLAGS} --with-gmp=$GMP_INSTALLDIR"
 fi

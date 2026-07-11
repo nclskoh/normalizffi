@@ -11,13 +11,7 @@
 
 (rule
   (target link_flags.sexp)
-  (action (write-file link_flags.sexp "(-std=c++14)"))
-  (enabled_if (= %{ocaml-config:system} macosx)))
-
-(rule
-  (target link_flags.sexp)
-  (action (write-file link_flags.sexp "()"))
-  (enabled_if (<> %{ocaml-config:system} macosx)))
+  (action (write-file link_flags.sexp "(-std=c++14)")))
 
 (foreign_library
  (archive_name normaliz_stubs)
@@ -33,7 +27,7 @@
 
 (rule
   (target lib_flags.sexp)
-  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint)"))
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -leanticxx)"))
   (enabled_if (<> %{ocaml-config:system} macosx)))
 
 (library
