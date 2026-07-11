@@ -27,7 +27,7 @@
 
 (rule
   (target lib_flags.sexp)
-  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint)"))
+  (action (write-file lib_flags.sexp "(-L. -lstdc++ -lgmpxx -lgmp -lgomp -lnormaliz -lflint -leanticxx)"))
   (enabled_if (<> %{ocaml-config:system} macosx)))
 
 (library
@@ -60,8 +60,7 @@
  (flags (:standard -w -32))
  (name test)
  (modules test)
- (libraries normalizffi ounit2)
- (link_flags -cclib -leanticxx))
+ (libraries normalizffi ounit2))
 
 (rule
  (deps (source_tree Normaliz-offline))
